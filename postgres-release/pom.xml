@@ -142,7 +142,7 @@
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.reporting</groupId>
+			<groupId>fish.focus.uvms.reporting</groupId>
 			<artifactId>reporting-liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -153,7 +153,7 @@
 			</exclusions>			
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.reporting</groupId>
+			<groupId>fish.focus.uvms.reporting</groupId>
 			<artifactId>reporting-liquibase</artifactId>
 			<version>${unionvms.project.reporting.module}</version>
 			<type>zip</type>

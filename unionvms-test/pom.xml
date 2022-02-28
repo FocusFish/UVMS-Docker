@@ -86,9 +86,10 @@
 			<version>${uvms.commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.reporting</groupId>
-			<artifactId>reporting-service</artifactId>
+			<groupId>fish.focus.uvms.reporting</groupId>
+			<artifactId>reporting-module</artifactId>
 			<version>${unionvms.project.reporting.module}</version>
+			<classifier>classes</classifier>
 			<exclusions>
 				<exclusion>
 					<groupId>*</groupId>

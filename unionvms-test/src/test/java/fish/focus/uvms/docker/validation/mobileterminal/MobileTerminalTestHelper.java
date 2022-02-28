@@ -273,7 +273,7 @@ public final class MobileTerminalTestHelper extends AbstractHelper {
 		mobileTerminal.setIndianOceanRegion(true); // 3
 
 		MobileTerminalPluginDto plugin = new MobileTerminalPluginDto();
-		plugin.setPluginServiceName("eu.europa.ec.fisheries.uvms.plugins.inmarsat");
+		plugin.setPluginServiceName("fish.focus.uvms.plugins.inmarsat");
 		plugin.setName("Thrane&Thrane");
 		plugin.setPluginSatelliteType("INMARSAT_C");
 		plugin.setPluginInactive(false);

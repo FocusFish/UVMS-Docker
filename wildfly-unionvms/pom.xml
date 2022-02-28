@@ -81,9 +81,9 @@
 			<type>ear</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.reporting</groupId>
+			<groupId>fish.focus.uvms.reporting</groupId>
 			<artifactId>reporting-module</artifactId>
-			<type>ear</type>
+			<type>war</type>
 		</dependency>
 		<dependency>
 			<groupId>fish.focus.uvms.activity</groupId>
