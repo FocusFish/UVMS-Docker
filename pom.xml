@@ -23,11 +23,11 @@
 		<unionvms.project.unionvms.web.version>3.0.79</unionvms.project.unionvms.web.version>
 		<unionvms.project.vms.web.version>1.1.35</unionvms.project.vms.web.version>
 		<unionvms.project.geoserver.version>2.19.4.3</unionvms.project.geoserver.version>
-		<unionvms.project.user.module>2.2.4</unionvms.project.user.module>
+		<unionvms.project.user.module>2.2.5</unionvms.project.user.module>
 		<unionvms.project.reporting.module>1.1.27-UVMS</unionvms.project.reporting.module>
 		<unionvms.project.movementrules.module>2.4.15</unionvms.project.movementrules.module>
 		<unionvms.project.movement.module>5.6.9</unionvms.project.movement.module>
-		<unionvms.project.exchange.module>5.3.24</unionvms.project.exchange.module>
+		<unionvms.project.exchange.module>5.3.25</unionvms.project.exchange.module>
 		<unionvms.project.spatial.module>2.2.11</unionvms.project.spatial.module>
 		<unionvms.project.config.module>4.3.12</unionvms.project.config.module>
 		<unionvms.project.audit.module>4.3.12</unionvms.project.audit.module>
@@ -35,10 +35,10 @@
 		<unionvms.project.incident.module>1.0.12</unionvms.project.incident.module>
 		<unionvms.project.activity.module>1.2.15</unionvms.project.activity.module>
 		<unionvms.project.web-gateway>1.0.9</unionvms.project.web-gateway>
-		<unionvms.project.plugins.ais>3.1.12</unionvms.project.plugins.ais>
+		<unionvms.project.plugins.ais>3.1.13</unionvms.project.plugins.ais>
 		<unionvms.project.plugins.naf>3.1.12</unionvms.project.plugins.naf>
 		<unionvms.project.plugins.flux>3.1.13</unionvms.project.plugins.flux>
-		<unionvms.project.plugins.inmarsat>3.1.13</unionvms.project.plugins.inmarsat>
+		<unionvms.project.plugins.inmarsat>3.1.14</unionvms.project.plugins.inmarsat>
 		<unionvms.project.plugins.siriusone>3.0.14</unionvms.project.plugins.siriusone>
 		<unionvms.project.plugins.flux-rest>1.9</unionvms.project.plugins.flux-rest>
 	</properties>
