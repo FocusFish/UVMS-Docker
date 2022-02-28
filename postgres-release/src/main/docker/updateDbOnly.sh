@@ -25,7 +25,7 @@ psql -U usm -d $1 --host=$2 --single-transaction -q -f fish.focus.uvms.user.liqu
 echo "Running spatial.sql to create tables and init data"
 psql -U spatial -d $1 --host=$2 --single-transaction -q -f fish.focus.uvms.spatial.liquibase-${unionvms.project.spatial.module}.sql >/dev/null
 echo "Running reporting.sql to create tables and init data"
-psql -U reporting -d $1 --host=$2 --single-transaction -q -f eu.europa.ec.fisheries.uvms.reporting.reporting-liquibase-${unionvms.project.reporting.module}.sql >/dev/null
+psql -U reporting -d $1 --host=$2 --single-transaction -q -f fish.focus.uvms.reporting.reporting-liquibase-${unionvms.project.reporting.module}.sql >/dev/null
 echo "Running activity.sql to create tables and init data"
 psql -U activity -d $1 --host=$2 --single-transaction -q -f fish.focus.uvms.activity.liquibase-${unionvms.project.activity.module}.sql >/dev/null
 echo "Completed module.sql"

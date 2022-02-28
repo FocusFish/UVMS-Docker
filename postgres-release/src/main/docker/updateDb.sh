@@ -33,7 +33,7 @@ psql -U usm -d db71u --single-transaction -q -f /var/lib/postgresql/fish.focus.u
 echo "Running spatial.sql to create tables and init data"
 psql -U spatial -d db71u --single-transaction -q -f /var/lib/postgresql/fish.focus.uvms.spatial.liquibase-${unionvms.project.spatial.module}.sql >/dev/null
 echo "Running reporting.sql to create tables and init data"
-psql -U reporting -d db71u --single-transaction -q -f /var/lib/postgresql/eu.europa.ec.fisheries.uvms.reporting.reporting-liquibase-${unionvms.project.reporting.module}.sql >/dev/null
+psql -U reporting -d db71u --single-transaction -q -f /var/lib/postgresql/fish.focus.uvms.reporting.reporting-liquibase-${unionvms.project.reporting.module}.sql >/dev/null
 echo "Completed module.sql"
 echo "Running activity.sql to create tables and init data"
 psql -U activity -d db71u --single-transaction -q -f /var/lib/postgresql/fish.focus.uvms.activity.liquibase-${unionvms.project.activity.module}.sql >/dev/null
