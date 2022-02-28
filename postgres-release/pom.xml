@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>eu.europa.ec.fisheries.uvms.docker</groupId>
+		<groupId>fish.focus.uvms.docker</groupId>
 		<artifactId>uvms-docker</artifactId>
 		<version>4.1.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
@@ -12,7 +12,7 @@
 	<name>uvms-docker-postgres-release</name>
 	<dependencies>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.asset</groupId>
+			<groupId>fish.focus.uvms.asset</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -23,13 +23,13 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.asset</groupId>
+			<groupId>fish.focus.uvms.asset</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.asset.module}</version>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.audit</groupId>
+			<groupId>fish.focus.uvms.audit</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -40,13 +40,13 @@
 			</exclusions>			
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.audit</groupId>
+			<groupId>fish.focus.uvms.audit</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.audit.module}</version>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.config</groupId>
+			<groupId>fish.focus.uvms.config</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -57,13 +57,13 @@
 			</exclusions>			
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.config</groupId>
+			<groupId>fish.focus.uvms.config</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.config.module}</version>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
+			<groupId>fish.focus.uvms.exchange</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -74,13 +74,13 @@
 			</exclusions>			
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
+			<groupId>fish.focus.uvms.exchange</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.exchange.module}</version>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.movement</groupId>
+			<groupId>fish.focus.uvms.movement</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -91,13 +91,13 @@
 			</exclusions>			
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.movement</groupId>
+			<groupId>fish.focus.uvms.movement</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.movement.module}</version>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.movement-rules</groupId>
+			<groupId>fish.focus.uvms.movement-rules</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -108,13 +108,13 @@
 			</exclusions>			
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.movement-rules</groupId>
+			<groupId>fish.focus.uvms.movement-rules</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.movementrules.module}</version>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.spatialSwe</groupId>
+			<groupId>fish.focus.uvms.spatial</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -125,18 +125,18 @@
 			</exclusions>			
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.spatialSwe</groupId>
+			<groupId>fish.focus.uvms.spatial</groupId>
 			<artifactId>liquibase</artifactId>
-			<version>${unionvms.project.spatialSwe.module}</version>
+			<version>${unionvms.project.spatial.module}</version>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.incident</groupId>
+			<groupId>fish.focus.uvms.incident</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.incident</groupId>
+			<groupId>fish.focus.uvms.incident</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.incident.module}</version>
 			<type>zip</type>
@@ -165,7 +165,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.user</groupId>
+			<groupId>fish.focus.uvms.user</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -176,13 +176,13 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.user</groupId>
+			<groupId>fish.focus.uvms.user</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.user.module}</version>
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.activity</groupId>
+			<groupId>fish.focus.uvms.activity</groupId>
 			<artifactId>liquibase</artifactId>
 			<type>sql</type>
 			<exclusions>
@@ -193,7 +193,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.activity</groupId>
+			<groupId>fish.focus.uvms.activity</groupId>
 			<artifactId>liquibase</artifactId>
 			<version>${unionvms.project.activity.module}</version>
 			<type>zip</type>

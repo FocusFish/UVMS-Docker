@@ -1,0 +1,7 @@
+#!groovy
+@Library('uvms-jenkins@main') _
+uvmsJenkinsfile {
+  MAVEN_PROFILES_RELEASE  = '-Ppush-docker'
+  MAVEN_OPTS_RELEASE      = '-DskipITs -DskipTests'
+  DOCKER                  = true
+}

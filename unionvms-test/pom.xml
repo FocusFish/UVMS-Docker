@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>eu.europa.ec.fisheries.uvms.docker</groupId>
+		<groupId>fish.focus.uvms.docker</groupId>
 		<artifactId>uvms-docker</artifactId>
 		<version>4.1.5-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
@@ -16,17 +16,17 @@
 	<properties>
 		<docker.skip>${skipITs}</docker.skip>
 		<docker.frontend.test.suite>UnionVMSTestCaseG2</docker.frontend.test.suite>
-		<uvms.commons.version>4.1.11</uvms.commons.version>
+		<uvms.commons.version>4.1.12</uvms.commons.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
+			<groupId>fish.focus.uvms.movement</groupId>
 			<artifactId>movement-model</artifactId>
-			<groupId>eu.europa.ec.fisheries.uvms.movement</groupId>
 			<version>${unionvms.project.movement.module}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.movement-rules</groupId>
+			<groupId>fish.focus.uvms.movement-rules</groupId>
 			<artifactId>movement-rules-model</artifactId>
 			<version>${unionvms.project.movementrules.module}</version>
 		</dependency>
@@ -46,42 +46,42 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
+			<groupId>fish.focus.uvms.exchange</groupId>
 			<artifactId>exchange-model</artifactId>
 			<version>${unionvms.project.exchange.module}</version>
 		</dependency>		
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.asset</groupId>
+			<groupId>fish.focus.uvms.asset</groupId>
 			<artifactId>asset-model</artifactId>
 			<version>${unionvms.project.asset.module}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.asset</groupId>
+			<groupId>fish.focus.uvms.asset</groupId>
 			<artifactId>asset-client</artifactId>
 			<version>${unionvms.project.asset.module}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.user</groupId>
+			<groupId>fish.focus.uvms.user</groupId>
 			<artifactId>user-model</artifactId>
 			<version>${unionvms.project.user.module}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.incident</groupId>
+			<groupId>fish.focus.uvms.incident</groupId>
 			<artifactId>incident-model</artifactId>
 			<version>${unionvms.project.incident.module}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
+			<groupId>fish.focus.uvms.commons</groupId>
 			<artifactId>uvms-commons-date</artifactId>
 			<version>${uvms.commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
+			<groupId>fish.focus.uvms.commons</groupId>
 			<artifactId>uvms-commons-message</artifactId>
 			<version>${uvms.commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
+			<groupId>fish.focus.uvms.commons</groupId>
 			<artifactId>uvms-commons-rest</artifactId>
 			<version>${uvms.commons.version}</version>
 		</dependency>
@@ -97,22 +97,22 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.config</groupId>
+			<groupId>fish.focus.uvms.config</groupId>
 			<artifactId>config-model</artifactId>
 			<version>${unionvms.project.config.module}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.audit</groupId>
+			<groupId>fish.focus.uvms.audit</groupId>
 			<artifactId>audit-model</artifactId>
 			<version>${unionvms.project.audit.module}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.spatialSwe</groupId>
+			<groupId>fish.focus.uvms.spatial</groupId>
 			<artifactId>spatial-model</artifactId>
-			<version>${unionvms.project.spatialSwe.module}</version>
+			<version>${unionvms.project.spatial.module}</version>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.activity</groupId>
+			<groupId>fish.focus.uvms.activity</groupId>
 			<artifactId>client-model</artifactId>
 			<version>${unionvms.project.activity.module}</version>
 			<exclusions>
@@ -139,14 +139,9 @@
             </exclusions>
 		</dependency>
 		<dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.service.client.flux</groupId>
-            <artifactId>flux-movement</artifactId>
-            <version>2.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.service.client</groupId>
-            <artifactId>connector-bridge-client</artifactId>
-            <version>2.0.1</version>
+            <groupId>fish.focus.uvms.plugins.flux.movement</groupId>
+            <artifactId>flux-movement-plugin-model</artifactId>
+            <version>${unionvms.project.plugins.flux}</version>
         </dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -238,31 +233,6 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-codegen-plugin</artifactId>
-                <version>3.5.0</version>
-                <executions>
-                    <execution>
-                        <id>wsdl-services</id>
-                        <phase>generate-sources</phase>
-                        <configuration>
-                            <wsdlOptions>
-                                <wsdlOption>
-                                    <wsdl>${basedir}/src/main/wsdl/FluxMessageReceiverBean.wsdl</wsdl>
-                                    <serviceName>MovementService</serviceName>
-                                    <bindingFiles>
-                                        <bindingFile>${basedir}/src/main/wsdl/binding.xml</bindingFile>
-                                    </bindingFiles>
-                                </wsdlOption>
-                            </wsdlOptions>
-                        </configuration>
-                        <goals>
-                            <goal>wsdl2java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<executions>
@@ -325,13 +295,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	<repositories>
-		<repository>
-			<id>focus-repo</id>
-			<name>Focus nexus repository</name>
-			<url>http://nexus.focus.fish/nexus/repository/public/</url>
-		</repository>
-	</repositories>
 	<profiles>
 		<profile>
 			<id>standalone</id>
