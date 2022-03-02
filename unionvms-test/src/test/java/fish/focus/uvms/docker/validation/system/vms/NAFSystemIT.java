@@ -12,8 +12,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.docker.validation.system.vms;
 
 import fish.focus.schema.exchange.movement.v1.MovementTypeType;
-import fish.focus.schema.exchange.v1.ExchangeLogType;
-import fish.focus.schema.exchange.v1.LogType;
 import fish.focus.schema.movement.search.v1.ListCriteria;
 import fish.focus.schema.movement.search.v1.MovementQuery;
 import fish.focus.schema.movement.search.v1.SearchKey;

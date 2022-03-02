@@ -33,7 +33,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class InmarsatSanityIT extends AbstractRest {
 
-    private static final String SELECTOR = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.flux.movement'";
+    private static final String SELECTOR = "ServiceName='fish.focus.uvms.plugins.flux.movement'";
 
     private static MessageHelper messageHelper;
 

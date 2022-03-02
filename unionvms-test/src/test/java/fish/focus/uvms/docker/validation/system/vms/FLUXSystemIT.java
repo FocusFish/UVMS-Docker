@@ -75,7 +75,7 @@ public class FLUXSystemIT extends AbstractRest {
     
     @BeforeClass
     public static void initFLUXSettings() throws InterruptedException, SocketException {
-        String expectedKey = "eu.europa.ec.fisheries.uvms.plugins.flux.movement.FLUX_ENDPOINT";
+        String expectedKey = "fish.focus.uvms.plugins.flux.movement.FLUX_ENDPOINT";
         
         List<SettingType> response = getWebTarget()
                 .path("config/rest/settings")
@@ -675,7 +675,7 @@ public class FLUXSystemIT extends AbstractRest {
     }
 
     private void setCustomTODT(String destination, String todtMinutes) throws InterruptedException {
-        String expectedKey = "eu.europa.ec.fisheries.uvms.plugins.flux.movement.TODT_MAP";
+        String expectedKey = "fish.focus.uvms.plugins.flux.movement.TODT_MAP";
 
         List<SettingType> response = getWebTarget()
                 .path("config/rest/settings")

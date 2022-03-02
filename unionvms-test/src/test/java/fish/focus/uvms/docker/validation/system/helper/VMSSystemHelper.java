@@ -44,17 +44,17 @@ import static org.junit.Assert.assertNotNull;
 
 public class VMSSystemHelper {
 
-    private static final String SERVICE_NAME = "eu.europa.ec.fisheries.uvms.docker.validation.system.rules.EMAIL";
+    private static final String SERVICE_NAME = "fish.focus.uvms.docker.validation.system.rules.EMAIL";
     private static final long TIMEOUT = 10000;
 
-    public static final String FLUX_SELECTOR = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.flux.movement'";
-    public static final String NAF_SELECTOR = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.naf'";
-    public static final String INMARSAT_SELECTOR = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.inmarsat'";
+    public static final String FLUX_SELECTOR = "ServiceName='fish.focus.uvms.plugins.flux.movement'";
+    public static final String NAF_SELECTOR = "ServiceName='fish.focus.uvms.plugins.naf'";
+    public static final String INMARSAT_SELECTOR = "ServiceName='fish.focus.uvms.plugins.inmarsat'";
     public static String emailSelector = "ServiceName='" + SERVICE_NAME + "'";
     public static String emailPluginName = "TEST EMAIL";
-    public static String FLUX_NAME = "eu.europa.ec.fisheries.uvms.plugins.flux.movement";
-    public static String NAF_NAME = "eu.europa.ec.fisheries.uvms.plugins.naf";
-    public static String REST_NAME = "eu.europa.ec.fisheries.uvms.plugins.rest.movement";
+    public static String FLUX_NAME = "fish.focus.uvms.plugins.flux.movement";
+    public static String NAF_NAME = "fish.focus.uvms.plugins.naf";
+    public static String REST_NAME = "fish.focus.uvms.plugins.rest.movement";
     
     public static SetReportRequest triggerBasicRuleAndSendToFlux(String fluxEndpoint) throws Exception {
         return triggerBasicRuleWithAction(ActionType.SEND_REPORT, FLUX_NAME, fluxEndpoint, SetReportRequest.class, FLUX_SELECTOR, true);

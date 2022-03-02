@@ -46,7 +46,7 @@ public class ConfigSynchronizationIT extends AbstractRest {
     
     @Test
     public void nafPluginConfigUpdateTest() throws Exception {
-        String expectedKey = "eu.europa.ec.fisheries.uvms.plugins.naf.connectTimeout";
+        String expectedKey = "fish.focus.uvms.plugins.naf.connectTimeout";
         
         List<SettingType> response = getWebTarget()
                 .path("config/rest/settings")

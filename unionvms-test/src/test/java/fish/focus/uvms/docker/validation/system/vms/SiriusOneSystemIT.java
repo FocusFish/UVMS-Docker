@@ -39,7 +39,7 @@ public class SiriusOneSystemIT {
         terminal.setMobileTerminalType(MobileTerminalTypeEnum.IRIDIUM.toString());
 
         MobileTerminalPluginDto plugin = new MobileTerminalPluginDto();
-        plugin.setPluginServiceName("eu.europa.ec.fisheries.uvms.plugins.iridium.siriusone");
+        plugin.setPluginServiceName("fish.focus.uvms.plugins.iridium.siriusone");
         terminal.setPlugin(plugin);
         
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.persistMobileTerminal(terminal);

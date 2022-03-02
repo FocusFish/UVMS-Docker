@@ -62,7 +62,7 @@ public class InmarsatPluginMock {
         reportType.setMovement(movement);
         GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
         reportType.setTimestamp(gcal.getTime());
-        reportType.setPluginName("eu.europa.ec.fisheries.uvms.plugins.inmarsat");
+        reportType.setPluginName("fish.focus.uvms.plugins.inmarsat");
         reportType.setPluginType(PluginType.SATELLITE_RECEIVER);
         
         String text = ExchangeModuleRequestMapper.createSetMovementReportRequest(reportType, "TWOSTAGE", null, Instant.now(), PluginType.SATELLITE_RECEIVER, "TWOSTAGE", null);

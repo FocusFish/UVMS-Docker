@@ -44,7 +44,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class VMSSystemPerformanceIT extends AbstractRest {
 
-    private static final String SELECTOR = "ServiceName='eu.europa.ec.fisheries.uvms.plugins.flux.movement'";
+    private static final String SELECTOR = "ServiceName='fish.focus.uvms.plugins.flux.movement'";
 
     private static final int NUMBER_OF_POSITIONS = 10;
     

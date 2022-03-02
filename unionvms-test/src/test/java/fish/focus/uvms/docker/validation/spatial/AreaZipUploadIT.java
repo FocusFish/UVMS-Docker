@@ -25,7 +25,7 @@ public class AreaZipUploadIT extends AbstractRest {
         mdo.addFormData("uploadedFile", bytes, MediaType.APPLICATION_OCTET_STREAM_TYPE );
 
         String stringResponse = getWebTarget()
-                .path("spatialSwe/rest")
+                .path("spatial/rest")
                 .path("files")
                 .path("metadata")
                 .request(MediaType.APPLICATION_JSON)
@@ -51,7 +51,7 @@ public class AreaZipUploadIT extends AbstractRest {
         String json = writeValueAsString(mapping);
 
         Response uploadResponse = getWebTarget()
-                .path("spatialSwe/rest")
+                .path("spatial/rest")
                 .path("files")
                 .path("upload")
                 .path("4326")

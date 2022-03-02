@@ -51,8 +51,8 @@ public class InmarsatSystemIT extends AbstractRest {
 
     @BeforeClass
     public static void initSettings() throws IOException, Exception {
-        String urlKey = "eu.europa.ec.fisheries.uvms.plugins.inmarsat.URL";
-        String portKey = "eu.europa.ec.fisheries.uvms.plugins.inmarsat.PORT";
+        String urlKey = "fish.focus.uvms.plugins.inmarsat.URL";
+        String portKey = "fish.focus.uvms.plugins.inmarsat.PORT";
 
         List<SettingType> response = getWebTarget()
                 .path("config/rest/settings")

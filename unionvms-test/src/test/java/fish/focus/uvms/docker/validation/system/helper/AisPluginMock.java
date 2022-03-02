@@ -52,7 +52,7 @@ public class AisPluginMock {
         reportType.setMovement(movement);
         GregorianCalendar gcal = (GregorianCalendar) GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
         reportType.setTimestamp(gcal.getTime());
-        reportType.setPluginName("eu.europa.ec.fisheries.uvms.plugins.ais");
+        reportType.setPluginName("fish.focus.uvms.plugins.ais");
         reportType.setPluginType(PluginType.OTHER);
 
         String text = ExchangeModuleRequestMapper.createSetMovementReportRequest(reportType, "AIS", null, Instant.now(), PluginType.OTHER, "AIS", null);

@@ -63,7 +63,7 @@ public class SiriusOnePluginMock {
         SetReportMovementType reportType = new SetReportMovementType();
         reportType.setMovement(movement);
 
-        reportType.setPluginName("eu.europa.ec.fisheries.uvms.plugins.iridium.siriusone");
+        reportType.setPluginName("fish.focus.uvms.plugins.iridium.siriusone");
 
         reportType.setTimestamp(new Date());
 
