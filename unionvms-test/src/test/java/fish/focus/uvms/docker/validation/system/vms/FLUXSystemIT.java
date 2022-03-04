@@ -17,6 +17,7 @@ import fish.focus.schema.movementrules.customrule.v1.*;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
+import fish.focus.uvms.docker.validation.common.TopicListener;
 import fish.focus.uvms.docker.validation.exchange.ExchangeHelper;
 import fish.focus.uvms.docker.validation.exchange.dto.ExchangeLogDto;
 import fish.focus.uvms.docker.validation.movement.LatLong;
@@ -486,9 +487,10 @@ public class FLUXSystemIT extends AbstractRest {
         norPosition.speed = 5;
         
         PostMsgType message;
-        try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint()) {
+        try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint(); 
+                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             FLUXHelper.sendPositionToFluxPlugin(asset, swePosition);
-            MovementHelper.pollMovementCreated();
+            topicListener.listenOnEventBus();
             FLUXHelper.sendPositionToFluxPlugin(asset, norPosition);
             message = fluxEndpoint.getMessage(10000);
         }
@@ -522,9 +524,10 @@ public class FLUXSystemIT extends AbstractRest {
         swePosition.speed = 5;
         
         PostMsgType message;
-        try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint()) {
+        try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint(); 
+                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             FLUXHelper.sendPositionToFluxPlugin(asset, norPosition);
-            MovementHelper.pollMovementCreated();
+            topicListener.listenOnEventBus();
             FLUXHelper.sendPositionToFluxPlugin(asset, swePosition);
             message = fluxEndpoint.getMessage(10000);
         }
@@ -543,8 +546,10 @@ public class FLUXSystemIT extends AbstractRest {
         FLUXVesselPositionMessage fluxMessage = FLUXHelper.createFluxMessage(asset, position);
         fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getTypeCode().setValue("ENTRY");
         RequestType request = FLUXHelper.createVesselReport(fluxMessage);
-        FLUXHelper.sendVesselReportToFluxPlugin(request);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendVesselReportToFluxPlugin(request);
+            topicListener.listenOnEventBus();
+        }
         List<MovementDto> latestMovements = MovementHelper.getLatestMovements(Arrays.asList(asset.getId().toString()));
         assertThat(latestMovements.size(), is(1));
         MovementDto latest = latestMovements.get(0);
@@ -559,8 +564,10 @@ public class FLUXSystemIT extends AbstractRest {
         FLUXVesselPositionMessage fluxMessage = FLUXHelper.createFluxMessage(asset, position);
         fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getTypeCode().setValue("EXIT");
         RequestType request = FLUXHelper.createVesselReport(fluxMessage);
-        FLUXHelper.sendVesselReportToFluxPlugin(request);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendVesselReportToFluxPlugin(request);
+            topicListener.listenOnEventBus();
+        }
         List<MovementDto> latestMovements = MovementHelper.getLatestMovements(Arrays.asList(asset.getId().toString()));
         assertThat(latestMovements.size(), is(1));
         MovementDto latest = latestMovements.get(0);

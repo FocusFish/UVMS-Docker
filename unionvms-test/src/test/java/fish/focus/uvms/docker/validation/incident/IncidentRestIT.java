@@ -4,6 +4,7 @@ import fish.focus.schema.movementrules.ticket.v1.TicketStatusType;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
+import fish.focus.uvms.docker.validation.common.TopicListener;
 import fish.focus.uvms.docker.validation.config.ConfigRestHelper;
 import fish.focus.uvms.docker.validation.movement.LatLong;
 import fish.focus.uvms.docker.validation.movement.MovementHelper;
@@ -98,10 +99,11 @@ public class IncidentRestIT extends AbstractRest {
         basicAsset.setParked(true);
         AssetDTO asset = AssetTestHelper.createAsset(basicAsset);
 
-        FLUXHelper.sendPositionToFluxPlugin(asset,
-                new LatLong(56d, 11d, new Date(System.currentTimeMillis() - 10000)));
-
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset,
+                    new LatLong(56d, 11d, new Date(System.currentTimeMillis() - 10000)));
+            topicListener.listenOnEventBus();
+        }
         Thread.sleep(1000);
 
         Map<String, IncidentDto> openTicketsForAsset = IncidentTestHelper.getOpenTicketsForAsset(asset.getId().toString());

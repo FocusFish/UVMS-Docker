@@ -527,8 +527,10 @@ public class RulesAlarmIT extends AbstractRest {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -552,8 +554,10 @@ public class RulesAlarmIT extends AbstractRest {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         Thread.sleep(1500);     //since sometimes we are fast enough to create the rule b4 the previous position as cleared MR
@@ -594,8 +598,10 @@ public class RulesAlarmIT extends AbstractRest {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -641,8 +647,10 @@ public class RulesAlarmIT extends AbstractRest {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -667,8 +675,10 @@ public class RulesAlarmIT extends AbstractRest {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -712,8 +722,10 @@ public class RulesAlarmIT extends AbstractRest {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -744,8 +756,10 @@ public class RulesAlarmIT extends AbstractRest {
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        InmarsatPluginMock.sendInmarsatPosition(mobileTerminal, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            InmarsatPluginMock.sendInmarsatPosition(mobileTerminal, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -781,8 +795,10 @@ public class RulesAlarmIT extends AbstractRest {
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        InmarsatPluginMock.sendInmarsatPosition(mobileTerminal, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            InmarsatPluginMock.sendInmarsatPosition(mobileTerminal, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -820,8 +836,10 @@ public class RulesAlarmIT extends AbstractRest {
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        InmarsatPluginMock.sendInmarsatPosition(mobileTerminal, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            InmarsatPluginMock.sendInmarsatPosition(mobileTerminal, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -883,8 +901,10 @@ public class RulesAlarmIT extends AbstractRest {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
@@ -908,8 +928,10 @@ public class RulesAlarmIT extends AbstractRest {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong positionSwe = new LatLong(57.670176, 11.799626, new Date());
-        FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            FLUXHelper.sendPositionToFluxPlugin(asset, positionSwe);
+            topicListener.listenOnEventBus();
+        }
         String fluxEndpoint = "DNK";
 
         CustomRuleType areaExitRule = CustomRuleBuilder.getBuilder()

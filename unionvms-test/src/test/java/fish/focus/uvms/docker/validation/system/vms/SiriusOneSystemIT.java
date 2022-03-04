@@ -20,11 +20,13 @@ import org.junit.Test;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
+import fish.focus.uvms.docker.validation.common.TopicListener;
 import fish.focus.uvms.docker.validation.mobileterminal.MobileTerminalTestHelper;
 import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
 import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalPluginDto;
 import fish.focus.uvms.docker.validation.movement.LatLong;
 import fish.focus.uvms.docker.validation.movement.MovementHelper;
+import fish.focus.uvms.docker.validation.system.helper.FLUXHelper;
 import fish.focus.uvms.docker.validation.system.helper.SiriusOnePluginMock;
 import fish.focus.uvms.mobileterminal.model.constants.MobileTerminalTypeEnum;
 import fish.focus.uvms.movement.model.dto.MovementDto;
@@ -46,9 +48,10 @@ public class SiriusOneSystemIT {
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
         
         LatLong position = new LatLong(11d, 56d, new Date());
-        SiriusOnePluginMock.sendSiriusOnePosition(mobileTerminal, position);
-        
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            SiriusOnePluginMock.sendSiriusOnePosition(mobileTerminal, position);
+            topicListener.listenOnEventBus();
+        }
         
         List<MovementDto> latestMovements = MovementHelper.getLatestMovements(Arrays.asList(asset.getId().toString()));
         
