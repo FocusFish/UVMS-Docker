@@ -142,11 +142,11 @@ embed-server --server-config=${SERVER_CONFIG}
 /subsystem=logging/logging-profile=siriusone/logger=fish.focus:add(handlers=[siriusone-file,siriusone-error-file])
 
 # Spatial
-/subsystem=logging/logging-profile=spatialSwe:add
-/subsystem=logging/logging-profile=spatialSwe/pattern-formatter=APP-PATTERN:add(pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %X{requestId} %-5p %c{40} %X{userId}- %m%n")
-/subsystem=logging/logging-profile=spatialSwe/periodic-size-rotating-file-handler=spatialSwe-file:add(level=INFO,file={path=>"/app/logs/spatialSwe/spatialSwe.log"},named-formatter=APP-PATTERN,suffix=".yyyy-ww",rotate-size=50M)
-/subsystem=logging/logging-profile=spatialSwe/periodic-size-rotating-file-handler=spatialSwe-error-file:add(level=ERROR,file={path=>"/app/logs/spatialSwe/spatialSwe-error.log"},named-formatter=APP-PATTERN,suffix=".yyyy-ww",rotate-size=50M)
-/subsystem=logging/logging-profile=spatialSwe/logger=fish.focus:add(handlers=[spatialSwe-file,spatialSwe-error-file])
+/subsystem=logging/logging-profile=spatial:add
+/subsystem=logging/logging-profile=spatial/pattern-formatter=APP-PATTERN:add(pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %X{requestId} %-5p %c{40} %X{userId}- %m%n")
+/subsystem=logging/logging-profile=spatial/periodic-size-rotating-file-handler=spatial-file:add(level=INFO,file={path=>"/app/logs/spatial/spatial.log"},named-formatter=APP-PATTERN,suffix=".yyyy-ww",rotate-size=50M)
+/subsystem=logging/logging-profile=spatial/periodic-size-rotating-file-handler=spatial-error-file:add(level=ERROR,file={path=>"/app/logs/spatial/spatial-error.log"},named-formatter=APP-PATTERN,suffix=".yyyy-ww",rotate-size=50M)
+/subsystem=logging/logging-profile=spatial/logger=fish.focus:add(handlers=[spatial-file,spatial-error-file])
 
 # User
 /subsystem=logging/logging-profile=user:add

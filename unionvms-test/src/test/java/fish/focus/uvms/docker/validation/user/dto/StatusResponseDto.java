@@ -2,7 +2,7 @@ package fish.focus.uvms.docker.validation.user.dto;
 
 public class StatusResponseDto {
     private int statusCode;
-    private String message;
+    private String statusMessage;
 
     public int getStatusCode() {
         return statusCode;
@@ -12,11 +12,11 @@ public class StatusResponseDto {
         this.statusCode = statusCode;
     }
 
-    public String getMessage() {
-        return message;
+    public String getStatusMessage() {
+        return statusMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setStatusMessage(String message) {
+        this.statusMessage = message;
     }
 }

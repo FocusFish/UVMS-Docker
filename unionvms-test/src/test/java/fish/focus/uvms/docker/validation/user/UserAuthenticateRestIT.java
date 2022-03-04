@@ -195,6 +195,6 @@ public class UserAuthenticateRestIT extends AbstractRest {
 		StatusResponseDto responseDto = response.readEntity(StatusResponseDto.class);
 
 		assertEquals(Status.OK.getStatusCode(), responseDto.getStatusCode());
-		assertEquals("OK", responseDto.getMessage());
+		assertEquals("OK", responseDto.getStatusMessage());
 	}
 }

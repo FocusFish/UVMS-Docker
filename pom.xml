@@ -20,15 +20,15 @@
 		<scm.connection>scm:git:https://github.com/FocusFish/UVMS-Docker.git</scm.connection>
 		<scm.url>scm:git:https://github.com/FocusFish/UVMS-Docker.git</scm.url>
 		<unionvms.wildfly.version>26.0.0.Final</unionvms.wildfly.version>
-		<unionvms.project.unionvms.web.version>3.0.79</unionvms.project.unionvms.web.version>
-		<unionvms.project.vms.web.version>1.1.35</unionvms.project.vms.web.version>
+		<unionvms.project.unionvms.web.version>3.0.80</unionvms.project.unionvms.web.version>
+		<unionvms.project.vms.web.version>1.1.36</unionvms.project.vms.web.version>
 		<unionvms.project.geoserver.version>2.19.4.3</unionvms.project.geoserver.version>
 		<unionvms.project.user.module>2.2.5</unionvms.project.user.module>
 		<unionvms.project.reporting.module>1.1.29</unionvms.project.reporting.module>
 		<unionvms.project.movementrules.module>2.4.16</unionvms.project.movementrules.module>
 		<unionvms.project.movement.module>5.6.9</unionvms.project.movement.module>
 		<unionvms.project.exchange.module>5.3.25</unionvms.project.exchange.module>
-		<unionvms.project.spatial.module>2.2.11</unionvms.project.spatial.module>
+		<unionvms.project.spatial.module>2.2.12</unionvms.project.spatial.module>
 		<unionvms.project.config.module>4.3.12</unionvms.project.config.module>
 		<unionvms.project.audit.module>4.3.12</unionvms.project.audit.module>
 		<unionvms.project.asset.module>6.8.24</unionvms.project.asset.module>
