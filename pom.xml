@@ -5,52 +5,49 @@
 	<parent>
 		<groupId>fish.focus.maven</groupId>
 		<artifactId>focus-pom</artifactId>
-		<version>2.2</version>
+		<version>2.5</version>
 		<relativePath />
 	</parent>
 
-	<groupId>eu.europa.ec.fisheries.uvms.docker</groupId>
+	<groupId>fish.focus.uvms.docker</groupId>
 	<artifactId>uvms-docker</artifactId>
-	<version>4.1.5-SNAPSHOT</version>
+	<version>4.1.5</version>
 	<packaging>pom</packaging>
 	<name>uvms-docker</name>
 
 	<properties>
 		<project.scm.id>github</project.scm.id>
-		<scm.connection>scm:git:https://github.com/UnionVMS/UVMS-Docker.git</scm.connection>
-		<scm.url>scm:git:https://github.com/UnionVMS/UVMS-Docker.git</scm.url>
+		<scm.connection>scm:git:https://github.com/FocusFish/UVMS-Docker.git</scm.connection>
+		<scm.url>scm:git:https://github.com/FocusFish/UVMS-Docker.git</scm.url>
 		<unionvms.wildfly.version>26.0.0.Final</unionvms.wildfly.version>
-		<unionvms.project.unionvms.web.version>3.0.78-UVMS</unionvms.project.unionvms.web.version>
-		<unionvms.project.vms.web.version>1.1.34</unionvms.project.vms.web.version>
-		<unionvms.project.mapfishprint.version>3.20.2.1</unionvms.project.mapfishprint.version>
-		<unionvms.project.geoserver.version>2.19.4.2</unionvms.project.geoserver.version>
-		<unionvms.project.user.module>2.2.2</unionvms.project.user.module>
-		<unionvms.project.reporting.module>1.1.27-UVMS</unionvms.project.reporting.module>
-		<unionvms.project.movementrules.module>2.4.14</unionvms.project.movementrules.module>
-		<unionvms.project.movement.module>5.6.8-UVMS</unionvms.project.movement.module>
-		<unionvms.project.exchange.module>5.3.22-UVMS</unionvms.project.exchange.module>
-		<unionvms.project.spatial.module>2.0.6</unionvms.project.spatial.module>
-		<unionvms.project.spatialSwe.module>2.2.10-UVMS</unionvms.project.spatialSwe.module>
-		<unionvms.project.config.module>4.3.10</unionvms.project.config.module>
-		<unionvms.project.audit.module>4.3.10</unionvms.project.audit.module>
-		<unionvms.project.asset.module>6.8.22</unionvms.project.asset.module>
-		<unionvms.project.incident.module>1.0.11</unionvms.project.incident.module>
-		<unionvms.project.activity.module>1.2.14-SWE</unionvms.project.activity.module>
-		<unionvms.project.plugins.ais>3.1.10</unionvms.project.plugins.ais>
-		<unionvms.project.plugins.naf>3.1.10</unionvms.project.plugins.naf>
-		<unionvms.project.plugins.flux>3.1.11</unionvms.project.plugins.flux>
-		<unionvms.project.plugins.inmarsat>3.1.11</unionvms.project.plugins.inmarsat>
-		<unionvms.project.plugins.siriusone>3.0.12</unionvms.project.plugins.siriusone>
-		<unionvms.project.plugins.fluxActivity>1.0.6</unionvms.project.plugins.fluxActivity>
-		<unionvms.project.plugins.flux-rest>1.7</unionvms.project.plugins.flux-rest>
-		<unionvms.project.web-gateway>1.0.8</unionvms.project.web-gateway>
+		<unionvms.project.unionvms.web.version>3.0.80</unionvms.project.unionvms.web.version>
+		<unionvms.project.vms.web.version>1.1.36</unionvms.project.vms.web.version>
+		<unionvms.project.geoserver.version>2.19.4.3</unionvms.project.geoserver.version>
+		<unionvms.project.user.module>2.2.5</unionvms.project.user.module>
+		<unionvms.project.reporting.module>1.1.29</unionvms.project.reporting.module>
+		<unionvms.project.movementrules.module>2.4.16</unionvms.project.movementrules.module>
+		<unionvms.project.movement.module>5.6.9</unionvms.project.movement.module>
+		<unionvms.project.exchange.module>5.3.25</unionvms.project.exchange.module>
+		<unionvms.project.spatial.module>2.2.12</unionvms.project.spatial.module>
+		<unionvms.project.config.module>4.3.12</unionvms.project.config.module>
+		<unionvms.project.audit.module>4.3.12</unionvms.project.audit.module>
+		<unionvms.project.asset.module>6.8.24</unionvms.project.asset.module>
+		<unionvms.project.incident.module>1.0.12</unionvms.project.incident.module>
+		<unionvms.project.activity.module>1.2.16</unionvms.project.activity.module>
+		<unionvms.project.web-gateway>1.0.9</unionvms.project.web-gateway>
+		<unionvms.project.plugins.ais>3.1.13</unionvms.project.plugins.ais>
+		<unionvms.project.plugins.naf>3.1.12</unionvms.project.plugins.naf>
+		<unionvms.project.plugins.flux>3.1.13</unionvms.project.plugins.flux>
+		<unionvms.project.plugins.inmarsat>3.1.14</unionvms.project.plugins.inmarsat>
+		<unionvms.project.plugins.siriusone>3.0.14</unionvms.project.plugins.siriusone>
+		<unionvms.project.plugins.flux-rest>1.9</unionvms.project.plugins.flux-rest>
 	</properties>
-
 
 	<scm>
 		<connection>${scm.connection}</connection>
 		<tag>HEAD</tag>
 	</scm>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -69,10 +66,11 @@
 			</plugin>
 		</plugins>
 	</build>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.asset</groupId>
+				<groupId>fish.focus.uvms.asset</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.asset.module}</version>
@@ -84,7 +82,7 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.audit</groupId>
+				<groupId>fish.focus.uvms.audit</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.audit.module}</version>
@@ -96,7 +94,7 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.config</groupId>
+				<groupId>fish.focus.uvms.config</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.config.module}</version>
@@ -108,7 +106,7 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
+				<groupId>fish.focus.uvms.exchange</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.exchange.module}</version>
@@ -120,7 +118,7 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.movement</groupId>
+				<groupId>fish.focus.uvms.movement</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.movement.module}</version>
@@ -132,7 +130,7 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.movement-rules</groupId>
+				<groupId>fish.focus.uvms.movement-rules</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.movementrules.module}</version>
@@ -143,20 +141,8 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-            <dependency>
-                <groupId>eu.europa.ec.fisheries.uvms.sales</groupId>
-                <artifactId>liquibase</artifactId>
-                <type>sql</type>
-                <version>${unionvms.project.sales.module}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.oracle</groupId>
-                        <artifactId>ojdbc6</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.spatial</groupId>
+				<groupId>fish.focus.uvms.spatial</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.spatial.module}</version>
@@ -168,25 +154,13 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.spatialSwe</groupId>
-				<artifactId>liquibase</artifactId>
-				<type>sql</type>
-				<version>${unionvms.project.spatialSwe.module}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>com.oracle</groupId>
-						<artifactId>ojdbc6</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.incident</groupId>
+				<groupId>fish.focus.uvms.incident</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.incident.module}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.reporting</groupId>
+				<groupId>fish.focus.uvms.reporting</groupId>
 				<artifactId>reporting-liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.reporting.module}</version>
@@ -198,7 +172,7 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.user</groupId>
+				<groupId>fish.focus.uvms.user</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.user.module}</version>
@@ -210,7 +184,7 @@
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.activity</groupId>
+				<groupId>fish.focus.uvms.activity</groupId>
 				<artifactId>liquibase</artifactId>
 				<type>sql</type>
 				<version>${unionvms.project.activity.module}</version>
@@ -223,15 +197,9 @@
 			</dependency>
 
 			<!-- frontend modules -->
-			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.mapfish.print-servlet-overlay</groupId>
-				<artifactId>print-servlet</artifactId>
-				<type>war</type>
-				<version>${unionvms.project.mapfishprint.version}</version>
-			</dependency>
 
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.geoserver.web.overlay</groupId>
+				<groupId>fish.focus.uvms.geoserver.web.overlay</groupId>
 				<artifactId>gs-web-app</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.geoserver.version}</version>
@@ -240,61 +208,49 @@
 
 			<!-- app modules -->
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.asset</groupId>
+				<groupId>fish.focus.uvms.asset</groupId>
 				<artifactId>asset-module</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.asset.module}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.audit</groupId>
+				<groupId>fish.focus.uvms.audit</groupId>
 				<artifactId>audit-module</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.audit.module}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.config</groupId>
+				<groupId>fish.focus.uvms.config</groupId>
 				<artifactId>config-module</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.config.module}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
+				<groupId>fish.focus.uvms.exchange</groupId>
 				<artifactId>exchange-module</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.exchange.module}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.movement</groupId>
+				<groupId>fish.focus.uvms.movement</groupId>
 				<artifactId>movement-module</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.movement.module}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.spatial</groupId>
+				<groupId>fish.focus.uvms.spatial</groupId>
 				<artifactId>spatial-module</artifactId>
-				<type>ear</type>
+				<type>war</type>
 				<version>${unionvms.project.spatial.module}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.spatialSwe</groupId>
-				<artifactId>spatialSwe-module</artifactId>
-				<type>war</type>
-				<version>${unionvms.project.spatialSwe.module}</version>
-			</dependency>
-			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.incident</groupId>
+				<groupId>fish.focus.uvms.incident</groupId>
 				<artifactId>incident-application</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.incident.module}</version>
 			</dependency>
-            <dependency>
-                <groupId>eu.europa.ec.fisheries.uvms.sales</groupId>
-                <artifactId>sales-module</artifactId>
-                <type>ear</type>
-                <version>${unionvms.project.sales.module}</version>
-            </dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.user</groupId>
+				<groupId>fish.focus.uvms.user</groupId>
 				<artifactId>user-module</artifactId>
 				<type>ear</type>
 				<version>${unionvms.project.user.module}</version>
@@ -302,13 +258,13 @@
 
 			<!-- frontend modules -->
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms</groupId>
+				<groupId>fish.focus.uvms</groupId>
 				<artifactId>unionvms-web</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.unionvms.web.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms</groupId>
+				<groupId>fish.focus.uvms</groupId>
 				<artifactId>vms-web</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.vms.web.version}</version>
@@ -316,26 +272,26 @@
 
 			<!-- app modules -->
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.movement-rules</groupId>
+				<groupId>fish.focus.uvms.movement-rules</groupId>
 				<artifactId>movement-rules-module</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.movementrules.module}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.reporting</groupId>
+				<groupId>fish.focus.uvms.reporting</groupId>
 				<artifactId>reporting-module</artifactId>
-				<type>ear</type>
+				<type>war</type>
 				<version>${unionvms.project.reporting.module}</version>
 			</dependency>
 
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.web-gateway</groupId>
+				<groupId>fish.focus.uvms.web-gateway</groupId>
 				<artifactId>web-gateway</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.web-gateway}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.activity</groupId>
+				<groupId>fish.focus.uvms.activity</groupId>
 				<artifactId>activity-application</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.activity.module}</version>
@@ -343,52 +299,40 @@
 
 			<!-- plugin modules -->
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+				<groupId>fish.focus.uvms.plugins.ais</groupId>
 				<artifactId>ais-module</artifactId>
 				<type>ear</type>
 				<version>${unionvms.project.plugins.ais}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+				<groupId>fish.focus.uvms.plugins.naf</groupId>
 				<artifactId>naf-module</artifactId>
 				<type>ear</type>
 				<version>${unionvms.project.plugins.naf}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+				<groupId>fish.focus.uvms.plugins.flux.movement</groupId>
 				<artifactId>flux-movement-plugin-module</artifactId>
 				<type>ear</type>
 				<version>${unionvms.project.plugins.flux}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.plugins.iridium</groupId>
-				<artifactId>siriusone-module</artifactId>
-				<type>ear</type>
-				<version>${unionvms.project.plugins.siriusone}</version>
-			</dependency>
-			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+				<groupId>fish.focus.uvms.plugins.rest.movement</groupId>
 				<artifactId>flux-vesselposition-rest-module</artifactId>
 				<type>ear</type>
 				<version>${unionvms.project.plugins.flux-rest}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+				<groupId>fish.focus.uvms.plugins.inmarsat</groupId>
 				<artifactId>inmarsat-module</artifactId>
 				<type>ear</type>
 				<version>${unionvms.project.plugins.inmarsat}</version>
 			</dependency>
 			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.plugins.iridium</groupId>
+				<groupId>fish.focus.uvms.plugins.iridium</groupId>
 				<artifactId>siriusone</artifactId>
 				<type>war</type>
 				<version>${unionvms.project.plugins.siriusone}</version>
-			</dependency>
-			<dependency>
-				<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
-				<artifactId>fluxActivity</artifactId>
-				<type>ear</type>
-				<version>${unionvms.project.plugins.fluxActivity}</version>
 			</dependency>
 		</dependencies>
 
@@ -404,33 +348,6 @@
 	</modules>
 
 	<profiles>
-		<profile>
-			<id>use-latest-snapshots</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>versions-maven-plugin</artifactId>
-						<version>2.9.0</version>
-						<executions>
-							<execution>
-								<id>use-latest-snapshots</id>
-								<phase>validate</phase>
-								<goals>
-									<goal>update-properties</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<excludeProperties>wildfly.hibernate.module.hibernate.version,wildfly.hibernate.module.spatial.version,wildfly.hibernate.module.jts.version,wildfly.postgres.module.postgis.version,wildfly.postgres.module.postgres.version,wildfly.activemq.rar.version</excludeProperties>
-							<includeProperties>
-								unionvms.project.unionvms.web.version,unionvms.project.mapfishprint.version,unionvms.project.geoserver.version,unionvms.project.user.module,unionvms.project.rules.module,unionvms.project.movement.module,unionvms.project.exchange.module,unionvms.project.reporting.module,unionvms.project.spatial.module,unionvms.project.config.module,unionvms.project.audit.module,unionvms.project.asset.module,unionvms.project.activity.module,unionvms.project.plugins.naf,unionvms.project.plugins.flux,unionvms.project.plugins.inmarsat,unionvms.project.plugins.siriusone</includeProperties>
-							<allowSnapshots>true</allowSnapshots>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 		<profile>
 			<id>dev-windows</id>
 			<activation>

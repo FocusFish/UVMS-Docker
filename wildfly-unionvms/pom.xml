@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>eu.europa.ec.fisheries.uvms.docker</groupId>
+		<groupId>fish.focus.uvms.docker</groupId>
 		<artifactId>uvms-docker</artifactId>
-		<version>4.1.5-SNAPSHOT</version>
+		<version>4.1.5</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -12,50 +12,23 @@
 	<packaging>pom</packaging>
 	<name>uvms-docker-wildfly-unionvms</name>
 
-	<repositories>
-		<repository>
-			<id>focus-repo</id>
-			<name>Focus nexus repository</name>
-			<url>http://nexus.focus.fish/nexus/</url>
-		</repository>
-	</repositories>
-
-	<distributionManagement>
-		<repository>
-			<id>focus-releases</id>
-			<name>UnionVms Repository</name>
-			<url>http://nexus.focus.fish/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>focus-snapshots</id>
-			<name>UnionVms Snapshot Repository</name>
-			<url>http://nexus.focus.fish/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
-
 	<dependencies>
 
 		<!-- frontend modules -->
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms</groupId>
+			<groupId>fish.focus.uvms</groupId>
 			<artifactId>unionvms-web</artifactId>
 			<type>war</type>
 		</dependency>
 
         <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms</groupId>
+            <groupId>fish.focus.uvms</groupId>
             <artifactId>vms-web</artifactId>
             <type>war</type>
         </dependency>
 
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.mapfish.print-servlet-overlay</groupId>
-			<artifactId>print-servlet</artifactId>
-			<type>war</type>
-		</dependency>
-		
-		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.geoserver.web.overlay</groupId>			
+			<groupId>fish.focus.uvms.geoserver.web.overlay</groupId>			
 			<artifactId>gs-web-app</artifactId>
 			<type>war</type>
 		</dependency>
@@ -63,99 +36,94 @@
 
 		<!-- app modules -->
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.asset</groupId>
+			<groupId>fish.focus.uvms.asset</groupId>
 			<artifactId>asset-module</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.audit</groupId>
+			<groupId>fish.focus.uvms.audit</groupId>
 			<artifactId>audit-module</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.config</groupId>
+			<groupId>fish.focus.uvms.config</groupId>
 			<artifactId>config-module</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
+			<groupId>fish.focus.uvms.exchange</groupId>
 			<artifactId>exchange-module</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.movement</groupId>
+			<groupId>fish.focus.uvms.movement</groupId>
 			<artifactId>movement-module</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.movement-rules</groupId>
+			<groupId>fish.focus.uvms.movement-rules</groupId>
 			<artifactId>movement-rules-module</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.spatial</groupId>
+			<groupId>fish.focus.uvms.spatial</groupId>
 			<artifactId>spatial-module</artifactId>
-			<type>ear</type>
-		</dependency>
-		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.spatialSwe</groupId>
-			<artifactId>spatialSwe-module</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.incident</groupId>
+			<groupId>fish.focus.uvms.incident</groupId>
 			<artifactId>incident-application</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.user</groupId>
+			<groupId>fish.focus.uvms.user</groupId>
 			<artifactId>user-module</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.reporting</groupId>
+			<groupId>fish.focus.uvms.reporting</groupId>
 			<artifactId>reporting-module</artifactId>
-			<type>ear</type>
+			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.activity</groupId>
+			<groupId>fish.focus.uvms.activity</groupId>
 			<artifactId>activity-application</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.web-gateway</groupId>
+			<groupId>fish.focus.uvms.web-gateway</groupId>
 			<artifactId>web-gateway</artifactId>
 			<type>war</type>
 		</dependency>
 
 		<!-- plugin modules -->
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+			<groupId>fish.focus.uvms.plugins.ais</groupId>
 			<artifactId>ais-module</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+			<groupId>fish.focus.uvms.plugins.inmarsat</groupId>
 			<artifactId>inmarsat-module</artifactId>
   			<type>ear</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.plugins.iridium</groupId>
+			<groupId>fish.focus.uvms.plugins.iridium</groupId>
 			<artifactId>siriusone</artifactId>
 			<type>war</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+			<groupId>fish.focus.uvms.plugins.naf</groupId>
 			<artifactId>naf-module</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+			<groupId>fish.focus.uvms.plugins.flux.movement</groupId>
 			<artifactId>flux-movement-plugin-module</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
-			<groupId>eu.europa.ec.fisheries.uvms.plugins</groupId>
+			<groupId>fish.focus.uvms.plugins.rest.movement</groupId>
 			<artifactId>flux-vesselposition-rest-module</artifactId>
 			<type>ear</type>
 		</dependency>
