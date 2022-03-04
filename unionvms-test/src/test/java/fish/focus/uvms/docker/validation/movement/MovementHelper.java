@@ -20,6 +20,7 @@ import fish.focus.uvms.commons.date.JsonBInstantAdapter;
 import fish.focus.uvms.commons.date.JsonBXmlGregorianCalendarAdapter;
 import fish.focus.uvms.docker.validation.common.AbstractHelper;
 import fish.focus.uvms.docker.validation.common.MessageHelper;
+import fish.focus.uvms.docker.validation.common.TopicListener;
 import fish.focus.uvms.docker.validation.movement.model.IncomingMovement;
 import fish.focus.uvms.movement.model.dto.MovementDto;
 import org.hamcrest.CoreMatchers;
@@ -305,8 +306,10 @@ public class MovementHelper extends AbstractHelper implements Closeable {
 	}
 
 	public MovementDto createMovement(IncomingMovement incomingMovement) throws Exception {
-		messageHelper.sendMessageWithFunctionAndGroup(UVMS_MOVEMENT_REQUEST_QUEUE, writeValueAsString(incomingMovement), "CREATE", incomingMovement.getAssetCFR());
-		MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            messageHelper.sendMessageWithFunctionAndGroup(UVMS_MOVEMENT_REQUEST_QUEUE, writeValueAsString(incomingMovement), "CREATE", incomingMovement.getAssetCFR());
+            topicListener.listenOnEventBus();
+        }
 		List<MovementDto> latestMovements = MovementHelper.getLatestMovements(Collections.singletonList(incomingMovement.getAssetGuid()));
 		assertThat(latestMovements.size(), CoreMatchers.is(1));
 		return latestMovements.get(0);
@@ -489,13 +492,6 @@ public class MovementHelper extends AbstractHelper implements Closeable {
 
 		return rutt;
 	}
-	
-	public static void pollMovementCreated() {
-        getWebTarget()
-            .path("movement/activity/movement")
-            .request(MediaType.APPLICATION_JSON)
-            .get();
-    }
 	
 	public static SseEventSource getSseStream() {
 	    WebTarget target = getWebTarget().path("movement/rest/sse/subscribe");
