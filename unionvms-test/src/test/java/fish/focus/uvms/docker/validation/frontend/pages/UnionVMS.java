@@ -41,6 +41,7 @@ public class UnionVMS extends AbstractRest {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--disable-gpu");
             options.addArguments("--no-sandbox");
+            options.addArguments("--window-size=1400,600");
             Configuration.browserCapabilities = new DesiredCapabilities();
             Configuration.browserCapabilities.setCapability(ChromeOptions.CAPABILITY, options);
         }
