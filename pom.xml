@@ -33,7 +33,7 @@
 		<unionvms.project.audit.module>4.3.12</unionvms.project.audit.module>
 		<unionvms.project.asset.module>6.8.24</unionvms.project.asset.module>
 		<unionvms.project.incident.module>1.0.12</unionvms.project.incident.module>
-		<unionvms.project.activity.module>1.2.16</unionvms.project.activity.module>
+		<unionvms.project.activity.module>1.2.17</unionvms.project.activity.module>
 		<unionvms.project.web-gateway>1.0.9</unionvms.project.web-gateway>
 		<unionvms.project.plugins.ais>3.1.13</unionvms.project.plugins.ais>
 		<unionvms.project.plugins.naf>3.1.12</unionvms.project.plugins.naf>
