@@ -41,10 +41,11 @@ public class SanityRuleHelper extends AbstractHelper {
     }
     
     public static void pollAlarmReportCreated() {
-        getWebTarget()
-            .path("movement/activity/alarm")
-            .request(MediaType.APPLICATION_JSON)
-            .get();
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     
     public static AlarmReport getLatestOpenAlarmReportSince(ZonedDateTime timestamp) throws Exception {
