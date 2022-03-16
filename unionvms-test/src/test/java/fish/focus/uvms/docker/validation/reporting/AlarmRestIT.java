@@ -22,6 +22,7 @@ import fish.focus.schema.movementrules.customrule.v1.*;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
+import fish.focus.uvms.docker.validation.common.TopicListener;
 import fish.focus.uvms.docker.validation.movement.LatLong;
 import fish.focus.uvms.docker.validation.movement.MovementHelper;
 import fish.focus.uvms.docker.validation.system.helper.CustomRuleBuilder;
@@ -84,9 +85,10 @@ public class AlarmRestIT extends AbstractRest {
 					.setAvailability(AvailabilityType.GLOBAL)
 					.build();
 			CustomRuleHelper.createCustomRule(customRule);
-			NAFHelper.sendPositionToNAFPlugin(new LatLong(1, 1, new Date()), asset);
-
-			MovementHelper.pollMovementCreated();
+	        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+	            NAFHelper.sendPositionToNAFPlugin(new LatLong(1, 1, new Date()), asset);
+	            topicListener.listenOnEventBus();
+	        }
 			// TODO find an alternative to Thread.sleep
 			Thread.sleep(10000);
 

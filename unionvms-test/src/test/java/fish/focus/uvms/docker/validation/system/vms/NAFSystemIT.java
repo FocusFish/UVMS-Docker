@@ -20,6 +20,7 @@ import fish.focus.schema.movementrules.customrule.v1.*;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
+import fish.focus.uvms.docker.validation.common.TopicListener;
 import fish.focus.uvms.docker.validation.exchange.ExchangeHelper;
 import fish.focus.uvms.docker.validation.exchange.dto.ExchangeLogDto;
 import fish.focus.uvms.docker.validation.movement.LatLong;
@@ -137,8 +138,10 @@ public class NAFSystemIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now().minusMillis(10 * 60 * 1000)));
         position.speed = 5;
-        NAFHelper.sendPositionToNAFPlugin(position, asset);
-        MovementHelper.pollMovementCreated(); // First position for an asset creates ENT, ignore this
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            NAFHelper.sendPositionToNAFPlugin(position, asset);
+            topicListener.listenOnEventBus(); // First position for an asset creates ENT, ignore this
+        }
 
         try (NafEndpoint nafEndpoint = new NafEndpoint(ENDPOINT_PORT)) {
             NAFHelper.sendPositionToNAFPlugin(position, asset);
@@ -188,9 +191,10 @@ public class NAFSystemIT extends AbstractRest {
         norPosition.speed = 5;
 
         String message;
-        try (NafEndpoint nafEndpoint = new NafEndpoint(ENDPOINT_PORT)) {
+        try (NafEndpoint nafEndpoint = new NafEndpoint(ENDPOINT_PORT);
+                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             NAFHelper.sendPositionToNAFPlugin(swePosition, asset);
-            MovementHelper.pollMovementCreated();
+            topicListener.listenOnEventBus();
             NAFHelper.sendPositionToNAFPlugin(norPosition, asset);
             message = nafEndpoint.getMessage(10000);
         }
@@ -229,9 +233,10 @@ public class NAFSystemIT extends AbstractRest {
         swePosition.speed = 5;
 
         String message;
-        try (NafEndpoint nafEndpoint = new NafEndpoint(ENDPOINT_PORT)) {
+        try (NafEndpoint nafEndpoint = new NafEndpoint(ENDPOINT_PORT);
+                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             NAFHelper.sendPositionToNAFPlugin(norPosition, asset);
-            MovementHelper.pollMovementCreated();
+            topicListener.listenOnEventBus();
             NAFHelper.sendPositionToNAFPlugin(swePosition, asset);
             message = nafEndpoint.getMessage(10000);
         }
@@ -250,53 +255,55 @@ public class NAFSystemIT extends AbstractRest {
     }
 
     @Test
-    public void exitReportTest() throws IOException {
+    public void exitReportTest() throws Exception {
         AssetDTO asset = AssetTestHelper.createBasicAsset();
         asset.setFlagStateCode("NOR");
         asset = AssetTestHelper.createAsset(asset);
 
-        LatLong entryPosition = new LatLong(58.509, 10.212, Date.from(Instant.now().minus(4, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES)));
-        NAFHelper.sendEntryReportToNAFPlugin(entryPosition, asset);
-        MovementHelper.pollMovementCreated();
-        LatLong normalPosition1 = new LatLong(58.474, 10.455, Date.from(Instant.now().minus(3, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES)));
-        NAFHelper.sendPositionToNAFPlugin(normalPosition1, asset);
-        MovementHelper.pollMovementCreated();
-        LatLong normalPosition2 = new LatLong(58.594, 10.400, Date.from(Instant.now().minus(2, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES)));
-        NAFHelper.sendPositionToNAFPlugin(normalPosition2, asset);
-        MovementHelper.pollMovementCreated();
-        LatLong exitPosition = new LatLong(58.655, 10.344, Date.from(Instant.now().minus(1, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES)));
-        NAFHelper.sendExitReportToNAFPlugin(exitPosition, asset);
-        MovementHelper.pollMovementCreated();
+        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+            LatLong entryPosition = new LatLong(58.509, 10.212, Date.from(Instant.now().minus(4, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES)));
+            NAFHelper.sendEntryReportToNAFPlugin(entryPosition, asset);
+            topicListener.listenOnEventBus();
+            LatLong normalPosition1 = new LatLong(58.474, 10.455, Date.from(Instant.now().minus(3, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES)));
+            NAFHelper.sendPositionToNAFPlugin(normalPosition1, asset);
+            topicListener.listenOnEventBus();
+            LatLong normalPosition2 = new LatLong(58.594, 10.400, Date.from(Instant.now().minus(2, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES)));
+            NAFHelper.sendPositionToNAFPlugin(normalPosition2, asset);
+            topicListener.listenOnEventBus();
+            LatLong exitPosition = new LatLong(58.655, 10.344, Date.from(Instant.now().minus(1, ChronoUnit.HOURS).truncatedTo(ChronoUnit.MINUTES)));
+            NAFHelper.sendExitReportToNAFPlugin(exitPosition, asset);
+            topicListener.listenOnEventBus();
 
-        MovementQuery query = MovementHelper.getBasicMovementQuery();
-        ListCriteria criteria = new ListCriteria();
-        criteria.setKey(SearchKey.CONNECT_ID);
-        criteria.setValue(asset.getId().toString());
-        query.getMovementSearchCriteria().add(criteria);
-
-        List<MovementType> movements = MovementHelper.getListByQuery(query);
-
-        assertThat(movements.size(), is(4));
-        movements.sort(Comparator.comparing(MovementType::getPositionTime));
-        assertThat(movements.get(0).getConnectId(), is(asset.getId().toString()));
-        assertThat(movements.get(0).getPosition().getLongitude(), is(entryPosition.longitude));
-        assertThat(movements.get(0).getPosition().getLatitude(), is(entryPosition.latitude));
-        assertThat(movements.get(0).getPositionTime(), is(entryPosition.positionTime));
-
-        assertThat(movements.get(1).getConnectId(), is(asset.getId().toString()));
-        assertThat(movements.get(1).getPosition().getLongitude(), is(normalPosition1.longitude));
-        assertThat(movements.get(1).getPosition().getLatitude(), is(normalPosition1.latitude));
-        assertThat(movements.get(1).getPositionTime(), is(normalPosition1.positionTime));
-
-        assertThat(movements.get(2).getConnectId(), is(asset.getId().toString()));
-        assertThat(movements.get(2).getPosition().getLongitude(), is(normalPosition2.longitude));
-        assertThat(movements.get(2).getPosition().getLatitude(), is(normalPosition2.latitude));
-        assertThat(movements.get(2).getPositionTime(), is(normalPosition2.positionTime));
-
-        assertThat(movements.get(3).getConnectId(), is(asset.getId().toString()));
-        assertThat(movements.get(3).getPosition().getLongitude(), is(normalPosition2.longitude));
-        assertThat(movements.get(3).getPosition().getLatitude(), is(normalPosition2.latitude));
-        assertThat(movements.get(3).getPositionTime(), is(exitPosition.positionTime));
+            MovementQuery query = MovementHelper.getBasicMovementQuery();
+            ListCriteria criteria = new ListCriteria();
+            criteria.setKey(SearchKey.CONNECT_ID);
+            criteria.setValue(asset.getId().toString());
+            query.getMovementSearchCriteria().add(criteria);
+    
+            List<MovementType> movements = MovementHelper.getListByQuery(query);
+    
+            assertThat(movements.size(), is(4));
+            movements.sort(Comparator.comparing(MovementType::getPositionTime));
+            assertThat(movements.get(0).getConnectId(), is(asset.getId().toString()));
+            assertThat(movements.get(0).getPosition().getLongitude(), is(entryPosition.longitude));
+            assertThat(movements.get(0).getPosition().getLatitude(), is(entryPosition.latitude));
+            assertThat(movements.get(0).getPositionTime(), is(entryPosition.positionTime));
+    
+            assertThat(movements.get(1).getConnectId(), is(asset.getId().toString()));
+            assertThat(movements.get(1).getPosition().getLongitude(), is(normalPosition1.longitude));
+            assertThat(movements.get(1).getPosition().getLatitude(), is(normalPosition1.latitude));
+            assertThat(movements.get(1).getPositionTime(), is(normalPosition1.positionTime));
+    
+            assertThat(movements.get(2).getConnectId(), is(asset.getId().toString()));
+            assertThat(movements.get(2).getPosition().getLongitude(), is(normalPosition2.longitude));
+            assertThat(movements.get(2).getPosition().getLatitude(), is(normalPosition2.latitude));
+            assertThat(movements.get(2).getPositionTime(), is(normalPosition2.positionTime));
+    
+            assertThat(movements.get(3).getConnectId(), is(asset.getId().toString()));
+            assertThat(movements.get(3).getPosition().getLongitude(), is(normalPosition2.longitude));
+            assertThat(movements.get(3).getPosition().getLatitude(), is(normalPosition2.latitude));
+            assertThat(movements.get(3).getPositionTime(), is(exitPosition.positionTime));
+        }
     }
 
     @Test
