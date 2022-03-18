@@ -11,7 +11,7 @@
 
 	<groupId>fish.focus.uvms.docker</groupId>
 	<artifactId>uvms-docker</artifactId>
-	<version>4.2.0</version>
+	<version>4.2.1</version>
 	<packaging>pom</packaging>
 	<name>uvms-docker</name>
 
@@ -23,17 +23,17 @@
 		<unionvms.project.unionvms.web.version>3.0.80</unionvms.project.unionvms.web.version>
 		<unionvms.project.vms.web.version>1.1.36</unionvms.project.vms.web.version>
 		<unionvms.project.geoserver.version>2.19.4.3</unionvms.project.geoserver.version>
-		<unionvms.project.user.module>2.2.5</unionvms.project.user.module>
-		<unionvms.project.reporting.module>1.1.30</unionvms.project.reporting.module>
+		<unionvms.project.user.module>2.2.6</unionvms.project.user.module>
+		<unionvms.project.reporting.module>1.1.31</unionvms.project.reporting.module>
 		<unionvms.project.movementrules.module>2.4.16</unionvms.project.movementrules.module>
 		<unionvms.project.movement.module>5.6.10</unionvms.project.movement.module>
-		<unionvms.project.exchange.module>5.3.26</unionvms.project.exchange.module>
+		<unionvms.project.exchange.module>5.3.27</unionvms.project.exchange.module>
 		<unionvms.project.spatial.module>2.2.12</unionvms.project.spatial.module>
 		<unionvms.project.config.module>4.3.12</unionvms.project.config.module>
 		<unionvms.project.audit.module>4.3.12</unionvms.project.audit.module>
 		<unionvms.project.asset.module>6.8.24</unionvms.project.asset.module>
 		<unionvms.project.incident.module>1.0.12</unionvms.project.incident.module>
-		<unionvms.project.activity.module>1.2.17</unionvms.project.activity.module>
+		<unionvms.project.activity.module>1.2.18</unionvms.project.activity.module>
 		<unionvms.project.web-gateway>1.0.9</unionvms.project.web-gateway>
 		<unionvms.project.plugins.ais>3.1.13</unionvms.project.plugins.ais>
 		<unionvms.project.plugins.naf>3.1.12</unionvms.project.plugins.naf>
