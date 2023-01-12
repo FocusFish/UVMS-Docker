@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11-openj9:jdk-11.0.4_11_openj9-0.15.1-alpine-slim
+FROM eclipse-temurin:11.0.17_8-jre-alpine
 
 ARG WILDFLY_VERSION
 ENV JBOSS_HOME /opt/jboss/wildfly
