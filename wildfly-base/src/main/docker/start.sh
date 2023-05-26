@@ -2,8 +2,7 @@
 
 rm -rf /app/logs/*
 rm -rf /opt/jboss/wildfly/standalone/log/*
-
-$JBOSS_HOME/cli-scripts/apply_cli.sh "$@"
+rm -rf /opt/jboss/wildfly/standalone/configuration/standalone_xml_history/*
 
 locked="y"
 printf "Waiting for database.\n"
