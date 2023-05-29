@@ -10,6 +10,9 @@ set cors_allowed_host_regex=${cors_allowed_host_regex}
 
 embed-server --server-config=${SERVER_CONFIG}
 
+# Credential Store
+/subsystem=elytron/credential-store=uvms_pwstore:add(location="credentials/uvms_pwstore.jceks", relative-to=jboss.server.data.dir, credential-reference={clear-text=uvms4ever},create=true)
+
 # System properties
 /system-property=jboss.as.management.blocking.timeout:add(value=1200)
 /system-property=db.dialect:add(value=postgres)
