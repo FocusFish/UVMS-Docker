@@ -45,7 +45,6 @@ RUN mkdir -p /app/logs && \
     chown -R jboss:jboss /opt/jboss/wildfly/standalone/log && \
     chmod 777 /opt/jboss/wildfly/standalone/log/ && \
     chmod 755 /opt/jboss/start.sh && \
-    chmod 755 $JBOSS_HOME/cli-scripts/apply_cli.sh && \
     chown -R jboss:jboss /opt/jboss
 # install TZDATA, set timesone then delete TZDATA
 # alpine linux does not include curl. install it, but delete the apk cache to keep layer size small
@@ -66,6 +65,16 @@ USER jboss
 
 RUN $JBOSS_HOME/bin/add-user.sh -u 'admin' -p 'Wildfly4ever!'
 RUN $JBOSS_HOME/bin/add-user.sh -a 'test' -p 'test' -g guest
+
+RUN $JBOSS_HOME/bin/jboss-cli.sh \
+        --file=$JBOSS_HOME/cli-scripts/uvms_configuration.cli \
+        --properties=$JBOSS_HOME/cli-scripts/uvms.properties  && \
+    $JBOSS_HOME/bin/jboss-cli.sh \
+        --file=$JBOSS_HOME/cli-scripts/uvms_datasources.cli \
+        --properties=$JBOSS_HOME/cli-scripts/uvms.properties && \
+    $JBOSS_HOME/bin/jboss-cli.sh \
+        --file=$JBOSS_HOME/cli-scripts/uvms_messaging.cli \
+        --properties=$JBOSS_HOME/cli-scripts/uvms.properties
 
 CMD ["/opt/jboss/start.sh", "/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "--debug", "*:8787"]
 
