@@ -14,6 +14,7 @@ ENV TZ=CET
 
 ENV HIBERNATE_MODULE $JBOSS_HOME/modules/system/layers/base/org/hibernate/main
 ENV POSTGRES_MODULE $JBOSS_HOME/modules/org/postgresql/main
+ENV ARTEMIS_MODULE $JBOSS_HOME/modules/system/layers/base/org/apache/activemq/artemis
 ENV PGPASSWORD=postgres
 
 RUN mkdir -p $JBOSS_HOME/modules/org/postgresql/main
@@ -29,6 +30,27 @@ COPY dependencies/hibernate-envers-${wildfly.hibernate.module.spatial.version}.j
 COPY dependencies/hibernate-spatial-${wildfly.hibernate.module.spatial.version}.jar $HIBERNATE_MODULE
 COPY dependencies/jts-core-${wildfly.hibernate.module.jts.version}.jar $HIBERNATE_MODULE
 COPY dependencies/geolatte-geom-${wildfly.hibernate.module.geolatte.version}.jar $HIBERNATE_MODULE
+
+COPY artemis $ARTEMIS_MODULE
+COPY dependencies/artemis-server-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-service-extensions-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-selector-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-jms-server-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-jms-client-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-jdbc-store-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-hqclient-protocol-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-dto-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-core-client-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+COPY dependencies/artemis-cli-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/main
+
+COPY dependencies/artemis-journal-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/journal/main
+COPY dependencies/artemis-commons-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/journal/main
+
+COPY dependencies/artemis-amqp-protocol-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/protocol/amqp/main
+COPY dependencies/artemis-hornetq-protocol-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/protocol/hornetq/main
+COPY dependencies/artemis-stomp-protocol-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/protocol/stomp/main
+
+COPY dependencies/artemis-ra-${wildfly.artemis.module.artemis.version}.jar $ARTEMIS_MODULE/ra/main
 
 # Standalone config
 COPY standalone.conf $JBOSS_HOME/bin/

@@ -30,5 +30,57 @@
             </includes>
             <outputDirectory>postgres</outputDirectory>
         </fileSet>
+        <fileSet>
+            <directory>target/dockerfile/dependencies</directory>
+            <includes>
+                <include>artemis-server*.*</include>
+                <include>artemis-service-extensions*.*</include>
+                <include>artemis-selector*.*</include>
+                <include>artemis-jms-server*.*</include>
+                <include>artemis-jms-client*.*</include>
+                <include>artemis-jdbc-store*.*</include>
+                <include>artemis-hqclient-protocol*.*</include>
+                <include>artemis-dto*.*</include>
+                <include>artemis-core-client*.*</include>
+                <include>artemis-cli*.*</include>
+            </includes>
+            <outputDirectory>artemis/main</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/dockerfile/dependencies</directory>
+            <includes>
+                <include>artemis-journal*.*</include>
+                <include>artemis-commons*.*</include>
+            </includes>
+            <outputDirectory>artemis/journal/main</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/dockerfile/dependencies</directory>
+            <includes>
+                <include>artemis-amqp-protocol*.*</include>
+            </includes>
+            <outputDirectory>artemis/protocol/amqp/main</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/dockerfile/dependencies</directory>
+            <includes>
+                <include>artemis-hornetq-protocol*.*</include>
+            </includes>
+            <outputDirectory>artemis/protocol/hornetq/main</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/dockerfile/dependencies</directory>
+            <includes>
+                <include>artemis-stomp-protocol*.*</include>
+            </includes>
+            <outputDirectory>artemis/protocol/stomp/main</outputDirectory>
+        </fileSet>
+        <fileSet>
+            <directory>target/dockerfile/dependencies</directory>
+            <includes>
+                <include>artemis-ra*.*</include>
+            </includes>
+            <outputDirectory>artemis/ra/main</outputDirectory>
+        </fileSet>
     </fileSets>
 </assembly>
