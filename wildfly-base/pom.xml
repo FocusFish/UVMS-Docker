@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>fish.focus.uvms.docker</groupId>
 		<artifactId>uvms-docker</artifactId>
-		<version>4.2.7</version>
+		<version>4.2.8</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>uvms-docker-wildfly-base</artifactId>
@@ -15,7 +15,8 @@
 		<wildfly.hibernate.module.geolatte.version>1.4.0</wildfly.hibernate.module.geolatte.version>
 		<wildfly.hibernate.module.jts.version>1.16.1</wildfly.hibernate.module.jts.version>
 		<wildfly.postgres.module.postgis.version>2.5.1</wildfly.postgres.module.postgis.version>
-		<wildfly.postgres.module.postgres.version>42.5.1</wildfly.postgres.module.postgres.version>
+		<wildfly.postgres.module.postgres.version>42.6.0</wildfly.postgres.module.postgres.version>
+		<wildfly.artemis.module.artemis.version>2.22.0</wildfly.artemis.module.artemis.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -58,6 +59,86 @@
 			<artifactId>postgis-geometry</artifactId>
 			<version>${wildfly.postgres.module.postgis.version}</version>
 		</dependency>
+		<dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-server</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-service-extensions</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-selector</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-server</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-client</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jdbc-store</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-hqclient-protocol</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-dto</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-core-client</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-cli</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-journal</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-commons</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-amqp-protocol</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-hornetq-protocol</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-stomp-protocol</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-ra</artifactId>
+            <version>${wildfly.artemis.module.artemis.version}</version>
+        </dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>
@@ -65,7 +146,7 @@
 				<plugin>
 					<groupId>io.fabric8</groupId>
 					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.39.1</version>
+					<version>0.43.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -145,7 +226,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.6.0</version>
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
@@ -165,7 +246,7 @@
 			</plugin>					
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.4.2</version>
+				<version>3.6.0</version>
 				<configuration>
 					<descriptors>
 						<descriptor>src/main/assembly/assembly.xml</descriptor>
