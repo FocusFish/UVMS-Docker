@@ -20,6 +20,7 @@ embed-server --server-config=${SERVER_CONFIG}
 /system-property=hibernate.spatial.dialect:add(value=org.hibernate.spatial.dialect.postgis.PostgisPG9Dialect)
 /system-property=USM.secretKey:add(value=$secretkey)
 /system-property=resteasy.preferJacksonOverJsonB:add(value=false)
+/system-property=hibernate.use_sql_comments:add(value=true)
 
 # Logging
 /subsystem=logging/logger=org.apache.tomcat.util.modeler:add(level=WARN)
