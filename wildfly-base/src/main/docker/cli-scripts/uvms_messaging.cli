@@ -7,7 +7,7 @@ embed-server --server-config=${SERVER_CONFIG}
 
 /subsystem=messaging-activemq/server=default/security-setting=#/role=guest:write-attribute(name=create-durable-queue, value=true)
 /subsystem=messaging-activemq/server=default/security-setting=#/role=guest:write-attribute(name=delete-durable-queue, value=true)
-
+/subsystem=messaging-activemq/server=default/address-setting=#/:write-attribute(name=max-delivery-attempts,value=3)
 /subsystem=messaging-activemq/server=default/remote-connector=remote-connector:add(socket-binding=messaging)
 /subsystem=messaging-activemq/server=default/remote-acceptor=remote-acceptor:add(socket-binding=messaging)
 /subsystem=messaging-activemq/server=default/remote-acceptor=remote-acceptor-throughput:add(socket-binding=messaging-throughput, params={batch-delay=50,direct-deliver=false})
