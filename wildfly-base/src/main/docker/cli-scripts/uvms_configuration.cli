@@ -54,6 +54,12 @@ embed-server --server-config=${SERVER_CONFIG}
 /subsystem=logging/logging-profile=ais/size-rotating-file-handler=ais-error-file:add(level=ERROR,file={path=>"/app/logs/ais/ais-error.log"},named-formatter=APP-PATTERN,suffix=".yyyy-MM-dd_HHmmss.zip",rotate-size=50M, max-backup-index=40)
 /subsystem=logging/logging-profile=ais/logger=fish.focus:add(handlers=[ais-file,ais-error-file])
 
+# AIS_NO_FISHINGVESSEL
+/subsystem=logging/logging-profile=aisnofishingvessel:add
+/subsystem=logging/logging-profile=aisnofishingvessel/pattern-formatter=APP-PATTERN:add(pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %X{requestId} %-5p %c{40} %X{userId}- %m%n")
+/subsystem=logging/logging-profile=aisnofishingvessel/size-rotating-file-handler=aisnofishingvessel-file:add(level=INFO,file={path=>"/app/logs/ais/aisnofishingvessel.log"},named-formatter=APP-PATTERN,suffix=".zip",rotate-size=50M, max-backup-index=100)
+/subsystem=logging/logging-profile=aisnofishingvessel/logger=aisnofishingvessel:add(handlers=[aisnofishingvessel-file])
+
 # Asset
 /subsystem=logging/logging-profile=asset:add
 /subsystem=logging/logging-profile=asset/pattern-formatter=APP-PATTERN:add(pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %X{requestId} %-5p %c{40} %X{userId}- %m%n")
