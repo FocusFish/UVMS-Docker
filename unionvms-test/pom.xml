@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fish.focus.uvms.docker</groupId>
 		<artifactId>uvms-docker</artifactId>
-		<version>4.2.22</version>
+		<version>4.2.23</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	
@@ -218,7 +218,7 @@
 		<dependency>
 			<groupId>com.codeborne</groupId>
 			<artifactId>selenide</artifactId>
-			<version>7.0.0</version>
+			<version>6.17.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
