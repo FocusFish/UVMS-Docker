@@ -52,8 +52,9 @@ public class MetricsIT extends AbstractRest {
         assertThat(getMetricValue(NAF_INCOMING), is(notNullValue()));
     }
 
-    //@Test
+    @Test
     public void aisIncoming() throws URISyntaxException, IOException, InterruptedException {
+        TimeUnit.SECONDS.sleep(70);
         assertThat(getMetricValue(AIS_INCOMING), is(notNullValue()));
     }
 
