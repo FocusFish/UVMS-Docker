@@ -54,6 +54,11 @@ public class MetricsIT extends AbstractRest {
 
     @Test
     public void aisIncoming() throws URISyntaxException, IOException, InterruptedException {
+        try {
+            TimeUnit.MINUTES.sleep(2L);
+        } catch (InterruptedException e) {
+            System.out.println("Ais test waiting sleep was interrupted");
+        }
         assertThat(getMetricValue(AIS_INCOMING), is(notNullValue()));
     }
 
