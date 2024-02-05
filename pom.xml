@@ -11,7 +11,7 @@
 
 	<groupId>fish.focus.uvms.docker</groupId>
 	<artifactId>uvms-docker</artifactId>
-	<version>4.2.25</version>
+	<version>4.2.26</version>
 	<packaging>pom</packaging>
 	<name>uvms-docker</name>
 
@@ -31,7 +31,7 @@
 		<unionvms.project.spatial.module>2.2.12</unionvms.project.spatial.module>
 		<unionvms.project.config.module>4.3.12</unionvms.project.config.module>
 		<unionvms.project.audit.module>4.3.12</unionvms.project.audit.module>
-		<unionvms.project.asset.module>6.8.27</unionvms.project.asset.module>
+		<unionvms.project.asset.module>6.8.29</unionvms.project.asset.module>
 		<unionvms.project.incident.module>1.0.12</unionvms.project.incident.module>
 		<unionvms.project.activity.module>1.2.18</unionvms.project.activity.module>
 		<unionvms.project.web-gateway>1.0.9</unionvms.project.web-gateway>
