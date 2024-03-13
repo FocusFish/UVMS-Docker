@@ -11,7 +11,7 @@
 
 	<groupId>fish.focus.uvms.docker</groupId>
 	<artifactId>uvms-docker</artifactId>
-	<version>4.2.29</version>
+	<version>4.2.30</version>
 	<packaging>pom</packaging>
 	<name>uvms-docker</name>
 
@@ -22,7 +22,7 @@
 		<unionvms.wildfly.version>26.0.0.Final</unionvms.wildfly.version>
 		<unionvms.project.unionvms.web.version>3.0.80</unionvms.project.unionvms.web.version>
 		<unionvms.project.vms.web.version>1.1.37</unionvms.project.vms.web.version>
-		<unionvms.project.geoserver.version>2.19.6.1</unionvms.project.geoserver.version>
+		<unionvms.project.geoserver.version>2.19.6.0</unionvms.project.geoserver.version>
 		<unionvms.project.user.module>2.2.6</unionvms.project.user.module>
 		<unionvms.project.reporting.module>1.1.31</unionvms.project.reporting.module>
 		<unionvms.project.movementrules.module>2.4.16</unionvms.project.movementrules.module>
@@ -40,7 +40,7 @@
 		<unionvms.project.plugins.flux>3.1.13</unionvms.project.plugins.flux>
 		<unionvms.project.plugins.inmarsat>3.1.15</unionvms.project.plugins.inmarsat>
 		<unionvms.project.plugins.siriusone>3.0.15</unionvms.project.plugins.siriusone>
-		<unionvms.project.plugins.flux-rest>1.10</unionvms.project.plugins.flux-rest>
+		<unionvms.project.plugins.flux-rest>1.9</unionvms.project.plugins.flux-rest>
 	</properties>
 
 	<scm>
