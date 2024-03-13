@@ -11,7 +11,7 @@
 
 	<groupId>fish.focus.uvms.docker</groupId>
 	<artifactId>uvms-docker</artifactId>
-	<version>4.2.28</version>
+	<version>4.2.29</version>
 	<packaging>pom</packaging>
 	<name>uvms-docker</name>
 
@@ -25,9 +25,9 @@
 		<unionvms.project.geoserver.version>2.19.6.1</unionvms.project.geoserver.version>
 		<unionvms.project.user.module>2.2.6</unionvms.project.user.module>
 		<unionvms.project.reporting.module>1.1.31</unionvms.project.reporting.module>
-		<unionvms.project.movementrules.module>2.4.17</unionvms.project.movementrules.module>
+		<unionvms.project.movementrules.module>2.4.16</unionvms.project.movementrules.module>
 		<unionvms.project.movement.module>5.6.21</unionvms.project.movement.module>
-		<unionvms.project.exchange.module>5.3.31</unionvms.project.exchange.module>
+		<unionvms.project.exchange.module>5.3.30</unionvms.project.exchange.module>
 		<unionvms.project.spatial.module>2.2.12</unionvms.project.spatial.module>
 		<unionvms.project.config.module>4.3.12</unionvms.project.config.module>
 		<unionvms.project.audit.module>4.3.12</unionvms.project.audit.module>
