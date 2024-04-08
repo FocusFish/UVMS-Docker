@@ -13,17 +13,23 @@ services:
       - /opt/jboss/wildfly/standalone/log:/opt/jboss/wildfly/standalone/log
     depends_on:
       - postgres
-    links:
-      - postgres
-      - ais-simulator
+    networks:
+      - uvms-ais-net
     command: ["/opt/jboss/start.sh", "/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-full.xml", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0", "--debug"]
   postgres:
     image: uvms/postgres-release:${project.version}
     container_name: postgres
     ports:
       - "25432:5432"
+    networks:
+      - uvms-ais-net
   ais-simulator:
     image: uvms/ais-simulator:latest
     container_name: ais-simulator
     ports:
       - "28040:8040"
+    networks:
+      - uvms-ais-net
+networks:
+  uvms-ais-net:
+    driver: bridge

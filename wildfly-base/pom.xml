@@ -305,12 +305,15 @@
 					</execution>
 				</executions>
 				<configuration>
+					<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
 					<images>
 						<image>
 							<alias>postgres</alias>
 							<name>uvms/postgres-release:${project.version}</name>
 							<run>
-								<net>bridge</net>
+								<network>
+									<name>uvms-wildfly-net</name>
+								</network>
 								<namingStrategy>none</namingStrategy>
 								<ports>
 									<port>25432:5432</port>
@@ -337,11 +340,10 @@
 								<dockerFileDir>${project.basedir}/target/dockerfile</dockerFileDir>
 							</build>
 							<run>
-								<net>bridge</net>
 								<namingStrategy>none</namingStrategy>
-								<links>
-									<link>postgres:postgres</link>
-								</links>
+								<network>
+									<name>uvms-wildfly-net</name>
+								</network>
 								<ports>
 									<port>29990:9990</port>
 									<port>28787:8787</port>

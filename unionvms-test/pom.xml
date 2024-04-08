@@ -8,7 +8,7 @@
 		<version>4.2.33-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	
+
 	<artifactId>uvms-unionvms-test</artifactId>
 	<packaging>jar</packaging>
 	<name>uvms-unionvms-test</name>
@@ -49,7 +49,7 @@
 			<groupId>fish.focus.uvms.exchange</groupId>
 			<artifactId>exchange-model</artifactId>
 			<version>${unionvms.project.exchange.module}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>fish.focus.uvms.asset</groupId>
 			<artifactId>asset-model</artifactId>
@@ -147,7 +147,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.13.2</version>		
+			<version>4.13.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -177,7 +177,7 @@
 		<dependency>
 			<groupId>org.databene</groupId>
 			<artifactId>contiperf</artifactId>
-			<version>2.4.4</version>			
+			<version>2.4.4</version>
 		</dependency>
 		<dependency>
 			<groupId>com.peertopark.java</groupId>
@@ -308,12 +308,15 @@
 						<groupId>io.fabric8</groupId>
 						<artifactId>docker-maven-plugin</artifactId>
 						<configuration>
+							<autoCreateCustomNetworks>true</autoCreateCustomNetworks>
 							<images>
 								<image>
 								<alias>postgres</alias>
 								<name>uvms/postgres-release:${project.version}</name>
 								<run>
-									<net>bridge</net>
+									<network>
+										<name>uvms-test-net</name>
+									</network>
 									<namingStrategy>none</namingStrategy>
 									<ports>
 										<port>25432:5432</port>
@@ -324,16 +327,15 @@
 									</log>
 									<hostname>postgres</hostname>
 								</run>
-							</image>
+                                </image>
 								<image>
 									<alias>wildfly</alias>
 									<name>uvms/wildfly-unionvms:${project.version}</name>
 									<run>
-										<net>bridge</net>
+										<network>
+											<name>uvms-test-net</name>
+										</network>
 										<namingStrategy>none</namingStrategy>
-										<links>
-											<link>postgres:postgres</link>
-										</links>
 										<ports>
 											<port>29990:9990</port>
 											<port>28787:8787</port>
@@ -417,9 +419,9 @@
 									<goal>run</goal>
 								</goals>
 								<configuration>
-									<tasks>									
+									<tasks>
 										<exec dir="${project.basedir}/target/" executable="${python.runtime}">
-										 	<redirector output="target/Python-regression-suite-seleniumG2.log" alwayslog="true" /> 
+										 	<redirector output="target/Python-regression-suite-seleniumG2.log" alwayslog="true" />
 											<arg value="-u" />
 											<arg value="-m" />
 											<arg value="unittest" />
