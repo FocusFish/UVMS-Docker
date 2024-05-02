@@ -18,6 +18,7 @@
         <docker.skip>${skipITs}</docker.skip>
         <docker.frontend.test.suite>UnionVMSTestCaseG2</docker.frontend.test.suite>
         <uvms.commons.version>4.1.15</uvms.commons.version>
+        <uvms.pom.version>3.23</uvms.pom.version>
     </properties>
 
     <dependencies>
@@ -145,16 +146,6 @@
             <artifactId>flux-movement-plugin-model</artifactId>
             <version>${unionvms.project.plugins.flux}</version>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.13</version>
-        </dependency>
         <dependency> <!-- Mute jboss-logging -->
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -193,8 +184,15 @@
         <dependency>
             <groupId>fish.focus.uvms.maven</groupId>
             <artifactId>uvms-pom-java11-deps</artifactId>
-            <version>3.22</version>
+            <version>${uvms.pom.version}</version>
             <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>fish.focus.uvms.maven</groupId>
+            <artifactId>uvms-pom-test-deps</artifactId>
+            <version>${uvms.pom.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.ws</groupId>

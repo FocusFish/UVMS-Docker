@@ -18,14 +18,11 @@ import org.junit.Test;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
+import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 public class MetricsIT extends AbstractRest {
 
@@ -39,37 +36,31 @@ public class MetricsIT extends AbstractRest {
     public void inmarsatIncoming() throws Exception {
         try (MessageHelper messageHelper = new MessageHelper()) {
             messageHelper.sendMessage("UVMSInmarsatMessages", "test");
-            TimeUnit.SECONDS.sleep(1);
         }
-        assertThat(getMetricValue(INMARSAT_INCOMING), is(notNullValue()));
+        await().until(() -> getMetricValue(INMARSAT_INCOMING), is(notNullValue()));
     }
 
     @Test
-    public void fluxIncoming() throws URISyntaxException, IOException, InterruptedException {
-        assertThat(getMetricValue(FLUX_INCOMING), is(notNullValue()));
+    public void fluxIncoming() {
+        await().until(() -> getMetricValue(FLUX_INCOMING), is(notNullValue()));
     }
 
     @Test
-    public void nafIncoming() throws URISyntaxException, IOException, InterruptedException {
-        assertThat(getMetricValue(NAF_INCOMING), is(notNullValue()));
+    public void nafIncoming() {
+        await().until(() -> getMetricValue(NAF_INCOMING), is(notNullValue()));
     }
 
     @Test
-    public void aisIncoming() throws URISyntaxException, IOException, InterruptedException {
-        try {
-            TimeUnit.MINUTES.sleep(2L);
-        } catch (InterruptedException e) {
-            System.out.println("Ais test waiting sleep was interrupted");
-        }
-        assertThat(getMetricValue(AIS_INCOMING), is(notNullValue()));
+    public void aisIncoming() {
+        await().until(() -> getMetricValue(AIS_INCOMING), is(notNullValue()));
     }
 
     @Test
-    public void restOutgoing() throws URISyntaxException, IOException, InterruptedException {
-        assertThat(getMetricValue(REST_OUTGOING), is(notNullValue()));
+    public void restOutgoing() {
+        await().until(() -> getMetricValue(REST_OUTGOING), is(notNullValue()));
     }
 
-    private String getMetricValue(String metricName) throws URISyntaxException, IOException, InterruptedException {
+    private String getMetricValue(String metricName) {
         Map<String, Map<String, String>> metrics = ClientBuilder.newClient()
                 .target("http://" + getHost() + ":29990/metrics")
                 .request(MediaType.APPLICATION_JSON)
