@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>fish.focus.uvms.docker</groupId>
 		<artifactId>uvms-docker</artifactId>
-		<version>4.2.34</version>
+		<version>4.2.35</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -134,7 +134,7 @@
 				<plugin>
 					<groupId>io.fabric8</groupId>
 					<artifactId>docker-maven-plugin</artifactId>
-					<version>0.43.4</version>
+					<version>0.44.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -192,7 +192,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.6.0</version>
+				<version>3.7.1</version>
 				<configuration>
 					<descriptors>
 						<descriptor>src/main/assembly/assembly.xml</descriptor>
