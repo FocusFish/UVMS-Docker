@@ -12,14 +12,13 @@ import fish.focus.uvms.commons.date.DateUtils;
 import fish.focus.uvms.docker.validation.common.AbstractHelper;
 import fish.focus.uvms.docker.validation.common.AuditHelper;
 import fish.focus.uvms.docker.validation.movement.AuthorizationHeaderWebTarget;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.sse.SseEventSource;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -28,6 +27,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class AssetTestHelper extends AbstractHelper {
 
@@ -160,7 +162,7 @@ public class AssetTestHelper extends AbstractHelper {
     }
 
     private static void assertAuditLog(UUID guid, AuditOperationEnum auditOperation,
-            AuditLogListQuery auditLogListQuery, Date fromDate) {
+                                       AuditLogListQuery auditLogListQuery, Date fromDate) {
         ListCriteria typeListCriteria = new ListCriteria();
         typeListCriteria.setKey(SearchKey.OPERATION);
         typeListCriteria.setValue(auditOperation.getValue());

@@ -21,36 +21,38 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 public class RulesConfigRestIT extends AbstractRest {
 
-	@Test
-	public void getConfigTest() {
-		Response response = getWebTarget()
-				.path("movement-rules/rest/config")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get();
+    @Test
+    public void getConfigTest() {
+        Response response = getWebTarget()
+                .path("movement-rules/rest/config")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get();
 
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 
-		Map data = response.readEntity(Map.class);
-		assertFalse(data.isEmpty());
-	}
+        Map data = response.readEntity(Map.class);
+        assertFalse(data.isEmpty());
+    }
 
-	@Test
-	public void getTicketStatusesTest() {
-		List<TicketStatusType> response = getWebTarget()
-				.path("movement-rules/rest/config")
-				.path("ticketstatus")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(new GenericType<List<TicketStatusType>>(){});
+    @Test
+    public void getTicketStatusesTest() {
+        List<TicketStatusType> response = getWebTarget()
+                .path("movement-rules/rest/config")
+                .path("ticketstatus")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(new GenericType<List<TicketStatusType>>() {
+                });
 
-		assertFalse(response.isEmpty());
-	}
+        assertFalse(response.isEmpty());
+    }
 }

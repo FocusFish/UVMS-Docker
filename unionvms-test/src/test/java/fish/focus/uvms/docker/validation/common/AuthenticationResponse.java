@@ -14,40 +14,49 @@ package fish.focus.uvms.docker.validation.common;
 import java.util.Map;
 
 public class AuthenticationResponse {
-    
+
     private boolean authenticated;
     private int statusCode;
     private String errorDescription;
     private Map<String, Object> userMap;
     private String jwtoken;
-    
+
     public boolean isAuthenticated() {
         return authenticated;
     }
+
     public void setAuthenticated(boolean authenticated) {
         this.authenticated = authenticated;
     }
+
     public int getStatusCode() {
         return statusCode;
     }
+
     public void setStatusCode(int statusCode) {
         this.statusCode = statusCode;
     }
+
     public String getErrorDescription() {
         return errorDescription;
     }
+
     public void setErrorDescription(String errorDescription) {
         this.errorDescription = errorDescription;
     }
+
     public Map<String, Object> getUserMap() {
         return userMap;
     }
+
     public void setUserMap(Map<String, Object> userMap) {
         this.userMap = userMap;
     }
+
     public String getJwtoken() {
         return jwtoken;
     }
+
     public void setJwtoken(String jwtoken) {
         this.jwtoken = jwtoken;
     }

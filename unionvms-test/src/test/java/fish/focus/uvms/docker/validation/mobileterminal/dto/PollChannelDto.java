@@ -15,60 +15,60 @@ import java.util.List;
 
 public class PollChannelDto {
 
-	private String connectId;
-	private String mobileTerminalId;
-	private String mobileTerminalType;
-	private String comChannelId;
-	
-	private PollDto poll;
-	
-	private List<AttributeDto> mobileTerminalAttributes;
+    private String connectId;
+    private String mobileTerminalId;
+    private String mobileTerminalType;
+    private String comChannelId;
 
-	public String getConnectId() {
-		return connectId;
-	}
+    private PollDto poll;
 
-	public void setConnectId(String connectId) {
-		this.connectId = connectId;
-	}
-	
-	public String getMobileTerminalType() {
-		return mobileTerminalType;
-	}
+    private List<AttributeDto> mobileTerminalAttributes;
 
-	public void setMobileTerminalType(String mobileTerminalType) {
-		this.mobileTerminalType = mobileTerminalType;
-	}
+    public String getConnectId() {
+        return connectId;
+    }
 
-	public String getComChannelId() {
-		return comChannelId;
-	}
+    public void setConnectId(String connectId) {
+        this.connectId = connectId;
+    }
 
-	public void setComChannelId(String comChannelId) {
-		this.comChannelId = comChannelId;
-	}
+    public String getMobileTerminalType() {
+        return mobileTerminalType;
+    }
 
-	public List<AttributeDto> getMobileTerminalAttributes() {
-		return mobileTerminalAttributes;
-	}
+    public void setMobileTerminalType(String mobileTerminalType) {
+        this.mobileTerminalType = mobileTerminalType;
+    }
 
-	public void setMobileTerminalAttributes(List<AttributeDto> attributes) {
-		this.mobileTerminalAttributes = attributes;
-	}
+    public String getComChannelId() {
+        return comChannelId;
+    }
 
-	public String getMobileTerminalId() {
-		return mobileTerminalId;
-	}
+    public void setComChannelId(String comChannelId) {
+        this.comChannelId = comChannelId;
+    }
 
-	public void setMobileTerminalId(String mobileTerminalId) {
-		this.mobileTerminalId = mobileTerminalId;
-	}
+    public List<AttributeDto> getMobileTerminalAttributes() {
+        return mobileTerminalAttributes;
+    }
 
-	public PollDto getPoll() {
-		return poll;
-	}
+    public void setMobileTerminalAttributes(List<AttributeDto> attributes) {
+        this.mobileTerminalAttributes = attributes;
+    }
 
-	public void setPoll(PollDto poll) {
-		this.poll = poll;
-	}
+    public String getMobileTerminalId() {
+        return mobileTerminalId;
+    }
+
+    public void setMobileTerminalId(String mobileTerminalId) {
+        this.mobileTerminalId = mobileTerminalId;
+    }
+
+    public PollDto getPoll() {
+        return poll;
+    }
+
+    public void setPoll(PollDto poll) {
+        this.poll = poll;
+    }
 }

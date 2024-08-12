@@ -42,10 +42,10 @@ public class ManualMovementRestIT extends AbstractRest {
 
         Response response = ManualMovementRestHelper.sendManualMovement(manualMovement);
         assertEquals(200, response.getStatus());
-        
+
         List<MovementDto> latestMovements = MovementHelper.getLatestMovements(Collections.singletonList(asset.getId().toString()));
         assertThat(latestMovements.size(), is(1));
-        
+
         MovementDto createdMovement = latestMovements.get(0);
         assertThat(createdMovement.getLocation().getLatitude(), is(latitude));
         assertThat(createdMovement.getLocation().getLongitude(), is(longitude));
@@ -67,7 +67,6 @@ public class ManualMovementRestIT extends AbstractRest {
         assertEquals(createdMovement.getLocation().getLatitude(), 0.8d, 0);
         assertEquals(createdMovement.getLocation().getLongitude(), 0.5d, 0);
     }
-
 
 
 }

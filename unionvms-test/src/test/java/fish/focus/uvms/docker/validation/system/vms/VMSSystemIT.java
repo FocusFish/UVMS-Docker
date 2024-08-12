@@ -65,7 +65,7 @@ public class VMSSystemIT extends AbstractRest {
     public void removeCustomRules() {
         CustomRuleHelper.removeCustomRulesByDefaultUser();
     }
-    
+
     @Test
     public void sendFlagStateToFLUXDNKTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -73,25 +73,25 @@ public class VMSSystemIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
-        
+
         String fluxEndpoint = "DNK";
 
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
 
         senPositionToFluxAndVerifyMessageContent(timestamp, asset, fluxEndpoint, createdCustomRule, position);
     }
-    
+
     @Test
     public void sendFlagStateAndAreaDNKToFLUXDNKTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -99,15 +99,15 @@ public class VMSSystemIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
-        
+
         String areaCode = "DNK";
         String fluxEndpoint = "DNK";
-        
+
         CustomRuleType flagStateAndAreaRule = CustomRuleBuilder.getBuilder()
                 .setName("Flag state && Area => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
-                .and(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .and(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, areaCode)
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -115,7 +115,7 @@ public class VMSSystemIT extends AbstractRest {
 
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateAndAreaRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(56d, 10.5, new Date());
 
         senPositionToFluxAndVerifyMessageContent(timestamp, asset, fluxEndpoint, createdCustomRule, position);
@@ -128,34 +128,34 @@ public class VMSSystemIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
-        
+
         String fluxEndpoint = "DNK";
 
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.add(Calendar.HOUR, -1);
         Date ruleIntervalStart = calendarStart.getTime();
-        
+
         Calendar calendarEnd = Calendar.getInstance();
         calendarEnd.add(Calendar.HOUR, 1);
         Date ruleIntervalEnd = calendarEnd.getTime();
-        
+
         CustomRuleType flagStateRuleWithInterval = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .interval(ruleIntervalStart, ruleIntervalEnd)
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRuleWithInterval);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
 
         senPositionToFluxAndVerifyMessageContent(timestamp, asset, fluxEndpoint, createdCustomRule, position);
     }
-    
+
     @Test
     public void sendFlagStateToFLUXDNKWithPastValidRuleIntervalTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -163,40 +163,40 @@ public class VMSSystemIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
-        
+
         String fluxEndpoint = "DNK";
 
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.add(Calendar.HOUR, -2);
         Date ruleIntervalStart = calendarStart.getTime();
-        
+
         Calendar calendarEnd = Calendar.getInstance();
         calendarEnd.add(Calendar.HOUR, -1);
         Date ruleIntervalEnd = calendarEnd.getTime();
-        
+
         CustomRuleType flagStateRuleWithInterval = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .interval(ruleIntervalStart, ruleIntervalEnd)
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRuleWithInterval = CustomRuleHelper.createCustomRule(flagStateRuleWithInterval);
         assertNotNull(createdCustomRuleWithInterval);
-        
+
         CustomRuleType flagStateRuleWithoutInterval = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRuleWithoutInterval = CustomRuleHelper.createCustomRule(flagStateRuleWithoutInterval);
         assertNotNull(createdCustomRuleWithoutInterval);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
 
         sendPositionToFluxAndVerifyMessage(asset, position);
@@ -212,40 +212,40 @@ public class VMSSystemIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
-        
+
         String fluxEndpoint = "DNK";
 
         Calendar calendarStart = Calendar.getInstance();
         calendarStart.add(Calendar.HOUR, 1);
         Date ruleIntervalStart = calendarStart.getTime();
-        
+
         Calendar calendarEnd = Calendar.getInstance();
         calendarEnd.add(Calendar.HOUR, 2);
         Date ruleIntervalEnd = calendarEnd.getTime();
-        
+
         CustomRuleType flagStateRuleWithInterval = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .interval(ruleIntervalStart, ruleIntervalEnd)
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRuleWithInterval = CustomRuleHelper.createCustomRule(flagStateRuleWithInterval);
         assertNotNull(createdCustomRuleWithInterval);
-        
+
         CustomRuleType flagStateRuleWithoutInterval = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRuleWithoutInterval = CustomRuleHelper.createCustomRule(flagStateRuleWithoutInterval);
         assertNotNull(createdCustomRuleWithoutInterval);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
 
         sendPositionToFluxAndVerifyMessage(asset, position);
@@ -253,7 +253,7 @@ public class VMSSystemIT extends AbstractRest {
         CustomRuleHelper.assertRuleNotTriggered(createdCustomRuleWithInterval);
         CustomRuleHelper.assertRuleTriggered(createdCustomRuleWithoutInterval, timestamp);
     }
-    
+
     @Test
     public void sendToExistingNafEndpointTest() throws Exception {
         String nation = generateARandomStringWithMaxLength(9);
@@ -279,9 +279,9 @@ public class VMSSystemIT extends AbstractRest {
         SetReportRequest report = VMSSystemHelper.triggerBasicRuleAndSendToNAF(organisation.getName());
         assertThat(report, is(notNullValue()));
         assertThat(report.getReport(), is(notNullValue()));
-        
+
         List<RecipientInfoType> recipientInfo = report.getReport().getRecipientInfo();
-        
+
         assertThat(recipientInfo.size(), is(1));
         RecipientInfoType recipientInfoType = recipientInfo.get(0);
         assertThat(recipientInfoType.getKey(), is(name));
@@ -314,7 +314,7 @@ public class VMSSystemIT extends AbstractRest {
         assertThat(report, is(notNullValue()));
         assertThat(report.getReport(), is(notNullValue()));
         assertThat(report.getReport().getRecipient(), is(uri));
-        
+
         List<RecipientInfoType> recipientInfo = report.getReport().getRecipientInfo();
         assertThat(recipientInfo.size(), is(1));
     }

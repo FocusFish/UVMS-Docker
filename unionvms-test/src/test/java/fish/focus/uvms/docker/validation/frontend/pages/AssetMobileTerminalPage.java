@@ -12,7 +12,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.docker.validation.frontend.pages;
 
 import static com.codeborne.selenide.Selenide.*;
+
 import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.*;
 
@@ -25,8 +27,8 @@ public class AssetMobileTerminalPage {
     public void createMobileTerminal(MobileTerminalDto mobileTerminal, String comment) {
         $(byText("Attach")).click();
         $(by("data-placeholder", "Serial number"))
-            .setValue(mobileTerminal.getSerialNo())
-            .pressEnter();
+                .setValue(mobileTerminal.getSerialNo())
+                .pressEnter();
         $(byText("Create")).click();
         AssetMobileTerminalEditPage editPage = new AssetMobileTerminalEditPage();
         editPage.populateFieldsFromMobileTerminal(mobileTerminal);
@@ -35,8 +37,8 @@ public class AssetMobileTerminalPage {
 
     public void assertSerialNumber(String expectedSerialNumber) {
         $(byText("Serial no."))
-            .parent()
-            .sibling(0)
-            .shouldHave(text(expectedSerialNumber));
+                .parent()
+                .sibling(0)
+                .shouldHave(text(expectedSerialNumber));
     }
 }

@@ -40,14 +40,11 @@ public class NAFExchangePerformanceIT extends AbstractRest {
 
     private static final String MOVEMENTRULES_QUEUE = "UVMSMovementRulesEvent";
     private static final String RESPONSE_QUEUE = "IntegrationTestsResponseQueue";
-
-    private Map<String, JAXBContext> contexts = new HashMap<>();
-
     private static Connection connection;
     private static MessageProducer messageProducer;
     private static Session session;
-
     private static MovementHelper movementHelper;
+    private Map<String, JAXBContext> contexts = new HashMap<>();
 
     @BeforeClass
     public static void setup() throws JMSException {
@@ -55,7 +52,7 @@ public class NAFExchangePerformanceIT extends AbstractRest {
         params.put("host", "localhost");
         params.put("port", 5445);
         TransportConfiguration transportConfiguration = new TransportConfiguration(NettyConnectorFactory.class.getName(), params);
-        ConnectionFactory connectionFactory = ActiveMQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF,transportConfiguration);
+        ConnectionFactory connectionFactory = ActiveMQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, transportConfiguration);
         connection = connectionFactory.createConnection("test", "test");
         connection.setClientID(UUID.randomUUID().toString());
         connection.start();
@@ -91,6 +88,20 @@ public class NAFExchangePerformanceIT extends AbstractRest {
         }
     }
 
+    private static String humanReadableFormat(Duration duration) {
+        return duration.toString()
+                .substring(2)
+                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                .toLowerCase();
+    }
+
+    public static SseEventSource getSseStream() {
+        WebTarget target = getWebTarget().path("movement-rules/rest/sse/subscribe");
+        AuthorizationHeaderWebTarget jwtTarget = new AuthorizationHeaderWebTarget(target, getValidJwtToken());
+        return SseEventSource.
+                target(jwtTarget).reconnectingEvery(1, TimeUnit.SECONDS).build();
+    }
+
     @Test
     @Ignore
     public void createRouteTestTitanic10ships10PositionsAsync() throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
@@ -100,60 +111,60 @@ public class NAFExchangePerformanceIT extends AbstractRest {
 
     @Test
     @Ignore
-    public void createRouteTestTitanic1000PositionsAsync() throws Exception{ //Needs a special version of exchange that respond on the sales queue to work!!!!
+    public void createRouteTestTitanic1000PositionsAsync() throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
         List<LatLong> route = movementHelper.createRuttCobhNewYork(1000, 0.06f); //0.1F = 654 pos    0.01 = 6543     0.07 = 934   0.06 = 1090
         sendRouteToNAFOnXShipsAsync(1, route);
     }
 
     @Test
     @Ignore
-    public void createRouteTestTitanic10ships1000PositionsAsync() throws Exception{ //Needs a special version of exchange that respond on the sales queue to work!!!!
+    public void createRouteTestTitanic10ships1000PositionsAsync() throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
         List<LatLong> route = movementHelper.createRuttCobhNewYork(1000, 0.06f); //0.1F = 654 pos    0.01 = 6543     0.07 = 934   0.06 = 1090
         sendRouteToNAFOnXShipsAsync(10, route);
     }
 
     @Test
     @Ignore
-    public void createRouteTestTitanic10ships6000PositionsAsync() throws Exception{ //Needs a special version of exchange that respond on the sales queue to work!!!!
+    public void createRouteTestTitanic10ships6000PositionsAsync() throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
         List<LatLong> route = movementHelper.createRuttCobhNewYork(6000, 0.01f); //0.1F = 654 pos    0.01 = 6543     0.07 = 934   0.06 = 1090
         sendRouteToNAFOnXShipsAsync(20, route);
     }
 
     @Test
     @Ignore
-    public void createRouteTestTitanic10ships60000PositionsAsync() throws Exception{ //Needs a special version of exchange that respond on the sales queue to work!!!!
+    public void createRouteTestTitanic10ships60000PositionsAsync() throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
         List<LatLong> route = movementHelper.createRuttCobhNewYork(60000, 0.001f); //0.1F = 654 pos    0.01 = 6543     0.07 = 934   0.06 = 1090
         sendRouteToNAFOnXShipsAsync(10, route);
     }
 
     @Test
     @Ignore
-    public void createRouteTestTitanic10ships600000PositionsAsync() throws Exception{ //Needs a special version of exchange that respond on the sales queue to work!!!!
+    public void createRouteTestTitanic10ships600000PositionsAsync() throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
         List<LatLong> route = movementHelper.createRuttCobhNewYork(600000, 0.0001f); //0.1F = 654 pos    0.01 = 6543     0.07 = 934   0.06 = 1090
         sendRouteToNAFOnXShipsAsync(10, route);
     }
 
     @Test
     @Ignore
-    public void createRouteTestTitanic10ships100000PositionsAsync() throws Exception{ //Needs a special version of exchange that respond on the sales queue to work!!!!
+    public void createRouteTestTitanic10ships100000PositionsAsync() throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
         List<LatLong> route = movementHelper.createRuttCobhNewYork(100000, 0.0006f); //0.1F = 654 pos    0.01 = 6543     0.07 = 934   0.06 = 1090
         sendRouteToNAFOnXShipsAsync(10, route);
     }
 
     @Test
     @Ignore
-    public void createRouteTestTitanic60ships6000PositionsAsync() throws Exception{ //Needs a special version of exchange that respond on the sales queue to work!!!!
+    public void createRouteTestTitanic60ships6000PositionsAsync() throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
         List<LatLong> route = movementHelper.createRuttCobhNewYork(6000, 0.01f); //0.1F = 654 pos    0.01 = 6543     0.07 = 934   0.06 = 1090
         sendRouteToNAFOnXShipsAsync(60, route);
     }
 
-    private void sendRouteToNAFOnXShipsAsync(int nrOfShips, List<LatLong> route) throws Exception{ //Needs a special version of exchange that respond on the sales queue to work!!!!
+    private void sendRouteToNAFOnXShipsAsync(int nrOfShips, List<LatLong> route) throws Exception { //Needs a special version of exchange that respond on the sales queue to work!!!!
 
         List<AssetDTO> assetDTOList = new ArrayList<>();
 
         System.out.println("Start creating assets");
 
-        for(int i = 0; i < nrOfShips; i++ ){
+        for (int i = 0; i < nrOfShips; i++) {
             AssetDTO testAsset = AssetTestHelper.createTestAsset();
             MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
             MobileTerminalTestHelper.assignMobileTerminal(testAsset, mobileTerminal);
@@ -199,7 +210,7 @@ public class NAFExchangePerformanceIT extends AbstractRest {
 
         while (movements.size() < route.size()) {
             Thread.sleep(100);
-            if(Duration.between(lastRec, Instant.now()).getSeconds() > 90){
+            if (Duration.between(lastRec, Instant.now()).getSeconds() > 90) {
                 throw new RuntimeException("More then 30 seconds since last received. Received so far: "
                         + movements.size() + " Time of death: " + humanReadableFormat(Duration.between(b4, Instant.now())));
             }
@@ -252,19 +263,5 @@ public class NAFExchangePerformanceIT extends AbstractRest {
         } finally {
             session.close();
         }
-    }
-
-    private static String humanReadableFormat(Duration duration) {
-        return duration.toString()
-                .substring(2)
-                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
-                .toLowerCase();
-    }
-
-    public static SseEventSource getSseStream() {
-        WebTarget target = getWebTarget().path("movement-rules/rest/sse/subscribe");
-        AuthorizationHeaderWebTarget jwtTarget = new AuthorizationHeaderWebTarget(target, getValidJwtToken());
-        return SseEventSource.
-                target(jwtTarget).reconnectingEvery(1, TimeUnit.SECONDS).build();
     }
 }

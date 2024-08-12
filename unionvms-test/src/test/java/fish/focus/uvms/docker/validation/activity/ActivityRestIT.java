@@ -2,6 +2,7 @@ package fish.focus.uvms.docker.validation.activity;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -11,6 +12,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import org.junit.Test;
 import fish.focus.uvms.activity.model.schemas.SearchFilter;
 import fish.focus.uvms.activity.service.dto.FishingActivityReportDTO;
@@ -69,7 +71,7 @@ public class ActivityRestIT {
         FishingActivityQueryWithStringMaps query = new FishingActivityQueryWithStringMaps();
         String searchDate = DateTimeFormatter.ofPattern(DateUtils.DATE_TIME_UI_FORMAT).format(Instant.now().minus(2, ChronoUnit.HOURS).atZone(ZoneId.of("UTC")));
         query.setSearchCriteriaMap(Map.of(SearchFilter.VESSEL_GUIDS.toString(), asset.getId().toString(),
-                                          SearchFilter.PERIOD_START.toString(), searchDate));
+                SearchFilter.PERIOD_START.toString(), searchDate));
         query.setSearchCriteriaMapMultipleValues(Map.of(SearchFilter.PURPOSE.toString(), List.of("9", "5")));
 
         List<FishingActivityReportDTO> faList = ActivityTestHelper.getFaList(query);
@@ -89,7 +91,7 @@ public class ActivityRestIT {
         ActivityJMSHelper.sendToActivity(fishingOperation);
         FishingActivityQueryWithStringMaps query = new FishingActivityQueryWithStringMaps();
         query.setSearchCriteriaMap(Map.of(SearchFilter.VESSEL_GUIDS.toString(), asset.getId().toString(),
-                                          SearchFilter.ACTIVITY_TYPE.toString(), "FISHING_OPERATION"));
+                SearchFilter.ACTIVITY_TYPE.toString(), "FISHING_OPERATION"));
         query.setSearchCriteriaMapMultipleValues(Map.of(SearchFilter.PURPOSE.toString(), List.of("9", "5")));
 
         List<FishingActivityReportDTO> faList = ActivityTestHelper.getFaList(query);

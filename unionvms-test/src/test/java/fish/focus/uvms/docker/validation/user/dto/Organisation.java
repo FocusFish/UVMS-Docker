@@ -21,7 +21,8 @@ public class Organisation implements Serializable {
     /**
      * Creates a new instance.
      */
-    public Organisation() {}
+    public Organisation() {
+    }
 
     /**
      * Get the value of organisation's description

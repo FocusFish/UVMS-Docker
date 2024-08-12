@@ -30,12 +30,12 @@ public class TopicListener implements Closeable {
     public static final String EVENT_BUS = "jms.topic.EventBus";
     public static final String EVENT_STREAM = "jms.topic.EventStream";
     public static final String CONFIG_STATUS = "jms.topic.ConfigStatus";
-    
+
     private static final Logger log = LoggerFactory.getLogger(TopicListener.class.getSimpleName());
     private Connection connection;
     private Session session;
     private MessageConsumer subscriber;
-    
+
     public TopicListener(String selector) throws Exception {
         this(EVENT_BUS, selector);
     }
@@ -50,13 +50,13 @@ public class TopicListener implements Closeable {
         connection.start();
         registerSubscriber(topic, selector);
     }
-    
+
     private void registerSubscriber(String topic, String selector) throws Exception {
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         Topic eventBus = session.createTopic(topic);
         subscriber = session.createConsumer(eventBus, selector, true);
     }
-    
+
     public Message listenOnEventBus() throws Exception {
         long TIMEOUT = 10000;
         return subscriber.receive(TIMEOUT);

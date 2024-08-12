@@ -17,6 +17,7 @@ import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.common.AbstractHelper;
 import fish.focus.uvms.docker.validation.movement.model.ManualMovementDto;
 import fish.focus.uvms.docker.validation.movement.model.MicroMovement;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;

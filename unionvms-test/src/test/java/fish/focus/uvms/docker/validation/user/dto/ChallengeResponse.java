@@ -12,7 +12,8 @@ public class ChallengeResponse {
     /**
      * Creates a new instance.
      */
-    public ChallengeResponse() {}
+    public ChallengeResponse() {
+    }
 
     public ChallengeResponse(String userName, String challenge, String response) {
         this.userName = userName;
@@ -66,7 +67,7 @@ public class ChallengeResponse {
 
     /**
      * Formats a human-readable view of this instance.
-     * 
+     *
      * @return a human-readable view
      */
     @Override

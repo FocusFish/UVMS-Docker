@@ -19,9 +19,11 @@ import static com.codeborne.selenide.Selectors.byTagName;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+
 import com.codeborne.selenide.SelenideElement;
 
 public class IncidentPanel {
@@ -50,12 +52,12 @@ public class IncidentPanel {
 
     public void assertIncidentId(Long expectedId) {
         $(byClassName("panel-title"))
-            .$(withText("#"))
-            .shouldHave(text("#" + expectedId));
+                .$(withText("#"))
+                .shouldHave(text("#" + expectedId));
     }
 
     public void assertIncidentName(String expectedIrcs, String extectedAssetName) {
         $(byClassName("asset-name"))
-            .shouldHave(text(expectedIrcs + " · " + extectedAssetName));
+                .shouldHave(text(expectedIrcs + " · " + extectedAssetName));
     }
 }

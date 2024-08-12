@@ -20,11 +20,13 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selectors.byTitle;
 import static com.codeborne.selenide.Selectors.withText;
 import static com.codeborne.selenide.Selenide.$;
+
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+
 import org.openqa.selenium.By.ByClassName;
 
 public class WorkflowsPanel {
@@ -48,13 +50,13 @@ public class WorkflowsPanel {
 
     public void assertIncidentExists(String assetName) {
         $(byTitle(assetName))
-            .should(exist);
+                .should(exist);
     }
 
     public void assertIncidentIrcsByAsset(String assetName, String expectedIrcs) {
         $(byTitle(assetName))
-            .$(byClassName("ircs"))
-            .shouldHave(text(expectedIrcs));
+                .$(byClassName("ircs"))
+                .shouldHave(text(expectedIrcs));
     }
 
     public void assertIncidentPositionTimestampByAsset(String assetName, Instant expectedTimestamp) {
@@ -62,20 +64,20 @@ public class WorkflowsPanel {
         String expectedTime = DateTimeFormatter.ofPattern("HH:mm").format(expectedTimestamp.atZone(ZoneId.of("UTC")));
         String expectedDateTime = expectedDate + " • " + expectedTime;
         $(byTitle(assetName))
-            .$(byClassName("time"))
-            .shouldHave(text(expectedDateTime));
+                .$(byClassName("time"))
+                .shouldHave(text(expectedDateTime));
     }
 
     public void assertProgressCircleExists(String assetName) {
         $(byTitle(assetName))
-            .$(byClassName("countdown"))
-            .should(exist);
+                .$(byClassName("countdown"))
+                .should(exist);
     }
 
     public void assertProgressCircleValue(String assetName, String expectedValue) {
         $(byTitle(assetName))
-            .$(byClassName("countdown"))
-            .$(byText(expectedValue))
-            .should(exist);
+                .$(byClassName("countdown"))
+                .$(byText(expectedValue))
+                .should(exist);
     }
 }

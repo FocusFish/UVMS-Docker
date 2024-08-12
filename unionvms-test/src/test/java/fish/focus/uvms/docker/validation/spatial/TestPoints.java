@@ -1,7 +1,7 @@
 package fish.focus.uvms.docker.validation.spatial;
 
 public class TestPoints {
-    public static double[] testpoints = {   61.11272353,
+    public static double[] testpoints = {61.11272353,
             115.89315997,
             5.35198638,
             -107.74903992,

@@ -6,12 +6,15 @@ import fish.focus.uvms.docker.validation.common.AbstractRest;
 import fish.focus.uvms.docker.validation.spatial.dto.upload.AreaUploadMapping;
 import fish.focus.uvms.docker.validation.spatial.dto.upload.AreaUploadMappingProperty;
 import fish.focus.uvms.docker.validation.spatial.dto.upload.AreaUploadMetadata;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import java.io.IOException;
 
 public class AreaZipUploadIT extends AbstractRest {
@@ -21,8 +24,8 @@ public class AreaZipUploadIT extends AbstractRest {
         byte[] bytes = getClass().getClassLoader().getResourceAsStream("FAO_AREAS.zip").readAllBytes();
 
         MultipartFormDataOutput mdo = new MultipartFormDataOutput();
-        mdo.addFormData("areaType", "FAO", MediaType.TEXT_PLAIN_TYPE );
-        mdo.addFormData("uploadedFile", bytes, MediaType.APPLICATION_OCTET_STREAM_TYPE );
+        mdo.addFormData("areaType", "FAO", MediaType.TEXT_PLAIN_TYPE);
+        mdo.addFormData("uploadedFile", bytes, MediaType.APPLICATION_OCTET_STREAM_TYPE);
 
         String stringResponse = getWebTarget()
                 .path("spatial/rest")
@@ -57,13 +60,13 @@ public class AreaZipUploadIT extends AbstractRest {
                 .path("4326")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .post(Entity.json(json) , Response.class);
+                .post(Entity.json(json), Response.class);
 
         assertNotNull(uploadResponse);
         assertEquals(200, uploadResponse.getStatus());
     }
 
-    private AreaUploadMappingProperty createAreaUploadMappingProperty(String source, String target){
+    private AreaUploadMappingProperty createAreaUploadMappingProperty(String source, String target) {
         AreaUploadMappingProperty property = new AreaUploadMappingProperty(source, target);
         return property;
     }

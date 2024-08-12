@@ -45,11 +45,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
@@ -58,12 +55,12 @@ import static org.junit.Assert.assertTrue;
 public class NAFSystemIT extends AbstractRest {
 
     public static int ENDPOINT_PORT = 29001;
-    
+
     @After
     public void removeCustomRules() {
         CustomRuleHelper.removeCustomRulesByDefaultUser();
     }
-    
+
     @Test
     public void sendPositionToNorwayAndVerifyMandatoryFields() throws IOException, Exception {
         Organisation organisation = createOrganisationNorway();
@@ -86,7 +83,7 @@ public class NAFSystemIT extends AbstractRest {
             NAFHelper.sendPositionToNAFPlugin(position, asset);
             nafEndpoint.getMessage(10000);
         }
-        
+
         position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
         position.speed = 5;
 
@@ -95,15 +92,15 @@ public class NAFSystemIT extends AbstractRest {
             NAFHelper.sendPositionToNAFPlugin(position, asset);
             message = nafEndpoint.getMessage(10000);
         }
-        
+
         assertThat(NAFHelper.readCodeValue("AD", message), is(organisation.getNation()));
         assertThat(NAFHelper.readCodeValue("FR", message), is("UNK"));
         assertThat(NAFHelper.readCodeValue("TM", message), is(MovementTypeType.POS.toString()));
         assertThat(NAFHelper.readCodeValue("RC", message), is(asset.getIrcs()));
         assertThat(NAFHelper.readCodeDoubleValue("LT", message), is(position.latitude));
         assertThat(NAFHelper.readCodeDoubleValue("LG", message), is(position.longitude));
-        assertThat(NAFHelper.readCodeValue("SP", message), is(String.valueOf((int)position.speed * 10)));
-        assertThat(NAFHelper.readCodeValue("CO", message), is(String.valueOf((int)position.bearing)));
+        assertThat(NAFHelper.readCodeValue("SP", message), is(String.valueOf((int) position.speed * 10)));
+        assertThat(NAFHelper.readCodeValue("CO", message), is(String.valueOf((int) position.bearing)));
         ZonedDateTime positionTime = ZonedDateTime.ofInstant(position.positionTime.toInstant(), ZoneId.of("UTC"));
         assertThat(NAFHelper.readCodeValue("DA", message), is(positionTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
         assertThat(NAFHelper.readCodeValue("TI", message), is(positionTime.format(DateTimeFormatter.ofPattern("HHmm"))));
@@ -147,24 +144,24 @@ public class NAFSystemIT extends AbstractRest {
             NAFHelper.sendPositionToNAFPlugin(position, asset);
             nafEndpoint.getMessage(10000);
         }
-        
+
         position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
         position.speed = 5;
-        
+
         String message;
         try (NafEndpoint nafEndpoint = new NafEndpoint(ENDPOINT_PORT)) {
             NAFHelper.sendPositionToNAFPlugin(position, asset);
             message = nafEndpoint.getMessage(10000);
         }
-        
+
         assertThat(NAFHelper.readCodeValue("AD", message), is(organisation.getNation()));
         assertThat(NAFHelper.readCodeValue("FR", message), is("UNK"));
         assertThat(NAFHelper.readCodeValue("TM", message), is(MovementTypeType.POS.toString()));
         assertThat(NAFHelper.readCodeValue("RC", message), is(asset.getIrcs()));
         assertThat(NAFHelper.readCodeDoubleValue("LT", message), is(position.latitude));
         assertThat(NAFHelper.readCodeDoubleValue("LG", message), is(position.longitude));
-        assertThat(NAFHelper.readCodeValue("SP", message), is(String.valueOf((int)position.speed * 10)));
-        assertThat(NAFHelper.readCodeValue("CO", message), is(String.valueOf((int)position.bearing)));
+        assertThat(NAFHelper.readCodeValue("SP", message), is(String.valueOf((int) position.speed * 10)));
+        assertThat(NAFHelper.readCodeValue("CO", message), is(String.valueOf((int) position.bearing)));
         ZonedDateTime positionTime = ZonedDateTime.ofInstant(position.positionTime.toInstant(), ZoneId.of("UTC"));
         assertThat(NAFHelper.readCodeValue("DA", message), is(positionTime.format(DateTimeFormatter.ofPattern("yyyyMMdd"))));
         assertThat(NAFHelper.readCodeValue("TI", message), is(positionTime.format(DateTimeFormatter.ofPattern("HHmm"))));
@@ -176,7 +173,7 @@ public class NAFSystemIT extends AbstractRest {
 
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Enter NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_ENTRY_REPORT, VMSSystemHelper.NAF_NAME, organisation.getName())
                 .build();
@@ -192,7 +189,7 @@ public class NAFSystemIT extends AbstractRest {
 
         String message;
         try (NafEndpoint nafEndpoint = new NafEndpoint(ENDPOINT_PORT);
-                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+             TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             NAFHelper.sendPositionToNAFPlugin(swePosition, asset);
             topicListener.listenOnEventBus();
             NAFHelper.sendPositionToNAFPlugin(norPosition, asset);
@@ -218,7 +215,7 @@ public class NAFSystemIT extends AbstractRest {
 
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Exit NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_EXT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_EXT,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_EXIT_REPORT, VMSSystemHelper.NAF_NAME, organisation.getName())
                 .build();
@@ -234,7 +231,7 @@ public class NAFSystemIT extends AbstractRest {
 
         String message;
         try (NafEndpoint nafEndpoint = new NafEndpoint(ENDPOINT_PORT);
-                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+             TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             NAFHelper.sendPositionToNAFPlugin(norPosition, asset);
             topicListener.listenOnEventBus();
             NAFHelper.sendPositionToNAFPlugin(swePosition, asset);
@@ -279,26 +276,26 @@ public class NAFSystemIT extends AbstractRest {
             criteria.setKey(SearchKey.CONNECT_ID);
             criteria.setValue(asset.getId().toString());
             query.getMovementSearchCriteria().add(criteria);
-    
+
             List<MovementType> movements = MovementHelper.getListByQuery(query);
-    
+
             assertThat(movements.size(), is(4));
             movements.sort(Comparator.comparing(MovementType::getPositionTime));
             assertThat(movements.get(0).getConnectId(), is(asset.getId().toString()));
             assertThat(movements.get(0).getPosition().getLongitude(), is(entryPosition.longitude));
             assertThat(movements.get(0).getPosition().getLatitude(), is(entryPosition.latitude));
             assertThat(movements.get(0).getPositionTime(), is(entryPosition.positionTime));
-    
+
             assertThat(movements.get(1).getConnectId(), is(asset.getId().toString()));
             assertThat(movements.get(1).getPosition().getLongitude(), is(normalPosition1.longitude));
             assertThat(movements.get(1).getPosition().getLatitude(), is(normalPosition1.latitude));
             assertThat(movements.get(1).getPositionTime(), is(normalPosition1.positionTime));
-    
+
             assertThat(movements.get(2).getConnectId(), is(asset.getId().toString()));
             assertThat(movements.get(2).getPosition().getLongitude(), is(normalPosition2.longitude));
             assertThat(movements.get(2).getPosition().getLatitude(), is(normalPosition2.latitude));
             assertThat(movements.get(2).getPositionTime(), is(normalPosition2.positionTime));
-    
+
             assertThat(movements.get(3).getConnectId(), is(asset.getId().toString()));
             assertThat(movements.get(3).getPosition().getLongitude(), is(normalPosition2.longitude));
             assertThat(movements.get(3).getPosition().getLatitude(), is(normalPosition2.latitude));
@@ -383,7 +380,7 @@ public class NAFSystemIT extends AbstractRest {
         UserHelper.createOrganisation(organisation);
         EndPoint endpoint = new EndPoint();
         endpoint.setName("NAF");
-        endpoint.setUri("http://" + getDockerHostIp() + ":"+ENDPOINT_PORT+"/naf/message/#MESSAGE#");
+        endpoint.setUri("http://" + getDockerHostIp() + ":" + ENDPOINT_PORT + "/naf/message/#MESSAGE#");
         endpoint.setStatus("E");
         endpoint.setOrganisationName(organisation.getName());
         EndPoint createdEndpoint = UserHelper.createEndpoint(endpoint);

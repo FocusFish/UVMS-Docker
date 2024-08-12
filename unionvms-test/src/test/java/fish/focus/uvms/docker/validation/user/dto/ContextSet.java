@@ -13,7 +13,8 @@ public class ContextSet implements Serializable {
     /**
      * Creates a new instance
      */
-    public ContextSet() {}
+    public ContextSet() {
+    }
 
     /**
      * Get the value of contexts
@@ -35,7 +36,7 @@ public class ContextSet implements Serializable {
 
     /**
      * Formats a human-readable view of this instance.
-     * 
+     *
      * @return a human-readable view
      */
     @Override

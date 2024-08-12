@@ -17,6 +17,7 @@ import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selectors.byTagName;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selectors;
 import fish.focus.uvms.asset.client.model.AssetDTO;
@@ -31,8 +32,8 @@ public class AssetSearchPage {
 
     public void searchAsset(String searchQuery) {
         $(byAttribute("name", "Search"))
-            .setValue(searchQuery)
-            .pressEnter();
+                .setValue(searchQuery)
+                .pressEnter();
     }
 
     public AssetPage clickOnResultRow(int row) {
@@ -46,7 +47,7 @@ public class AssetSearchPage {
 
     public void assertSearchResultAtPosition(int index, AssetDTO asset) {
         ElementsCollection searchResultRow = searchResults.get(index)
-            .$$(Selectors.byTagName("td"));
+                .$$(Selectors.byTagName("td"));
         searchResultRow.get(0).shouldHave(text(asset.getExternalMarking()));
         searchResultRow.get(1).shouldHave(text(asset.getIrcs()));
         searchResultRow.get(2).shouldHave(text(asset.getName()));

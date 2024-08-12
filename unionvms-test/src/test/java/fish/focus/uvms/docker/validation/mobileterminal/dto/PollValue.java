@@ -21,7 +21,7 @@ public class PollValue {
         this.value = value;
     }
 
-    public PollValue(){/* for json */}
+    public PollValue() {/* for json */}
 
     public PollKey getKey() {
         return key;

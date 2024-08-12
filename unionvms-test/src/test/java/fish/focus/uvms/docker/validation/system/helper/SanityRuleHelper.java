@@ -11,8 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.system.helper;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import fish.focus.schema.movementrules.search.v1.AlarmListCriteria;
 import fish.focus.schema.movementrules.search.v1.AlarmQuery;
 import fish.focus.schema.movementrules.search.v1.AlarmSearchKey;
@@ -30,8 +28,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
 public class SanityRuleHelper extends AbstractHelper {
-    
+
     public static long countOpenAlarms() {
         return getWebTarget()
                 .path("movement/rest/alarms/countopen")
@@ -39,7 +39,7 @@ public class SanityRuleHelper extends AbstractHelper {
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get(long.class);
     }
-    
+
     public static void pollAlarmReportCreated() {
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -47,7 +47,7 @@ public class SanityRuleHelper extends AbstractHelper {
             e.printStackTrace();
         }
     }
-    
+
     public static AlarmReport getLatestOpenAlarmReportSince(ZonedDateTime timestamp) throws Exception {
         AlarmQuery query = new AlarmQuery();
         ListPagination pagination = new ListPagination();

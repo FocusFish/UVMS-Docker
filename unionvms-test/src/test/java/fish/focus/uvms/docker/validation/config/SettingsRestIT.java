@@ -25,11 +25,12 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class SettingsRestIT extends AbstractRest {
 
@@ -39,7 +40,7 @@ public class SettingsRestIT extends AbstractRest {
     public void getByModuleNameTest() {
         Response response = getWebTarget()
                 .path("config/rest/settings")
-                .queryParam("moduleName","audit")
+                .queryParam("moduleName", "audit")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get();
@@ -54,7 +55,8 @@ public class SettingsRestIT extends AbstractRest {
                 .path("config/rest/catalog")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<Map<String, List<SettingType>>>() {});
+                .get(new GenericType<Map<String, List<SettingType>>>() {
+                });
 
 
         for (String module : dataMap.keySet()) {
@@ -142,7 +144,7 @@ public class SettingsRestIT extends AbstractRest {
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .post(Entity.json(settingsCreateQuery), SettingType.class);
 
-            return setting;
+        return setting;
     }
 
     @Test
@@ -152,7 +154,8 @@ public class SettingsRestIT extends AbstractRest {
                 .path("config/rest/catalog")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<Map<String, List<SettingType>>>() {});
+                .get(new GenericType<Map<String, List<SettingType>>>() {
+                });
 
         assertNotNull(catalog);
     }

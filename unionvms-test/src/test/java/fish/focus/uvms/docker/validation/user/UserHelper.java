@@ -13,11 +13,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 package fish.focus.uvms.docker.validation.user;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
 import fish.focus.uvms.docker.validation.common.AuthenticationRequest;
 import fish.focus.uvms.docker.validation.common.AuthenticationResponse;
@@ -26,40 +21,47 @@ import fish.focus.uvms.docker.validation.user.dto.Channel;
 import fish.focus.uvms.docker.validation.user.dto.EndPoint;
 import fish.focus.uvms.docker.validation.user.dto.Organisation;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 public class UserHelper extends AbstractRest {
 
-	public static AuthenticationResponse authenticate(String user, String password) {
-	    AuthenticationRequest userPwd = new AuthenticationRequest(user,password);
-		
-	    return getWebTarget()
+    public static AuthenticationResponse authenticate(String user, String password) {
+        AuthenticationRequest userPwd = new AuthenticationRequest(user, password);
+
+        return getWebTarget()
                 .path("usm-administration/rest/authenticate")
                 .request(MediaType.APPLICATION_JSON)
                 .post(Entity.json(userPwd), AuthenticationResponse.class);
-	}
+    }
 
-	public static ChallengeResponse getChallenge(String jwtoken) {
-		ChallengeResponse challengeResponse = getWebTarget()
+    public static ChallengeResponse getChallenge(String jwtoken) {
+        ChallengeResponse challengeResponse = getWebTarget()
                 .path("usm-administration/rest/challenge")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, jwtoken)
                 .get(ChallengeResponse.class);
-		
-		assertNotNull(challengeResponse.getChallenge());
-		assertEquals("vms_admin_com", challengeResponse.getUserName());
-		return challengeResponse;
-	}
-	
-	public static Organisation createOrganisation(Organisation organisation) {
-	    return getWebTarget()
+
+        assertNotNull(challengeResponse.getChallenge());
+        assertEquals("vms_admin_com", challengeResponse.getUserName());
+        return challengeResponse;
+    }
+
+    public static Organisation createOrganisation(Organisation organisation) {
+        return getWebTarget()
                 .path("usm-administration/rest/organisations")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .header("roleName", "AdminAllUVMS")
                 .header("scopeName", "All Vessels")
                 .post(Entity.json(organisation), Organisation.class);
-	}
+    }
 
-	public static Organisation getOrganisation(Long organisationId) {
+    public static Organisation getOrganisation(Long organisationId) {
         return getWebTarget()
                 .path("usm-administration/rest/organisations")
                 .path(organisationId.toString())
@@ -70,8 +72,8 @@ public class UserHelper extends AbstractRest {
                 .get(Organisation.class);
     }
 
-	public static EndPoint createEndpoint(EndPoint endpoint) {
-		return getWebTarget()
+    public static EndPoint createEndpoint(EndPoint endpoint) {
+        return getWebTarget()
                 .path("usm-administration/rest/endpoint")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
@@ -80,7 +82,7 @@ public class UserHelper extends AbstractRest {
                 .post(Entity.json(endpoint), EndPoint.class);
     }
 
-	public static Channel createChannel(Channel channel) {
+    public static Channel createChannel(Channel channel) {
         return getWebTarget()
                 .path("usm-administration/rest/channel")
                 .request(MediaType.APPLICATION_JSON)

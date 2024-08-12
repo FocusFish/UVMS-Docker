@@ -16,34 +16,34 @@ import java.util.List;
 
 public class CreatePollResultDto {
 
-	private boolean unsentPoll;
-	private List<String> sentPolls = new ArrayList<>();
-	private List<String> unsentPolls = new ArrayList<>();
-	
-	public CreatePollResultDto() {
-	}
+    private boolean unsentPoll;
+    private List<String> sentPolls = new ArrayList<>();
+    private List<String> unsentPolls = new ArrayList<>();
 
-	public List<String> getSentPolls() {
-		return sentPolls;
-	}
+    public CreatePollResultDto() {
+    }
 
-	public void setSentPolls(List<String> sentPolls) {
-		this.sentPolls = sentPolls;
-	}
+    public List<String> getSentPolls() {
+        return sentPolls;
+    }
 
-	public List<String> getUnsentPolls() {
-		return unsentPolls;
-	}
+    public void setSentPolls(List<String> sentPolls) {
+        this.sentPolls = sentPolls;
+    }
 
-	public void setUnsentPolls(List<String> unsentPolls) {
-		this.unsentPolls = unsentPolls;
-	}
+    public List<String> getUnsentPolls() {
+        return unsentPolls;
+    }
 
-	public boolean isUnsentPoll() {
-		return unsentPoll;
-	}
+    public void setUnsentPolls(List<String> unsentPolls) {
+        this.unsentPolls = unsentPolls;
+    }
 
-	public void setUnsentPoll(boolean unsentPoll) {
-		this.unsentPoll = unsentPoll;
-	}	
+    public boolean isUnsentPoll() {
+        return unsentPoll;
+    }
+
+    public void setUnsentPoll(boolean unsentPoll) {
+        this.unsentPoll = unsentPoll;
+    }
 }

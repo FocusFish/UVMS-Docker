@@ -15,21 +15,27 @@ public class Preferences {
     private String applicationName;
     private String optionName;
     private String optionValue;
+
     public String getApplicationName() {
         return applicationName;
     }
+
     public void setApplicationName(String applicationName) {
         this.applicationName = applicationName;
     }
+
     public String getOptionName() {
         return optionName;
     }
+
     public void setOptionName(String optionName) {
         this.optionName = optionName;
     }
+
     public String getOptionValue() {
         return optionValue;
     }
+
     public void setOptionValue(String optionValue) {
         this.optionValue = optionValue;
     }

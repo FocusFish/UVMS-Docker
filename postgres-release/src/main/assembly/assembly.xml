@@ -25,7 +25,7 @@
                 <include>createDb.sh</include>
                 <include>dropDb.sh</include>
                 <include>updateDbOnly.sh</include>
-                <include>drop-all.sql</include>                                   
+                <include>drop-all.sql</include>
             </includes>
             <outputDirectory></outputDirectory>
         </fileSet>
@@ -42,6 +42,6 @@
                 <include>.pgpass</include>
             </includes>
             <outputDirectory></outputDirectory>
-        </fileSet>        
+        </fileSet>
     </fileSets>
 </assembly>

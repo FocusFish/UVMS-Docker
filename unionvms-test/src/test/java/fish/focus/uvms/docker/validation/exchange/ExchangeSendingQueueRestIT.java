@@ -41,43 +41,43 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ExchangeSendingQueueRestIT extends AbstractRest {
-    
+
     @Test
-	public void getSendingQueueTest() throws Exception {
-	    String fluxEndpoint = "DNK";
-	    SetReportRequest reportRequest = VMSSystemHelper.triggerBasicRuleAndSendToFlux(fluxEndpoint);
-	    String unsentMessageGuid = reportRequest.getReport().getUnsentMessageGuid();
-		assertSendingLogContainsUnsentMessageGuid(fluxEndpoint, unsentMessageGuid);
-	}
+    public void getSendingQueueTest() throws Exception {
+        String fluxEndpoint = "DNK";
+        SetReportRequest reportRequest = VMSSystemHelper.triggerBasicRuleAndSendToFlux(fluxEndpoint);
+        String unsentMessageGuid = reportRequest.getReport().getUnsentMessageGuid();
+        assertSendingLogContainsUnsentMessageGuid(fluxEndpoint, unsentMessageGuid);
+    }
 
-	@Test
-	public void getSendTest() throws Exception {
-		boolean sent = sendSendingGroupIds(new ArrayList<>());
-		assertTrue(sent);
-	}
+    @Test
+    public void getSendTest() throws Exception {
+        boolean sent = sendSendingGroupIds(new ArrayList<>());
+        assertTrue(sent);
+    }
 
-	@Test
-	public void resendToFLUXTest() throws Exception {
-	    String fluxEndpoint = "DNK";
-	    SetReportRequest reportRequest = VMSSystemHelper.triggerBasicRuleAndSendToFlux(fluxEndpoint);
-	    String unsentMessageGuid = reportRequest.getReport().getUnsentMessageGuid();
-	    assertSendingLogContainsUnsentMessageGuid(fluxEndpoint, unsentMessageGuid);
+    @Test
+    public void resendToFLUXTest() throws Exception {
+        String fluxEndpoint = "DNK";
+        SetReportRequest reportRequest = VMSSystemHelper.triggerBasicRuleAndSendToFlux(fluxEndpoint);
+        String unsentMessageGuid = reportRequest.getReport().getUnsentMessageGuid();
+        assertSendingLogContainsUnsentMessageGuid(fluxEndpoint, unsentMessageGuid);
 
-	    SetReportRequest reportRequest2;
-	    try (TopicListener topicListener = new TopicListener(VMSSystemHelper.FLUX_SELECTOR)) {
-	        sendSendingGroupIds(Collections.singletonList(unsentMessageGuid));
-	        reportRequest2 = topicListener.listenOnEventBusForSpecificMessage(SetReportRequest.class);
+        SetReportRequest reportRequest2;
+        try (TopicListener topicListener = new TopicListener(VMSSystemHelper.FLUX_SELECTOR)) {
+            sendSendingGroupIds(Collections.singletonList(unsentMessageGuid));
+            reportRequest2 = topicListener.listenOnEventBusForSpecificMessage(SetReportRequest.class);
         }
-	    assertThat(reportRequest2, is(notNullValue()));
+        assertThat(reportRequest2, is(notNullValue()));
 
-		assertEquals(reportRequest.getReport().getMovement(), reportRequest2.getReport().getMovement());
-	    assertThat(reportRequest.getReport().getRecipient(), is(reportRequest2.getReport().getRecipient()));
-	}
-	
-	@Test
+        assertEquals(reportRequest.getReport().getMovement(), reportRequest2.getReport().getMovement());
+        assertThat(reportRequest.getReport().getRecipient(), is(reportRequest2.getReport().getRecipient()));
+    }
+
+    @Test
     public void resendToEmailTest() throws Exception {
-	    VMSSystemHelper.registerEmailPluginIfNotExisting();
-	    
+        VMSSystemHelper.registerEmailPluginIfNotExisting();
+
         String email = UUID.randomUUID() + "@mail.com";
         SetCommandRequest commandRequest = VMSSystemHelper.triggerBasicRuleAndSendEmail(email);
         String unsentMessageGuid = commandRequest.getCommand().getUnsentMessageGuid();
@@ -90,48 +90,49 @@ public class ExchangeSendingQueueRestIT extends AbstractRest {
         }
         assertThat(commandRequest2, is(notNullValue()));
 
-		assertEquals(commandRequest.getCommand().getEmail(), commandRequest2.getCommand().getEmail());
+        assertEquals(commandRequest.getCommand().getEmail(), commandRequest2.getCommand().getEmail());
         assertThat(commandRequest.getCommand().getFwdRule(), is(commandRequest2.getCommand().getFwdRule()));
     }
-	
-	private void assertSendingLogContainsUnsentMessageGuid(String msgType, String unsentMessageGuid) {
-	    List<SendingLog> list = getSendingLogListForMsgType(msgType);
+
+    private void assertSendingLogContainsUnsentMessageGuid(String msgType, String unsentMessageGuid) {
+        List<SendingLog> list = getSendingLogListForMsgType(msgType);
         assertFalse(list.isEmpty());
         assertTrue(list.stream().anyMatch(log -> log.getMessageId().equals(unsentMessageGuid)));
-	}
-	
-	private List<SendingLog> getSendingLogListForMsgType(String recipient) {
-    	List<SendingLog> sendingLogs = new ArrayList<>();
-	    List<SendingGroupLog> sendGroupList = getSendGroupList();
-	    for (SendingGroupLog sendingGroupLog : sendGroupList) {
-	        if (sendingGroupLog.getRecipient().equals(recipient)) {
-	            for (PluginType plugin : sendingGroupLog.getPluginList()) {
-	                sendingLogs.addAll(plugin.getSendingLogList());
-	            }
-	        }
+    }
+
+    private List<SendingLog> getSendingLogListForMsgType(String recipient) {
+        List<SendingLog> sendingLogs = new ArrayList<>();
+        List<SendingGroupLog> sendGroupList = getSendGroupList();
+        for (SendingGroupLog sendingGroupLog : sendGroupList) {
+            if (sendingGroupLog.getRecipient().equals(recipient)) {
+                for (PluginType plugin : sendingGroupLog.getPluginList()) {
+                    sendingLogs.addAll(plugin.getSendingLogList());
+                }
+            }
         }
-	    return sendingLogs;
-	}
-	
-	private List<SendingGroupLog> getSendGroupList() {
-	    Response response = getWebTarget()
+        return sendingLogs;
+    }
+
+    private List<SendingGroupLog> getSendGroupList() {
+        Response response = getWebTarget()
                 .path("exchange/rest/sendingqueue/list")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get(Response.class);
 
         assertEquals(200, response.getStatus());
-        return response.readEntity(new GenericType<List<SendingGroupLog>>() {});
-	}
-	
-	private Boolean sendSendingGroupIds(List<String> ids) {
-	    Response response = getWebTarget()
+        return response.readEntity(new GenericType<List<SendingGroupLog>>() {
+        });
+    }
+
+    private Boolean sendSendingGroupIds(List<String> ids) {
+        Response response = getWebTarget()
                 .path("exchange/rest/sendingqueue/send")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .put(Entity.json(writeValueAsString(ids).getBytes()), Response.class);
-	    
-	    assertEquals(200, response.getStatus());
-	    return response.readEntity(Boolean.class);
-	}
+
+        assertEquals(200, response.getStatus());
+        return response.readEntity(Boolean.class);
+    }
 }

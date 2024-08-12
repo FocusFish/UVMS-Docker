@@ -29,6 +29,6 @@ public class MapInformationPanel {
 
     public void assertFilteredAssetShowing(int expectedAssetsShowing) {
         $(byText("Showing")).parent().$(byTagName("div"), 0)
-            .shouldHave(text(String.valueOf(expectedAssetsShowing)));
+                .shouldHave(text(String.valueOf(expectedAssetsShowing)));
     }
 }

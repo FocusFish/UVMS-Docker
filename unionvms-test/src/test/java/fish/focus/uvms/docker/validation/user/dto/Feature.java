@@ -20,7 +20,8 @@ public class Feature implements Serializable {
     /**
      * Creates a new instance
      */
-    public Feature() {}
+    public Feature() {
+    }
 
     /**
      * Get the value of applicationName
@@ -60,7 +61,7 @@ public class Feature implements Serializable {
 
     /**
      * Formats a human-readable view of this instance.
-     * 
+     *
      * @return a human-readable view
      */
     @Override

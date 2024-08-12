@@ -1,14 +1,16 @@
 package fish.focus.uvms.docker.validation.asset;
 
-import org.junit.Test;
 import fish.focus.uvms.docker.validation.asset.assetfilter.test.dto.*;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import javax.json.JsonObject;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import javax.json.JsonObject;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AssetFilterRestIT extends AbstractRest {
 
@@ -66,7 +68,7 @@ public class AssetFilterRestIT extends AbstractRest {
         assertTrue(updatedAssetFilterString.contains("42"));
         assertTrue(updatedAssetFilterString.contains("operator update test"));
     }
-    
+
     @Test
     public void updateAssetFilterWithMultipleQueriesTest() {
         AssetFilterDto createdAssetFilter = AssetFilterTestHelper.createBasicAssetFilter();
@@ -83,10 +85,10 @@ public class AssetFilterRestIT extends AbstractRest {
         String updatedAssetFilterString = AssetFilterTestHelper.getAssetFilterByGuid(filterId);
         AssetFilterDto updatedAssetFilter = JSONB.fromJson(updatedAssetFilterString,
                 AssetFilterDto.class);
-        
+
         assertTrue(updatedAssetFilter.getId().equals(filterId));
         assertTrue(updatedAssetFilter.getName().equals("båtar2"));
-        
+
         String assetFilterToUpdate2 = "{\"name\":\"båtar3\",\"id\":\"" + filterId
                 + "\",\"filter\": [{\"values\":[{\"value\":42, \"operator\":\"operator update test\"}],"
                 + "\"type\": \"dsad\", \"inverse\": false,\"valueType\": \"NUMBER\"},"
@@ -97,19 +99,20 @@ public class AssetFilterRestIT extends AbstractRest {
         String updatedAssetFilterString2 = AssetFilterTestHelper.getAssetFilterByGuid(filterId);
         AssetFilterDto assetFilterResponseDto2 = JSONB.fromJson(updatedAssetFilterString2,
                 AssetFilterDto.class);
-        
+
         assertTrue(updatedAssetFilter.getId().equals(assetFilterResponseDto2.getId()));
         assertFalse(updatedAssetFilter.getName().equals(assetFilterResponseDto2.getName()));
-        
+
         List<JsonObject> assetFilterQueryRestDto = assetFilterResponseDto2.getFilter();
         AssetFilterQueryRestDto assetFilterQueryRestDto0 = AssetFilterTestHelper.deserializeFilter(assetFilterQueryRestDto.get(0));
         AssetFilterQueryRestDto assetFilterQueryRestDto1 = AssetFilterTestHelper.deserializeFilter(assetFilterQueryRestDto.get(1));
-        
-        assertFalse( assetFilterQueryRestDto0.getInverse() == assetFilterQueryRestDto1.getInverse() );
-        assertTrue( assetFilterQueryRestDto0.getValueType() == assetFilterQueryRestDto1.getValueType());
-        
-        
+
+        assertFalse(assetFilterQueryRestDto0.getInverse() == assetFilterQueryRestDto1.getInverse());
+        assertTrue(assetFilterQueryRestDto0.getValueType() == assetFilterQueryRestDto1.getValueType());
+
+
     }
+
     @Test
     public void updateAssetFilterWithMultipleValueTest() {
         AssetFilterDto createdAssetFilter = AssetFilterTestHelper.createBasicAssetFilter();
@@ -126,12 +129,12 @@ public class AssetFilterRestIT extends AbstractRest {
         String updatedAssetFilterString = AssetFilterTestHelper.getAssetFilterByGuid(filterId);
         AssetFilterDto updatedAssetFilter = JSONB.fromJson(updatedAssetFilterString,
                 AssetFilterDto.class);
-        
+
         AssetFilterValueRestTestDto assetFilterValueRestTestDtoUpdatedFirst = AssetFilterTestHelper.deserializeFilter(updatedAssetFilter.getFilter().get(0)).getValues().get(0);
-        
+
         assertTrue(updatedAssetFilter.getId().equals(filterId));
         assertTrue(updatedAssetFilter.getName().equals("testValue"));
-        
+
         String assetFilterToUpdate2 = "{\"name\":\"testValue2\",\"id\":\"" + filterId
                 + "\",\"filter\": [{\"values\":[{\"value\":42, \"operator\":\"operator update test\"},"
                 + "{\"value\":41, \"operator\":\"operator update test\"}],"
@@ -141,21 +144,21 @@ public class AssetFilterRestIT extends AbstractRest {
         String updatedAssetFilterString2 = AssetFilterTestHelper.getAssetFilterByGuid(filterId);
         AssetFilterDto assetFilterResponseDto2 = JSONB.fromJson(updatedAssetFilterString2,
                 AssetFilterDto.class);
-        
+
         assertTrue(updatedAssetFilter.getId().equals(assetFilterResponseDto2.getId()));
         assertFalse(updatedAssetFilter.getName().equals(assetFilterResponseDto2.getName()));
-        
+
         List<JsonObject> assetFilterQueryRestDto = assetFilterResponseDto2.getFilter();
         AssetFilterQueryRestDto assetFilterQueryRestDto0 = AssetFilterTestHelper.deserializeFilter(assetFilterQueryRestDto.get(0));
         List<AssetFilterValueRestTestDto> assetFilterValueList = assetFilterQueryRestDto0.getValues();
         AssetFilterValueRestTestDto assetFilterValueRestTestDto0 = assetFilterValueList.get(0);
         AssetFilterValueRestTestDto assetFilterValueRestTestDto1 = assetFilterValueList.get(1);
-        
-        assertFalse( assetFilterValueRestTestDto0.getValue()== assetFilterValueRestTestDto1.getValue() );
-        assertTrue( assetFilterValueRestTestDto0.getOperator().equals(assetFilterValueRestTestDto1.getOperator()) );
-        
-        assertTrue( assetFilterValueRestTestDtoUpdatedFirst.getOperator().equals(assetFilterValueRestTestDto0.getOperator()) );
-        assertTrue( assetFilterValueRestTestDtoUpdatedFirst.getOperator().equals(assetFilterValueRestTestDto1.getOperator()) );
+
+        assertFalse(assetFilterValueRestTestDto0.getValue() == assetFilterValueRestTestDto1.getValue());
+        assertTrue(assetFilterValueRestTestDto0.getOperator().equals(assetFilterValueRestTestDto1.getOperator()));
+
+        assertTrue(assetFilterValueRestTestDtoUpdatedFirst.getOperator().equals(assetFilterValueRestTestDto0.getOperator()));
+        assertTrue(assetFilterValueRestTestDtoUpdatedFirst.getOperator().equals(assetFilterValueRestTestDto1.getOperator()));
     }
 
     @Test

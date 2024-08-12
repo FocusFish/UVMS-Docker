@@ -20,36 +20,36 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class PollQuery {
 
-	@XmlElement(required=true)
-	private String statusFromDate;
-	
-	@XmlElement(required=true)
-	private String statusToDate;
+    @XmlElement(required = true)
+    private String statusFromDate;
 
-	@XmlElement(required=true)
-	private ExchangeLogStatusTypeType status;
-	
-	public String getStatusFromDate() {
-		return statusFromDate;
-	}
+    @XmlElement(required = true)
+    private String statusToDate;
 
-	public void setStatusFromDate(String statusFromDate) {
-		this.statusFromDate = statusFromDate;
-	}
+    @XmlElement(required = true)
+    private ExchangeLogStatusTypeType status;
 
-	public String getStatusToDate() {
-		return statusToDate;
-	}
+    public String getStatusFromDate() {
+        return statusFromDate;
+    }
 
-	public void setStatusToDate(String statusToDate) {
-		this.statusToDate = statusToDate;
-	}
+    public void setStatusFromDate(String statusFromDate) {
+        this.statusFromDate = statusFromDate;
+    }
 
-	public ExchangeLogStatusTypeType getStatus() {
-		return status;
-	}
+    public String getStatusToDate() {
+        return statusToDate;
+    }
 
-	public void setStatus(ExchangeLogStatusTypeType status) {
-		this.status = status;
-	}
+    public void setStatusToDate(String statusToDate) {
+        this.statusToDate = statusToDate;
+    }
+
+    public ExchangeLogStatusTypeType getStatus() {
+        return status;
+    }
+
+    public void setStatus(ExchangeLogStatusTypeType status) {
+        this.status = status;
+    }
 }

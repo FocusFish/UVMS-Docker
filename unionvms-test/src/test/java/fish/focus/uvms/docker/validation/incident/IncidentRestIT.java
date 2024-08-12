@@ -22,10 +22,12 @@ import org.junit.Test;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -82,7 +84,8 @@ public class IncidentRestIT extends AbstractRest {
                 .path(String.valueOf(incident.getId()))
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<Map<Long, IncidentLogDto>>() {});
+                .get(new GenericType<Map<Long, IncidentLogDto>>() {
+                });
 
         assertTrue(dtoList.size() > 0);
     }

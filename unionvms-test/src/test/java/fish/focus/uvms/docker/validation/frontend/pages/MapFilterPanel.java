@@ -28,7 +28,7 @@ public class MapFilterPanel {
 
     public void setFilter(String filterString) {
         $(by("data-placeholder", "Filter"))
-            .setValue(filterString);
+                .setValue(filterString);
     }
 
     public void createFilter(String filterName) {
@@ -39,22 +39,22 @@ public class MapFilterPanel {
 
     public void deleteFilter(String filterName) {
         $(byClassName("saved-filters"))
-            .$(byTitle(filterName))
-            .hover()
-            .sibling(0)
-            .click();
+                .$(byTitle(filterName))
+                .hover()
+                .sibling(0)
+                .click();
         $(byText("Delete")).click();
     }
 
     public void assertSavedFilterExists(String expectedFilterName) {
         $(byClassName("saved-filters"))
-            .$(byTitle(expectedFilterName))
-            .should(exist);
+                .$(byTitle(expectedFilterName))
+                .should(exist);
     }
 
     public void assertSavedFilterNotExists(String expectedFilterName) {
         $(byClassName("saved-filters"))
-            .$(byTitle(expectedFilterName))
-            .shouldNot(exist);
+                .$(byTitle(expectedFilterName))
+                .shouldNot(exist);
     }
 }

@@ -31,7 +31,7 @@ public class InmarsatPluginMock {
     // Code taken from inmarsat plugin
     public static void sendInmarsatPosition(MobileTerminalDto mobileTerminal, LatLong position) throws Exception {
         ChannelDto channel = mobileTerminal.getChannels().iterator().next();
-        
+
         MovementBaseType movement = new MovementBaseType();
         movement.setComChannelType(MovementComChannelType.MOBILE_TERMINAL);
         MobileTerminalId mobTermId = new MobileTerminalId();
@@ -64,7 +64,7 @@ public class InmarsatPluginMock {
         reportType.setTimestamp(gcal.getTime());
         reportType.setPluginName("fish.focus.uvms.plugins.inmarsat");
         reportType.setPluginType(PluginType.SATELLITE_RECEIVER);
-        
+
         String text = ExchangeModuleRequestMapper.createSetMovementReportRequest(reportType, "TWOSTAGE", null, Instant.now(), PluginType.SATELLITE_RECEIVER, "TWOSTAGE", null);
         try (MessageHelper messageHelper = new MessageHelper()) {
             messageHelper.sendMessage("UVMSExchangeEvent", text);

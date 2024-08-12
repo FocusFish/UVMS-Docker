@@ -32,6 +32,7 @@ import fish.focus.uvms.reporting.service.dto.rules.AlarmMovement;
 import fish.focus.uvms.reporting.service.dto.rules.AlarmMovementList;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
@@ -51,81 +52,81 @@ import static org.junit.Assert.assertEquals;
 
 public class AlarmRestIT extends AbstractRest {
 
-	@Test
-	@Ignore
-	public void getAlarmsTest() {
-		AlarmMovementList alarmMovementList = new AlarmMovementList();
-		ArrayList<AlarmMovement> alarmMovementListContent = new ArrayList<>();
-		AlarmMovement alarmMovement = new AlarmMovement();
-		alarmMovement.setMovementId("movementId");
-		alarmMovement.setxCoordinate("57.715434");
-		alarmMovement.setyCoordinate("11.970012");
-		alarmMovementListContent.add(alarmMovement);	
-		
-		alarmMovementList.setAlarmMovementList(alarmMovementListContent);
+    @Test
+    @Ignore
+    public void getAlarmsTest() {
+        AlarmMovementList alarmMovementList = new AlarmMovementList();
+        ArrayList<AlarmMovement> alarmMovementListContent = new ArrayList<>();
+        AlarmMovement alarmMovement = new AlarmMovement();
+        alarmMovement.setMovementId("movementId");
+        alarmMovement.setxCoordinate("57.715434");
+        alarmMovement.setyCoordinate("11.970012");
+        alarmMovementListContent.add(alarmMovement);
 
-		Response response = getWebTarget()
-		        .path("reporting/rest/alarms")
-		        .request(MediaType.APPLICATION_JSON)
-		        .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-		        .post(Entity.json(alarmMovementList));
+        alarmMovementList.setAlarmMovementList(alarmMovementListContent);
 
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-	}
-	
-	@Test
-	@Ignore
+        Response response = getWebTarget()
+                .path("reporting/rest/alarms")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(alarmMovementList));
+
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    @Ignore
     public void getTicketForMovementTest() throws Exception {
-		try {
-			// Create ticket
-			AssetDTO asset = AssetTestHelper.createTestAsset();
-			CustomRuleType customRule = CustomRuleBuilder.getBuilder()
-					.rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
-							ConditionType.EQ, asset.getFlagStateCode())
-					.setAvailability(AvailabilityType.GLOBAL)
-					.build();
-			CustomRuleHelper.createCustomRule(customRule);
-	        try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
-	            NAFHelper.sendPositionToNAFPlugin(new LatLong(1, 1, new Date()), asset);
-	            topicListener.listenOnEventBus();
-	        }
-			// TODO find an alternative to Thread.sleep
-			Thread.sleep(10000);
+        try {
+            // Create ticket
+            AssetDTO asset = AssetTestHelper.createTestAsset();
+            CustomRuleType customRule = CustomRuleBuilder.getBuilder()
+                    .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
+                            ConditionType.EQ, asset.getFlagStateCode())
+                    .setAvailability(AvailabilityType.GLOBAL)
+                    .build();
+            CustomRuleHelper.createCustomRule(customRule);
+            try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+                NAFHelper.sendPositionToNAFPlugin(new LatLong(1, 1, new Date()), asset);
+                topicListener.listenOnEventBus();
+            }
+            // TODO find an alternative to Thread.sleep
+            Thread.sleep(10000);
 
-			// Get movement guid
-			MovementQuery query = new MovementQuery();
-			ListPagination pagination = new ListPagination();
-			pagination.setListSize(BigInteger.TEN);
-			pagination.setPage(BigInteger.ONE);
-			query.setPagination(pagination);
-			ListCriteria criteria = new ListCriteria();
-			criteria.setKey(SearchKey.CONNECT_ID);
-			criteria.setValue(asset.getId().toString());
-			query.getMovementSearchCriteria().add(criteria);
-			List<MovementType> movements = MovementHelper.getListByQuery(query);
-			assertThat(movements.size(), is(1));
+            // Get movement guid
+            MovementQuery query = new MovementQuery();
+            ListPagination pagination = new ListPagination();
+            pagination.setListSize(BigInteger.TEN);
+            pagination.setPage(BigInteger.ONE);
+            query.setPagination(pagination);
+            ListCriteria criteria = new ListCriteria();
+            criteria.setKey(SearchKey.CONNECT_ID);
+            criteria.setValue(asset.getId().toString());
+            query.getMovementSearchCriteria().add(criteria);
+            List<MovementType> movements = MovementHelper.getListByQuery(query);
+            assertThat(movements.size(), is(1));
 
-			// Query reporting
-			AlarmMovementList alarmMovementList = new AlarmMovementList();
-			ArrayList<AlarmMovement> alarmMovementListContent = new ArrayList<>();
-			AlarmMovement alarmMovement = new AlarmMovement();
-			alarmMovement.setMovementId(movements.get(0).getGuid());
-			alarmMovement.setxCoordinate("1");
-			alarmMovement.setyCoordinate("1");
-			alarmMovementListContent.add(alarmMovement);
-			alarmMovementList.setAlarmMovementList(alarmMovementListContent);
-			
-			JsonObject data = getWebTarget()
-	                .path("reporting/rest/alarms")
-	                .request(MediaType.APPLICATION_JSON)
-	                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-	                .post(Entity.json(alarmMovementList), JsonObject.class);
+            // Query reporting
+            AlarmMovementList alarmMovementList = new AlarmMovementList();
+            ArrayList<AlarmMovement> alarmMovementListContent = new ArrayList<>();
+            AlarmMovement alarmMovement = new AlarmMovement();
+            alarmMovement.setMovementId(movements.get(0).getGuid());
+            alarmMovement.setxCoordinate("1");
+            alarmMovement.setyCoordinate("1");
+            alarmMovementListContent.add(alarmMovement);
+            alarmMovementList.setAlarmMovementList(alarmMovementListContent);
 
-			JsonObject alarms = data.getJsonObject("alarms");
-			JsonArray features = alarms.getJsonArray("features");
-			assertThat(features.size(), is(1));
-		} finally {
-			CustomRuleHelper.removeCustomRulesByDefaultUser();
-		}
+            JsonObject data = getWebTarget()
+                    .path("reporting/rest/alarms")
+                    .request(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                    .post(Entity.json(alarmMovementList), JsonObject.class);
+
+            JsonObject alarms = data.getJsonObject("alarms");
+            JsonArray features = alarms.getJsonArray("features");
+            assertThat(features.size(), is(1));
+        } finally {
+            CustomRuleHelper.removeCustomRulesByDefaultUser();
+        }
     }
 }

@@ -12,14 +12,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.docker.validation.system.helper;
 
 import fish.focus.uvms.exchange.model.mapper.JAXBMarshaller;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHandler;
-import un.unece.uncefact.data.standard.fluxvesselpositionmessage._4.FLUXVesselPositionMessage;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHandler;
+import un.unece.uncefact.data.standard.fluxvesselpositionmessage._4.FLUXVesselPositionMessage;
+
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
@@ -29,28 +29,27 @@ import java.util.concurrent.TimeUnit;
 public class RESTEndpoint implements Closeable {
 
     public static int ENDPOINT_PORT = 29001;
-    
-    private Server server;
     private static FLUXVesselPositionMessage message;
-    
+    private Server server;
+
     public RESTEndpoint() throws Exception {
         this(ENDPOINT_PORT);
     }
-    
+
     public RESTEndpoint(int port) throws Exception {
         server = new Server(port);
-       
+
         ServletHandler servletHandler = new ServletHandler();
         servletHandler.addServletWithMapping(RestServlet.class, "/*");
         server.setHandler(servletHandler);
         // Start Server
         server.start();
     }
-    
+
     public FLUXVesselPositionMessage getFLUXMessage() {
         return message;
     }
-    
+
     public FLUXVesselPositionMessage getMessage(int timeoutInMillis) throws InterruptedException {
         while (message == null && timeoutInMillis > 0) {
             TimeUnit.MILLISECONDS.sleep(100);
@@ -71,17 +70,17 @@ public class RESTEndpoint implements Closeable {
             }
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class RestServlet extends HttpServlet {
-        
+
         @Override
         protected void doPost(HttpServletRequest httpRequest, HttpServletResponse response) throws ServletException, IOException {
             try {
                 StringBuffer output = new StringBuffer();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpRequest.getInputStream()));
                 String line;
-                while ((line = bufferedReader.readLine()) != null) {  
+                while ((line = bufferedReader.readLine()) != null) {
                     output.append(line);
                 }
                 message = JAXBMarshaller.unmarshallString(output.toString(), FLUXVesselPositionMessage.class);

@@ -27,16 +27,16 @@ public class RealtimeMapPage {
 
     public RealtimeMapPage gotoCoordinates(Double latitude, Double longitude) {
         $(by("data-placeholder", "Search"))
-            .setValue(String.format("/c %s %s", latitude, longitude))
-            .pressEnter();
+                .setValue(String.format("/c %s %s", latitude, longitude))
+                .pressEnter();
         sleep(DEFAULT_ANIMATION_DURATION);
         return this;
     }
 
     public RealtimeMapPage clickOnCenter() {
         actions().moveToElement($("#realtime-map canvas"), 0, 0)
-                 .click()
-                 .perform();
+                .click()
+                .perform();
         return this;
     }
 

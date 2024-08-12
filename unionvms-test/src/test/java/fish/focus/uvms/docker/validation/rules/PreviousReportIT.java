@@ -11,14 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.rules;
 
-import static org.junit.Assert.assertTrue;
-import java.io.IOException;
-import java.util.List;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
@@ -27,6 +19,13 @@ import fish.focus.uvms.docker.validation.mobileterminal.MobileTerminalTestHelper
 import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
 import fish.focus.uvms.docker.validation.rules.dto.PreviousReportDto;
 import fish.focus.uvms.docker.validation.system.helper.VMSSystemHelper;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.List;
+
+import static org.junit.Assert.assertTrue;
 
 public class PreviousReportIT extends AbstractRest {
 

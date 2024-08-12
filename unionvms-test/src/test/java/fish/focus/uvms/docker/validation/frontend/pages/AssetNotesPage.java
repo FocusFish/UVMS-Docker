@@ -19,6 +19,7 @@ import static com.codeborne.selenide.Selectors.byId;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+
 import com.codeborne.selenide.ElementsCollection;
 
 public class AssetNotesPage {
@@ -40,7 +41,7 @@ public class AssetNotesPage {
 
     public void assertNoteAtPosition(int index, String note) {
         notes.get(index)
-            .$(byClassName("note-text"))
-            .shouldHave(text(note));
+                .$(byClassName("note-text"))
+                .shouldHave(text(note));
     }
 }

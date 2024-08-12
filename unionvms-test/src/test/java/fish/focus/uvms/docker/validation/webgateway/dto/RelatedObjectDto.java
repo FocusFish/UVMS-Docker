@@ -2,6 +2,7 @@ package fish.focus.uvms.docker.validation.webgateway.dto;
 
 import fish.focus.uvms.asset.client.model.Note;
 import fish.focus.uvms.docker.validation.movement.model.MicroMovement;
+
 import java.util.HashMap;
 import java.util.Map;
 

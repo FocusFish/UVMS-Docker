@@ -15,36 +15,41 @@ package fish.focus.uvms.docker.validation.exchange;
 
 import org.junit.Test;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
+
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
 import java.util.Map;
 
 public class ExchangeConfigRestIT extends AbstractRest {
 
-	@Test
-	public void getConfigSearchFieldsTest() {
-		List<String> fields = getWebTarget()
-				.path("exchange/rest/config/searchfields")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(new GenericType<List<String>>() {});
+    @Test
+    public void getConfigSearchFieldsTest() {
+        List<String> fields = getWebTarget()
+                .path("exchange/rest/config/searchfields")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(new GenericType<List<String>>() {
+                });
 
-		assertNotNull(fields);
-		assertEquals(10, fields.size());
-	}
+        assertNotNull(fields);
+        assertEquals(10, fields.size());
+    }
 
-	@Test
-	public void getConfigurationTest() {
-		Map<String, List> configurationMap = getWebTarget()
-				.path("exchange/rest/config")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(new GenericType<Map<String,List>>() {});
+    @Test
+    public void getConfigurationTest() {
+        Map<String, List> configurationMap = getWebTarget()
+                .path("exchange/rest/config")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(new GenericType<Map<String, List>>() {
+                });
 
-		assertNotNull(configurationMap);
-	}
+        assertNotNull(configurationMap);
+    }
 }

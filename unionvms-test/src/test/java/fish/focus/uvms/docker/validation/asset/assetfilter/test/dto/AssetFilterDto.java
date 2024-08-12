@@ -1,7 +1,7 @@
 package fish.focus.uvms.docker.validation.asset.assetfilter.test.dto;
 
-import java.util.List;
 import javax.json.JsonObject;
+import java.util.List;
 
 public class AssetFilterDto {
     private String name;

@@ -15,55 +15,57 @@ package fish.focus.uvms.docker.validation.mobileterminal;
 
 import org.junit.Test;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 public class ConfigRestIT extends AbstractRest {
 
-	@Test
-	public void getConfigTranspondersTest() {
-		Response response = getWebTarget()
-				.path("asset/rest/config/MT/transponders")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(Response.class);
+    @Test
+    public void getConfigTranspondersTest() {
+        Response response = getWebTarget()
+                .path("asset/rest/config/MT/transponders")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(Response.class);
 
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-		String json = response.readEntity(String.class);
-		assertNotNull(json);
-		assertFalse(json.isEmpty());
-	}
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        String json = response.readEntity(String.class);
+        assertNotNull(json);
+        assertFalse(json.isEmpty());
+    }
 
-	@Test
-	public void getConfigSearchFieldsTest() {
-		Response response = getWebTarget()
-				.path("asset/rest/config/MT/searchfields")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(Response.class);
+    @Test
+    public void getConfigSearchFieldsTest() {
+        Response response = getWebTarget()
+                .path("asset/rest/config/MT/searchfields")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(Response.class);
 
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-		String json = response.readEntity(String.class);
-		assertNotNull(json);
-		assertFalse(json.isEmpty());
-	}
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        String json = response.readEntity(String.class);
+        assertNotNull(json);
+        assertFalse(json.isEmpty());
+    }
 
-	@Test
-	public void getConfigurationTest() {
-		Response response = getWebTarget()
-				.path("asset/rest/config/MT")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(Response.class);
+    @Test
+    public void getConfigurationTest() {
+        Response response = getWebTarget()
+                .path("asset/rest/config/MT")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(Response.class);
 
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-		String json = response.readEntity(String.class);
-		assertNotNull(json);
-		assertFalse(json.isEmpty());
-	}
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+        String json = response.readEntity(String.class);
+        assertNotNull(json);
+        assertFalse(json.isEmpty());
+    }
 
 }

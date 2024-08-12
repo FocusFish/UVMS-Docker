@@ -13,6 +13,7 @@ package fish.focus.uvms.docker.validation.system.helper;
 
 import fish.focus.schema.movementrules.customrule.v1.CustomRuleType;
 import fish.focus.uvms.docker.validation.common.AbstractHelper;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
@@ -32,19 +33,19 @@ public class CustomRuleHelper extends AbstractHelper {
 
     public static CustomRuleType createCustomRule(CustomRuleType customRule) {
         return getWebTarget()
-               .path("movement-rules/rest/customrules")
-               .request(MediaType.APPLICATION_JSON)
-               .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-               .post(Entity.json(customRule), CustomRuleType.class);
+                .path("movement-rules/rest/customrules")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(customRule), CustomRuleType.class);
     }
-    
+
     public static void removeCustomRule(String guid) {
         getWebTarget()
-            .path("movement-rules/rest/customrules")
-            .path(guid)
-            .request(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-            .delete();
+                .path("movement-rules/rest/customrules")
+                .path(guid)
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .delete();
     }
 
     public static void removeCustomRulesByDefaultUser() {
@@ -53,13 +54,14 @@ public class CustomRuleHelper extends AbstractHelper {
                 .path(CustomRuleBuilder.DEFAULT_USER)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<CustomRuleType>>() {});
-        
+                .get(new GenericType<List<CustomRuleType>>() {
+                });
+
         for (CustomRuleType customRuleType : customRules) {
             removeCustomRule(customRuleType.getGuid());
         }
     }
-    
+
     public static void assertRuleTriggered(CustomRuleType rule, Instant dateFrom) {
         CustomRuleType fetchedCustomRule = getWebTarget()
                 .path("movement-rules/rest/customrules")
@@ -67,12 +69,12 @@ public class CustomRuleHelper extends AbstractHelper {
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get(CustomRuleType.class);
-        
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z");
         Instant lastTriggered = Instant.ofEpochMilli(Long.valueOf(fetchedCustomRule.getLastTriggered()));
         assertNotNull(lastTriggered);
 
-        assertTrue(lastTriggered.isAfter(dateFrom) || compareWithoutMillis(lastTriggered,dateFrom));
+        assertTrue(lastTriggered.isAfter(dateFrom) || compareWithoutMillis(lastTriggered, dateFrom));
     }
 
     private static boolean compareWithoutMillis(Instant a, Instant b) {
@@ -80,7 +82,7 @@ public class CustomRuleHelper extends AbstractHelper {
         Instant i2 = b.truncatedTo(ChronoUnit.SECONDS);
         return i1.equals(i2);
     }
-    
+
     public static void assertRuleNotTriggered(CustomRuleType rule) {
         CustomRuleType fetchedCustomRule = getWebTarget()
                 .path("movement-rules/rest/customrules")
@@ -94,8 +96,8 @@ public class CustomRuleHelper extends AbstractHelper {
 
     public static void pollTicketCreated() {
         getWebTarget()
-            .path("movement-rules/activity/ticket")
-            .request(MediaType.APPLICATION_JSON)
-            .get();
+                .path("movement-rules/activity/ticket")
+                .request(MediaType.APPLICATION_JSON)
+                .get();
     }
 }

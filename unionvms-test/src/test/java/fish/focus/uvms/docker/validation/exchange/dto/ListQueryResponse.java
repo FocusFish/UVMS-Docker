@@ -22,21 +22,27 @@ public class ListQueryResponse {
     public ListQueryResponse() {
         logList = new ArrayList<>();
     }
+
     public int getCurrentPage() {
         return currentPage;
     }
+
     public void setCurrentPage(int currentPage) {
         this.currentPage = currentPage;
     }
+
     public int getTotalNumberOfPages() {
         return totalNumberOfPages;
     }
+
     public void setTotalNumberOfPages(int totalNumberOfPages) {
         this.totalNumberOfPages = totalNumberOfPages;
     }
+
     public List<ExchangeLogDto> getLogList() {
         return logList;
     }
+
     public void setLogList(List<ExchangeLogDto> logList) {
         this.logList = logList;
     }

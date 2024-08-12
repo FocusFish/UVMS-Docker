@@ -32,6 +32,7 @@ import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentit
 import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._18.VesselTransportMeansType;
 import un.unece.uncefact.data.standard.unqualifieddatatype._18.IDType;
 import xeu.bridge_connector.v1.RequestType;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -71,24 +72,24 @@ public class RestSystemIT extends AbstractRest {
         Organisation organisation = createOrganisation();
 
         AssetDTO asset = AssetTestHelper.createTestAsset();
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.REST_NAME, organisation.getName())
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now().truncatedTo(ChronoUnit.MINUTES)));
         position.speed = 5;
         position.bearing = 123;
-        
+
         FLUXVesselPositionMessage positionMessage;
         FLUXHelper.sendPositionToFluxPlugin(asset, position);
         positionMessage = endpoint.getMessage(10000);
-        
+
         VesselTransportMeansType vesselTransportMeans = positionMessage.getVesselTransportMeans();
         assertThat(vesselTransportMeans, is(CoreMatchers.notNullValue()));
         assertThat(vesselTransportMeans.getRegistrationVesselCountry().getID().getValue(), is(asset.getFlagStateCode()));
@@ -150,7 +151,7 @@ public class RestSystemIT extends AbstractRest {
         UserHelper.createOrganisation(organisation);
         EndPoint endpoint = new EndPoint();
         endpoint.setName("REST");
-        endpoint.setUri("http://" + getDockerHostIp() + ":"+RESTEndpoint.ENDPOINT_PORT+"/");
+        endpoint.setUri("http://" + getDockerHostIp() + ":" + RESTEndpoint.ENDPOINT_PORT + "/");
         endpoint.setStatus("E");
         endpoint.setOrganisationName(organisation.getName());
         EndPoint createdEndpoint = UserHelper.createEndpoint(endpoint);

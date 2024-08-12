@@ -5,7 +5,6 @@ import java.util.List;
 
 /**
  * Holds the detail of an end point
- *
  */
 public class EndPoint implements Serializable {
     private static final long serialVersionUID = 1L;

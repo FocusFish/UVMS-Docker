@@ -24,6 +24,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.Map;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -32,28 +33,30 @@ import static org.junit.Assert.assertTrue;
 public class ConfigSynchronizationIT extends AbstractRest {
 
     private static final String EXPECTED_GLOBAL_CONFIG = "flux_local_nation_code";
-    
+
     @Test
     public void checkAssetConfigTest() {
         Map<String, String> response = getWebTarget()
-            .path("asset/rest/config/parameters")
-            .request(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-            .get(new GenericType<Map<String, String>>() {});
-        
+                .path("asset/rest/config/parameters")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(new GenericType<Map<String, String>>() {
+                });
+
         assertTrue(response.keySet().contains(EXPECTED_GLOBAL_CONFIG));
     }
-    
+
     @Test
     public void nafPluginConfigUpdateTest() throws Exception {
         String expectedKey = "fish.focus.uvms.plugins.naf.connectTimeout";
-        
+
         List<SettingType> response = getWebTarget()
                 .path("config/rest/settings")
                 .queryParam("moduleName", "exchange")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<SettingType>>() {});
+                .get(new GenericType<List<SettingType>>() {
+                });
 
         SettingType expectedSetting = null;
         for (SettingType settingType : response) {
@@ -65,7 +68,7 @@ public class ConfigSynchronizationIT extends AbstractRest {
 
         String newValue = generateARandomStringWithMaxLength(6);
         expectedSetting.setValue(newValue);
-        
+
         try (TopicListener listener = new TopicListener(VMSSystemHelper.NAF_SELECTOR)) {
             getWebTarget()
                     .path("config/rest/settings")

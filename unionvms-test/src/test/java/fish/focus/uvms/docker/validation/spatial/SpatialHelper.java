@@ -16,35 +16,35 @@ import java.io.StringWriter;
 
 public class SpatialHelper extends AbstractHelper implements Closeable {
 
-	private static final String UVMS_SPATIAL_REQUEST_QUEUE = "UVMSSpatialEvent";
+    private static final String UVMS_SPATIAL_REQUEST_QUEUE = "UVMSSpatialEvent";
 
-	private final MessageHelper messageHelper;
+    private final MessageHelper messageHelper;
 
-	public SpatialHelper() throws JMSException {
-		messageHelper = new MessageHelper();
-	}
+    public SpatialHelper() throws JMSException {
+        messageHelper = new MessageHelper();
+    }
 
-	@Override
-	public void close() {
-		messageHelper.close();
-	}
+    @Override
+    public void close() {
+        messageHelper.close();
+    }
 
-	public String marshall(final SpatialEnrichmentRQ request) throws JAXBException {
-		final StringWriter sw = new StringWriter();
-		JAXBContext.newInstance(SpatialEnrichmentRQ.class).createMarshaller().marshal(request, sw);
-		return sw.toString();
-	}
+    public String marshall(final SpatialEnrichmentRQ request) throws JAXBException {
+        final StringWriter sw = new StringWriter();
+        JAXBContext.newInstance(SpatialEnrichmentRQ.class).createMarshaller().marshal(request, sw);
+        return sw.toString();
+    }
 
-	public SpatialEnrichmentRS unMarshall(final Message response) throws Exception {
-		TextMessage textMessage = (TextMessage) response;
-		JAXBContext jaxbContext = JAXBContext.newInstance(SpatialEnrichmentRS.class);
-		return (SpatialEnrichmentRS) jaxbContext.createUnmarshaller()
-				.unmarshal(new StringReader(textMessage.getText()));
-	}
+    public SpatialEnrichmentRS unMarshall(final Message response) throws Exception {
+        TextMessage textMessage = (TextMessage) response;
+        JAXBContext jaxbContext = JAXBContext.newInstance(SpatialEnrichmentRS.class);
+        return (SpatialEnrichmentRS) jaxbContext.createUnmarshaller()
+                .unmarshal(new StringReader(textMessage.getText()));
+    }
 
-	public SpatialEnrichmentRS createSpatialEnrichment(SpatialEnrichmentRQ request) throws Exception {
-		Message messageResponse = messageHelper.getMessageResponse(UVMS_SPATIAL_REQUEST_QUEUE, marshall(request));
-		return unMarshall(messageResponse);
-	}
+    public SpatialEnrichmentRS createSpatialEnrichment(SpatialEnrichmentRQ request) throws Exception {
+        Message messageResponse = messageHelper.getMessageResponse(UVMS_SPATIAL_REQUEST_QUEUE, marshall(request));
+        return unMarshall(messageResponse);
+    }
 
 }
