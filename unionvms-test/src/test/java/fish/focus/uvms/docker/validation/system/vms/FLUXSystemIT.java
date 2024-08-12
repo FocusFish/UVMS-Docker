@@ -61,9 +61,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -73,17 +71,18 @@ public class FLUXSystemIT extends AbstractRest {
     public static String DEFAULT_DATAFLOW = "FLUX_DATAFLOW";
     public static String DEFAULT_CLIENT_HEADER = "CLIENT_CERT_HEADER";
     public static String DEFAULT_CLIENT_HEADER_VALUE = "CLIENT_CERT_USER";
-    
+
     @BeforeClass
     public static void initFLUXSettings() throws InterruptedException, SocketException {
         String expectedKey = "fish.focus.uvms.plugins.flux.movement.FLUX_ENDPOINT";
-        
+
         List<SettingType> response = getWebTarget()
                 .path("config/rest/settings")
                 .queryParam("moduleName", "exchange")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<SettingType>>() {});
+                .get(new GenericType<List<SettingType>>() {
+                });
 
         SettingType expectedSetting = null;
         for (SettingType settingType : response) {
@@ -95,46 +94,62 @@ public class FLUXSystemIT extends AbstractRest {
 
         String newValue = "http://" + getDockerHostIp() + ":" + FLUXEndpoint.ENDPOINT_PORT + "/";
         expectedSetting.setValue(newValue);
-        
+
         getWebTarget()
-            .path("config/rest/settings")
-            .path(expectedSetting.getId().toString())
-            .request(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-            .put(Entity.json(expectedSetting));
-        
+                .path("config/rest/settings")
+                .path(expectedSetting.getId().toString())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .put(Entity.json(expectedSetting));
+
         TimeUnit.SECONDS.sleep(1);
     }
-    
+
+    // Find docker host machine ip. Replace this with 'host.docker.internal' when supported on Linux.
+    private static String getDockerHostIp() throws SocketException {
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface e = interfaces.nextElement();
+            Enumeration<InetAddress> inetAddresses = e.getInetAddresses();
+            while (inetAddresses.hasMoreElements()) {
+                InetAddress inetAddress = inetAddresses.nextElement();
+                if (inetAddress.getHostAddress().startsWith("172")) {
+                    return inetAddress.getHostAddress();
+                }
+            }
+        }
+        return "host.docker.internal";
+    }
+
     @After
     public void removeCustomRules() {
         CustomRuleHelper.removeCustomRulesByDefaultUser();
     }
-    
+
     @Test
     public void sendPositionToFLUXAndVerifyAttributes() throws Exception {
         AssetDTO asset = AssetTestHelper.createTestAsset();
-        
+
         String destination = "NOR";
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Area NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, destination)
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, destination)
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
         position.speed = 5;
-        
+
         PostMsgType message;
         try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint()) {
             FLUXHelper.sendPositionToFluxPlugin(asset, position);
             message = fluxEndpoint.getMessage(10000);
         }
-        
+
         assertThat(message.getAD(), is(destination));
         assertThat(message.getDF(), is(DEFAULT_DATAFLOW));
         assertThat(message.getID(), is(notNullValue()));
@@ -174,26 +189,26 @@ public class FLUXSystemIT extends AbstractRest {
         String customDataflow = "urn:un:unece:uncefact:data:standard:FLUXVesselPositionMessage:4:Custom";
         Organisation organisation = createOrganisationWithCustomDF(customDataflow);
         AssetDTO asset = AssetTestHelper.createTestAsset();
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Area NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, organisation.getName())
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
         position.speed = 5;
-        
+
         PostMsgType message;
         try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint()) {
             FLUXHelper.sendPositionToFluxPlugin(asset, position);
             message = fluxEndpoint.getMessage(10000);
         }
-        
+
         assertThat(message.getDF(), is(customDataflow));
     }
 
@@ -251,7 +266,7 @@ public class FLUXSystemIT extends AbstractRest {
 
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Area NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, organisation.getName())
                 .build();
@@ -288,54 +303,54 @@ public class FLUXSystemIT extends AbstractRest {
         channel2.setEndpointId(createdEndpoint.getEndpointId());
         UserHelper.createChannel(channel2);
         AssetDTO asset = AssetTestHelper.createTestAsset();
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Area NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, organisation.getName())
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
         position.speed = 5;
-        
+
         PostMsgType message;
         try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint()) {
             FLUXHelper.sendPositionToFluxPlugin(asset, position);
             message = fluxEndpoint.getMessage(10000);
         }
-        
+
         assertThat(message.getDF(), is(customDataflow));
     }
-    
+
     @Test
     public void sendPositionToFLUXAndVerifyFLUXVesselReportDocument() throws Exception {
         AssetDTO asset = AssetTestHelper.createTestAsset();
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Area NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, "SWE")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
         position.speed = 5;
         position.bearing = 123;
-        
+
         PostMsgType message;
         try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint()) {
             FLUXHelper.sendPositionToFluxPlugin(asset, position);
             message = fluxEndpoint.getMessage(10000);
         }
         FLUXVesselPositionMessage positionMessage = extractVesselPositionMessage(message.getAny());
-        
+
         VesselTransportMeansType vesselTransportMeans = positionMessage.getVesselTransportMeans();
         assertThat(vesselTransportMeans.getRegistrationVesselCountry().getID().getValue(), is(asset.getFlagStateCode()));
 
@@ -354,7 +369,7 @@ public class FLUXSystemIT extends AbstractRest {
         assertThat(vesselCoordinates.getLatitudeMeasure().getValue().doubleValue(), is(position.latitude));
         assertThat(vesselCoordinates.getLongitudeMeasure().getValue().doubleValue(), is(position.longitude));
     }
-    
+
     @Test
     public void sendPositionToFLUXAndVerifyUVI() throws Exception {
         AssetDTO asset = AssetTestHelper.createTestAsset();
@@ -389,7 +404,7 @@ public class FLUXSystemIT extends AbstractRest {
 
     @Test
     public void sendPositionToFLUXAndVerifyFLUXVesselReportDocumentAttributes() throws Exception {
-        String expectedDocumentIdSchemeId= "UUID";
+        String expectedDocumentIdSchemeId = "UUID";
         String expectedPurposeCodeListId = "FLUX_GP_PURPOSE";
         String expectedFluxPartySchemeId = "FLUX_GP_PARTY";
         String expectedVesselCountrySchemeId = "TERRITORY";
@@ -434,20 +449,20 @@ public class FLUXSystemIT extends AbstractRest {
     public void verifyAssetIdentifiersWithUnknownAsset() throws Exception {
         // Don't save to database
         AssetDTO asset = AssetTestHelper.createBasicAsset();
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Area NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, "NOR")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
         position.speed = 5;
-        
+
         PostMsgType message;
         try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint()) {
             FLUXHelper.sendPositionToFluxPlugin(asset, position);
@@ -455,40 +470,40 @@ public class FLUXSystemIT extends AbstractRest {
         }
         FLUXVesselPositionMessage positionMessage = extractVesselPositionMessage(message.getAny());
         VesselTransportMeansType vesselTransportMeans = positionMessage.getVesselTransportMeans();
-        
+
         assertThat(vesselTransportMeans.getRegistrationVesselCountry().getID().getValue(), is(asset.getFlagStateCode()));
-        
+
         Map<String, String> assetIds = vesselTransportMeans.getIDS().stream().collect(Collectors.toMap(IDType::getSchemeID, IDType::getValue));
         assertThat(assetIds.get("CFR"), is(asset.getCfr()));
         assertThat(assetIds.get("IRCS"), is(asset.getIrcs()));
         assertThat(assetIds.get("EXT_MARK"), is(asset.getExternalMarking()));
     }
-    
+
     @Test
     public void verifyEntryPositionType() throws Exception {
         Organisation organisation = UserHelper.getBasicOrganisation();
         organisation.setNation("NOR");
         UserHelper.createOrganisation(organisation);
         AssetDTO asset = AssetTestHelper.createTestAsset();
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Area NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_ENTRY_REPORT, VMSSystemHelper.FLUX_NAME, organisation.getName())
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong swePosition = new LatLong(57.716673, 11.973996, Date.from(Instant.now().minusMillis(10 * 60 * 1000)));
         swePosition.speed = 5;
         LatLong norPosition = new LatLong(58.973, 5.781, Date.from(Instant.now()));
         norPosition.speed = 5;
-        
+
         PostMsgType message;
-        try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint(); 
-                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+        try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint();
+             TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             FLUXHelper.sendPositionToFluxPlugin(asset, swePosition);
             topicListener.listenOnEventBus();
             FLUXHelper.sendPositionToFluxPlugin(asset, norPosition);
@@ -500,32 +515,32 @@ public class FLUXSystemIT extends AbstractRest {
         VesselPositionEventType positionEvent = vesselTransportMeans.getSpecifiedVesselPositionEvents().get(0);
         assertThat(positionEvent.getTypeCode().getValue(), is("ENTRY"));
     }
-    
+
     @Test
     public void verifyExitPositionType() throws Exception {
         Organisation organisation = UserHelper.getBasicOrganisation();
         organisation.setNation("NOR");
         UserHelper.createOrganisation(organisation);
         AssetDTO asset = AssetTestHelper.createTestAsset();
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Area NOR => Send to NOR")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_EXT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_EXT,
                         ConditionType.EQ, "NOR")
                 .action(ActionType.SEND_EXIT_REPORT, VMSSystemHelper.FLUX_NAME, organisation.getName())
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong norPosition = new LatLong(58.973, 5.781, Date.from(Instant.now().minusMillis(10 * 60 * 1000)));
         norPosition.speed = 5;
         LatLong swePosition = new LatLong(57.716673, 11.973996, Date.from(Instant.now()));
         swePosition.speed = 5;
-        
+
         PostMsgType message;
-        try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint(); 
-                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
+        try (FLUXEndpoint fluxEndpoint = new FLUXEndpoint();
+             TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             FLUXHelper.sendPositionToFluxPlugin(asset, norPosition);
             topicListener.listenOnEventBus();
             FLUXHelper.sendPositionToFluxPlugin(asset, swePosition);
@@ -537,12 +552,12 @@ public class FLUXSystemIT extends AbstractRest {
         VesselPositionEventType positionEvent = vesselTransportMeans.getSpecifiedVesselPositionEvents().get(0);
         assertThat(positionEvent.getTypeCode().getValue(), is("EXIT"));
     }
-    
+
     @Test
     public void incomingEntryReportTest() throws Exception {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
-        
+
         FLUXVesselPositionMessage fluxMessage = FLUXHelper.createFluxMessage(asset, position);
         fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getTypeCode().setValue("ENTRY");
         RequestType request = FLUXHelper.createVesselReport(fluxMessage);
@@ -555,12 +570,12 @@ public class FLUXSystemIT extends AbstractRest {
         MovementDto latest = latestMovements.get(0);
         assertThat(latest.getMovementType(), is(MovementTypeType.ENT));
     }
-    
+
     @Test
     public void incomingExitReportTest() throws Exception {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         LatLong position = new LatLong(58.973, 5.781, Date.from(Instant.now()));
-        
+
         FLUXVesselPositionMessage fluxMessage = FLUXHelper.createFluxMessage(asset, position);
         fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getTypeCode().setValue("EXIT");
         RequestType request = FLUXHelper.createVesselReport(fluxMessage);
@@ -658,27 +673,11 @@ public class FLUXSystemIT extends AbstractRest {
         UserHelper.createChannel(channel);
         return organisation;
     }
-    
+
     private FLUXVesselPositionMessage extractVesselPositionMessage(Element any) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(FLUXVesselPositionMessage.class);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         return (FLUXVesselPositionMessage) unmarshaller.unmarshal(any);
-    }
-    
-    // Find docker host machine ip. Replace this with 'host.docker.internal' when supported on Linux.
-    private static String getDockerHostIp() throws SocketException {
-        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-        while (interfaces.hasMoreElements()) {
-            NetworkInterface e = interfaces.nextElement();
-            Enumeration<InetAddress> inetAddresses = e.getInetAddresses();
-            while (inetAddresses.hasMoreElements()) {
-                InetAddress inetAddress = inetAddresses.nextElement();
-                if (inetAddress.getHostAddress().startsWith("172")) {
-                    return inetAddress.getHostAddress();
-                }
-            }
-        }
-        return "host.docker.internal";
     }
 
     private void setCustomTODT(String destination, String todtMinutes) throws InterruptedException {
@@ -689,7 +688,8 @@ public class FLUXSystemIT extends AbstractRest {
                 .queryParam("moduleName", "exchange")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<SettingType>>() {});
+                .get(new GenericType<List<SettingType>>() {
+                });
 
         SettingType expectedSetting = null;
         for (SettingType settingType : response) {
@@ -702,11 +702,11 @@ public class FLUXSystemIT extends AbstractRest {
         expectedSetting.setValue(destination + ":" + todtMinutes);
 
         getWebTarget()
-            .path("config/rest/settings")
-            .path(expectedSetting.getId().toString())
-            .request(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-            .put(Entity.json(expectedSetting));
+                .path("config/rest/settings")
+                .path(expectedSetting.getId().toString())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .put(Entity.json(expectedSetting));
 
         TimeUnit.SECONDS.sleep(1);
     }

@@ -22,46 +22,59 @@ public class PreviousReportDto {
     private Instant positionTime;
     private Instant updated;
     private String updatedBy;
- 
+
     public UUID getId() {
         return id;
     }
+
     public void setId(UUID id) {
         this.id = id;
     }
+
     public String getAssetGuid() {
         return assetGuid;
     }
+
     public void setAssetGuid(String assetGuid) {
         this.assetGuid = assetGuid;
     }
+
     public UUID getMobTermGuid() {
         return mobTermGuid;
     }
+
     public void setMobTermGuid(UUID mobTermGuid) {
         this.mobTermGuid = mobTermGuid;
     }
+
     public UUID getMovementGuid() {
         return movementGuid;
     }
+
     public void setMovementGuid(UUID movementGuid) {
         this.movementGuid = movementGuid;
     }
+
     public Instant getPositionTime() {
         return positionTime;
     }
+
     public void setPositionTime(Instant positionTime) {
         this.positionTime = positionTime;
     }
+
     public Instant getUpdated() {
         return updated;
     }
+
     public void setUpdated(Instant updated) {
         this.updated = updated;
     }
+
     public String getUpdatedBy() {
         return updatedBy;
     }
+
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }

@@ -23,5 +23,5 @@ public class PreferencesList {
     public void setPreferences(List<Preferences> preferences) {
         this.preferences = preferences;
     }
-    
+
 }

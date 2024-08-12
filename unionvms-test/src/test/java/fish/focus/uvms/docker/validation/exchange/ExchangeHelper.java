@@ -12,9 +12,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.docker.validation.exchange;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+
 import org.hamcrest.CoreMatchers;
 import fish.focus.schema.exchange.v1.ExchangeListCriteria;
 import fish.focus.schema.exchange.v1.ExchangeListCriteriaPair;
@@ -27,7 +29,8 @@ import fish.focus.uvms.docker.validation.exchange.dto.ListQueryResponse;
 
 public class ExchangeHelper extends AbstractHelper {
 
-    private ExchangeHelper() {}
+    private ExchangeHelper() {
+    }
 
     public static ExchangeLogDto getIncomingExchangeLogByTypeGUID(String guid) {
         return getExchangeLogByTypeGUID("INCOMING", guid);
@@ -49,7 +52,7 @@ public class ExchangeHelper extends AbstractHelper {
         exchangeListCriteriaPair2.setKey(SearchField.TYPE_GUID);
         exchangeListCriteriaPair2.setValue(guid);
         exchangeListCriteria.getCriterias().add(exchangeListCriteriaPair2);
-        
+
         exchangeListQuery.setExchangeSearchCriteria(exchangeListCriteria);
         ExchangeListPagination exchangeListPagination = new ExchangeListPagination();
         exchangeListPagination.setPage(1);

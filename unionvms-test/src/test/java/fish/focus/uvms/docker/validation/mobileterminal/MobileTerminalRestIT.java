@@ -21,109 +21,111 @@ import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.List;
 
 public class MobileTerminalRestIT extends AbstractRest {
 
-	@Test
-	public void createMobileTerminalTest() {
-		MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
-		assertNotNull(mobileTerminal);
-		assertNotNull(mobileTerminal.getId());
-	}
+    @Test
+    public void createMobileTerminalTest() {
+        MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
+        assertNotNull(mobileTerminal);
+        assertNotNull(mobileTerminal.getId());
+    }
 
-	@Test
-	public void getMobileTerminalByIdTest() {
-		MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
-		MobileTerminalDto fetchedMobileTerminal = MobileTerminalTestHelper.getMobileTerminalById(mobileTerminal.getId());
-		assertNotNull(fetchedMobileTerminal);
-	}
+    @Test
+    public void getMobileTerminalByIdTest() {
+        MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
+        MobileTerminalDto fetchedMobileTerminal = MobileTerminalTestHelper.getMobileTerminalById(mobileTerminal.getId());
+        assertNotNull(fetchedMobileTerminal);
+    }
 
-	@Test
-	public void updateMobileTerminalTest() {
-		MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
-		assertFalse(mobileTerminal.getArchived());
-		mobileTerminal.setArchived(true);
+    @Test
+    public void updateMobileTerminalTest() {
+        MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
+        assertFalse(mobileTerminal.getArchived());
+        mobileTerminal.setArchived(true);
 
-		MobileTerminalDto updatedMobileTerminal = MobileTerminalTestHelper.updateMobileTerminal(mobileTerminal);
-		assertNotNull(updatedMobileTerminal);
-		assertTrue(mobileTerminal.getArchived());
-	}
+        MobileTerminalDto updatedMobileTerminal = MobileTerminalTestHelper.updateMobileTerminal(mobileTerminal);
+        assertNotNull(updatedMobileTerminal);
+        assertTrue(mobileTerminal.getArchived());
+    }
 
-	@Test
-	public void getMobileTerminalListTest() {
-		MTQuery mtQuery = new MTQuery();
-		mtQuery.setTranceiverTypes(Arrays.asList("dummy"));
+    @Test
+    public void getMobileTerminalListTest() {
+        MTQuery mtQuery = new MTQuery();
+        mtQuery.setTranceiverTypes(Arrays.asList("dummy"));
 
-		Response response = MobileTerminalTestHelper.getMobileTerminalList(mtQuery);
-		assertNotNull(response);
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-	}
+        Response response = MobileTerminalTestHelper.getMobileTerminalList(mtQuery);
+        assertNotNull(response);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
 
-	@Test
-	public void assignMobileTerminalTest() {
-		AssetDTO testAsset = AssetTestHelper.createTestAsset();
-		MobileTerminalDto createdMobileTerminalType = MobileTerminalTestHelper.createMobileTerminal();
+    @Test
+    public void assignMobileTerminalTest() {
+        AssetDTO testAsset = AssetTestHelper.createTestAsset();
+        MobileTerminalDto createdMobileTerminalType = MobileTerminalTestHelper.createMobileTerminal();
 
-		MobileTerminalDto mobileTerminalDto = MobileTerminalTestHelper.assignMobileTerminal(testAsset, createdMobileTerminalType);
-		assertNotNull(mobileTerminalDto);
-		assertNotNull(mobileTerminalDto.getAssetId());
-	}
+        MobileTerminalDto mobileTerminalDto = MobileTerminalTestHelper.assignMobileTerminal(testAsset, createdMobileTerminalType);
+        assertNotNull(mobileTerminalDto);
+        assertNotNull(mobileTerminalDto.getAssetId());
+    }
 
-	@Test
-	public void unAssignMobileTerminalTest() {
-		AssetDTO testAsset = AssetTestHelper.createTestAsset();
-		MobileTerminalDto createdMobileTerminalType = MobileTerminalTestHelper.createMobileTerminal();
+    @Test
+    public void unAssignMobileTerminalTest() {
+        AssetDTO testAsset = AssetTestHelper.createTestAsset();
+        MobileTerminalDto createdMobileTerminalType = MobileTerminalTestHelper.createMobileTerminal();
 
-		MobileTerminalDto mobileTerminalDto = MobileTerminalTestHelper.assignMobileTerminal(testAsset, createdMobileTerminalType);
-		assertNotNull(mobileTerminalDto);
-		assertNotNull(mobileTerminalDto.getAssetId());
+        MobileTerminalDto mobileTerminalDto = MobileTerminalTestHelper.assignMobileTerminal(testAsset, createdMobileTerminalType);
+        assertNotNull(mobileTerminalDto);
+        assertNotNull(mobileTerminalDto.getAssetId());
 
-		MobileTerminalDto unAssignMobileTerminal = MobileTerminalTestHelper.unAssignMobileTerminal(testAsset, createdMobileTerminalType);
-		assertNotNull(unAssignMobileTerminal);
-		assertNull(unAssignMobileTerminal.getAssetId());
-	}
+        MobileTerminalDto unAssignMobileTerminal = MobileTerminalTestHelper.unAssignMobileTerminal(testAsset, createdMobileTerminalType);
+        assertNotNull(unAssignMobileTerminal);
+        assertNull(unAssignMobileTerminal.getAssetId());
+    }
 
-	@Test
-	public void setStatusActiveTest() {
-		MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
+    @Test
+    public void setStatusActiveTest() {
+        MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
 
-		MobileTerminalDto activated = MobileTerminalTestHelper.activateMobileTerminal(mobileTerminal.getId());
-		assertNotNull(activated);
-		assertTrue(activated.getActive());
-	}
+        MobileTerminalDto activated = MobileTerminalTestHelper.activateMobileTerminal(mobileTerminal.getId());
+        assertNotNull(activated);
+        assertTrue(activated.getActive());
+    }
 
-	@Test
-	public void setStatusInactiveTest() {
-		MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
+    @Test
+    public void setStatusInactiveTest() {
+        MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
 
-		MobileTerminalDto inActivated = MobileTerminalTestHelper.inactivateMobileTerminal(mobileTerminal.getId());
-		assertNotNull(inActivated);
-		assertFalse(inActivated.getActive());
-	}
+        MobileTerminalDto inActivated = MobileTerminalTestHelper.inactivateMobileTerminal(mobileTerminal.getId());
+        assertNotNull(inActivated);
+        assertFalse(inActivated.getActive());
+    }
 
-	@Test
-	public void setStatusRemovedTest() {
-		MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
+    @Test
+    public void setStatusRemovedTest() {
+        MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
 
-		MobileTerminalDto removed = MobileTerminalTestHelper.removeMobileTerminal(mobileTerminal.getId());
-		assertNotNull(removed);
-		assertFalse(removed.getActive());
-		assertTrue(removed.getArchived());
-	}
+        MobileTerminalDto removed = MobileTerminalTestHelper.removeMobileTerminal(mobileTerminal.getId());
+        assertNotNull(removed);
+        assertFalse(removed.getActive());
+        assertTrue(removed.getArchived());
+    }
 
-	@Test
-	public void getMobileTerminalHistoryListByMobileTerminalIdTest() {
-		MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
+    @Test
+    public void getMobileTerminalHistoryListByMobileTerminalIdTest() {
+        MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
 
-		List<MobileTerminalDto> historyList = MobileTerminalTestHelper.getMobileTerminalHistoryList(mobileTerminal.getId());
-		assertNotNull(historyList);
-		assertFalse(historyList.isEmpty());
-	}
+        List<MobileTerminalDto> historyList = MobileTerminalTestHelper.getMobileTerminalHistoryList(mobileTerminal.getId());
+        assertNotNull(historyList);
+        assertFalse(historyList.isEmpty());
+    }
 }

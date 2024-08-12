@@ -24,95 +24,96 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.*;
+
 public class RulesTicketRestIT extends AbstractRest {
 
-	@Test
-	public void getTicketListTest() {
-		TicketQuery ticketQuery = CustomRulesTestHelper.getTicketQuery();
+    @Test
+    public void getTicketListTest() {
+        TicketQuery ticketQuery = CustomRulesTestHelper.getTicketQuery();
 
-		GetTicketListByQueryResponse response = getWebTarget()
-				.path("movement-rules/rest/tickets/list")
-				.path("vms_admin_se")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(ticketQuery), new GenericType<GetTicketListByQueryResponse>(){});
+        GetTicketListByQueryResponse response = getWebTarget()
+                .path("movement-rules/rest/tickets/list")
+                .path("vms_admin_se")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(ticketQuery), new GenericType<GetTicketListByQueryResponse>() {
+                });
 
-		assertNotNull(response);
-	}
+        assertNotNull(response);
+    }
 
-	@Test
-	public void getTicketsByMovementsTest() throws Exception {
-        String movementGuid = CustomRulesTestHelper.createRuleAndGetMovementGuid();
-	    ArrayList<String> list = new ArrayList<>();
-	    list.add(movementGuid);
-
-		GetTicketListByQueryResponse response = getWebTarget()
-				.path("movement-rules/rest/tickets/listByMovements")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(list), new GenericType<GetTicketListByQueryResponse>(){});
-
-        List<TicketType> tickets = response.getTickets();
-
-		assertFalse(tickets.isEmpty());
-	}
-
-	@Test
-	public void countTicketsByMovementsTest() throws Exception {
+    @Test
+    public void getTicketsByMovementsTest() throws Exception {
         String movementGuid = CustomRulesTestHelper.createRuleAndGetMovementGuid();
         ArrayList<String> list = new ArrayList<>();
         list.add(movementGuid);
 
-		Long response = getWebTarget()
-				.path("movement-rules/rest/tickets/countByMovements")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(list), new GenericType<Long>(){});
+        GetTicketListByQueryResponse response = getWebTarget()
+                .path("movement-rules/rest/tickets/listByMovements")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(list), new GenericType<GetTicketListByQueryResponse>() {
+                });
 
-		assertTrue(response > 0);
-	}
+        List<TicketType> tickets = response.getTickets();
 
-	@Test
-	public void updateTicketStatus() throws Exception {
+        assertFalse(tickets.isEmpty());
+    }
+
+    @Test
+    public void countTicketsByMovementsTest() throws Exception {
+        String movementGuid = CustomRulesTestHelper.createRuleAndGetMovementGuid();
+        ArrayList<String> list = new ArrayList<>();
+        list.add(movementGuid);
+
+        Long response = getWebTarget()
+                .path("movement-rules/rest/tickets/countByMovements")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(list), new GenericType<Long>() {
+                });
+
+        assertTrue(response > 0);
+    }
+
+    @Test
+    public void updateTicketStatus() throws Exception {
         String movementGuid = CustomRulesTestHelper.createRuleAndGetMovementGuid();
         TicketQuery ticketQuery = CustomRulesTestHelper.getTicketQuery();
         List<TicketType> tickets = getTicketTypeList(ticketQuery);
 
         Optional<TicketType> ticketOptional = tickets
-				.stream()
-				.filter(ticket -> movementGuid.equals(ticket.getMovementGuid()))
-				.findFirst();
+                .stream()
+                .filter(ticket -> movementGuid.equals(ticket.getMovementGuid()))
+                .findFirst();
 
-		TicketType ticketType = ticketOptional.orElse(null);
+        TicketType ticketType = ticketOptional.orElse(null);
 
-		if (ticketType == null) {
-			fail("There is no ticket to update");
-		}
+        if (ticketType == null) {
+            fail("There is no ticket to update");
+        }
 
-		assertEquals(TicketStatusType.OPEN, ticketType.getStatus());
+        assertEquals(TicketStatusType.OPEN, ticketType.getStatus());
 
-		ticketType.setStatus(TicketStatusType.CLOSED);
+        ticketType.setStatus(TicketStatusType.CLOSED);
 
         TicketType updateResponse = getWebTarget()
                 .path("movement-rules/rest/tickets/status")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .put(Entity.json(ticketType), new GenericType<TicketType>(){});
+                .put(Entity.json(ticketType), new GenericType<TicketType>() {
+                });
 
         assertEquals(TicketStatusType.CLOSED, updateResponse.getStatus());
-	}
+    }
 
     @Test
-	public void updateTicketStatusByQueryTest() throws Exception {
+    public void updateTicketStatusByQueryTest() throws Exception {
         String movementGuid = CustomRulesTestHelper.createRuleAndGetMovementGuid();
         TicketQuery ticketQuery = CustomRulesTestHelper.getTicketQuery();
         List<TicketType> tickets = getTicketTypeList(ticketQuery);
@@ -123,21 +124,22 @@ public class RulesTicketRestIT extends AbstractRest {
                 .findFirst()
                 .orElse(null);
 
-		if (ticketType == null) {
-			fail("There is no ticket to update");
-		}
+        if (ticketType == null) {
+            fail("There is no ticket to update");
+        }
 
-		assertEquals(TicketStatusType.OPEN, ticketType.getStatus());
+        assertEquals(TicketStatusType.OPEN, ticketType.getStatus());
 
-		ticketType.setStatus(TicketStatusType.CLOSED);
+        ticketType.setStatus(TicketStatusType.CLOSED);
 
-		List<TicketType> updatedTicketList = getWebTarget()
-				.path("movement-rules/rest/tickets/status")
-				.path("vms_admin_se")
-				.path(TicketStatusType.CLOSED.name())
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(ticketQuery), new GenericType<List<TicketType>>(){});
+        List<TicketType> updatedTicketList = getWebTarget()
+                .path("movement-rules/rest/tickets/status")
+                .path("vms_admin_se")
+                .path(TicketStatusType.CLOSED.name())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(ticketQuery), new GenericType<List<TicketType>>() {
+                });
 
         TicketType updatedTicket = updatedTicketList
                 .stream()
@@ -145,14 +147,14 @@ public class RulesTicketRestIT extends AbstractRest {
                 .findFirst()
                 .orElse(null);
 
-		if (updatedTicket == null) {
-			fail("Update Ticket Status failed");
-		}
-		assertEquals(TicketStatusType.CLOSED, updatedTicket.getStatus());
-	}
+        if (updatedTicket == null) {
+            fail("Update Ticket Status failed");
+        }
+        assertEquals(TicketStatusType.CLOSED, updatedTicket.getStatus());
+    }
 
     @Test
-	public void getTicketByGuidTest() throws Exception {
+    public void getTicketByGuidTest() throws Exception {
         String movementGuid = CustomRulesTestHelper.createRuleAndGetMovementGuid();
         TicketQuery ticketQuery = CustomRulesTestHelper.getTicketQuery();
         List<TicketType> tickets = getTicketTypeList(ticketQuery);
@@ -176,10 +178,10 @@ public class RulesTicketRestIT extends AbstractRest {
 
         assertNotNull(ticketResponse);
         assertEquals(ticketType.getGuid(), ticketResponse.getGuid());
-	}
+    }
 
-	@Test
-	public void getNumberOfOpenTicketReportsTest() throws Exception {
+    @Test
+    public void getNumberOfOpenTicketReportsTest() throws Exception {
         CustomRulesTestHelper.createRuleAndGetMovementGuid();
         Long count = getWebTarget()
                 .path("movement-rules/rest/tickets/countopen")
@@ -191,15 +193,15 @@ public class RulesTicketRestIT extends AbstractRest {
         assertTrue(count > 0);
     }
 
-	@Test
-	public void getNumberOfAssetsNotSendingTest() {
+    @Test
+    public void getNumberOfAssetsNotSendingTest() {
         Long count = getWebTarget()
                 .path("movement-rules/rest/tickets/countAssetsNotSending")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get(Long.class);
         assertNotNull(count);
-	}
+    }
 
     private List<TicketType> getTicketTypeList(TicketQuery ticketQuery) {
         GetTicketListByQueryResponse response = getWebTarget()

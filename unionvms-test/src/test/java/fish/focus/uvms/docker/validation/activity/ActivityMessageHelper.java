@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import un.unece.uncefact.data.standard.fluxfareportmessage._3.FLUXFAReportMessage;
 import un.unece.uncefact.data.standard.reusableaggregatebusinessinformationentity._20.AAPProcess;
@@ -31,7 +32,8 @@ import un.unece.uncefact.data.standard.unqualifieddatatype._20.NumericType;
 
 public class ActivityMessageHelper {
 
-    private ActivityMessageHelper() {}
+    private ActivityMessageHelper() {
+    }
 
     public static FLUXFAReportMessage getDeparture(AssetDTO asset, long tripId, Instant departureDate, String port) throws DatatypeConfigurationException {
         FLUXFAReportMessage faReportMessage = getFLUXFAReportMessage();

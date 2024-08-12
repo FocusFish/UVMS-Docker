@@ -15,11 +15,11 @@ import fish.focus.schema.movement.v1.MovementTypeType;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.common.AbstractHelper;
 import fish.focus.uvms.docker.validation.movement.LatLong;
+
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -29,6 +29,8 @@ import java.time.ZoneId;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static org.junit.Assert.assertEquals;
 
 public class NAFHelper extends AbstractHelper {
 
@@ -53,7 +55,7 @@ public class NAFHelper extends AbstractHelper {
         matcher.find();
         return matcher.group(1);
     }
-    
+
     public static Double readCodeDoubleValue(String code, String nafMessage) {
         return Double.valueOf(readCodeValue(code, nafMessage));
     }
@@ -80,12 +82,12 @@ public class NAFHelper extends AbstractHelper {
                 "//IR/" + asset.getCfr() +
                 "//XR/" + asset.getExternalMarking();
         if (!MovementTypeType.EXI.equals(typeOfMessage)) {
-        str +=  "//LT/" + formatter.format(position.latitude).replace(",", ".") +
-                "//LG/" + formatter.format(position.longitude).replace(",", ".") +
-                "//SP/" + (int) (position.speed * 10) +
-                "//CO/" + (int) position.bearing;
+            str += "//LT/" + formatter.format(position.latitude).replace(",", ".") +
+                    "//LG/" + formatter.format(position.longitude).replace(",", ".") +
+                    "//SP/" + (int) (position.speed * 10) +
+                    "//CO/" + (int) position.bearing;
         }
-        str +=  "//DA/" + dateFormatter.format(position.positionTime) +
+        str += "//DA/" + dateFormatter.format(position.positionTime) +
                 "//TI/" + timeFormatter.format(position.positionTime) +
                 "//NA/" + asset.getName() +
                 "//FS/" + asset.getFlagStateCode() +
@@ -101,7 +103,7 @@ public class NAFHelper extends AbstractHelper {
                 .get();
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
-    
+
     private static String getNAFUrl() {
         return getBaseUrl().replace("unionvms/", "");
     }

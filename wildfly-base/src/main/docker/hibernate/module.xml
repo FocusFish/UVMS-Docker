@@ -24,16 +24,16 @@
 <module name="org.hibernate" xmlns="urn:jboss:module:1.7">
     <resources>
         <resource-root path="hibernate-core-${wildfly.hibernate.module.spatial.version}.jar"/>
-        <resource-root path="hibernate-envers-${wildfly.hibernate.module.spatial.version}.jar"/> 
+        <resource-root path="hibernate-envers-${wildfly.hibernate.module.spatial.version}.jar"/>
 
         <resource-root path="hibernate-spatial-${wildfly.hibernate.module.spatial.version}.jar"/>
-		<resource-root path="jts-core-${wildfly.hibernate.module.jts.version}.jar"/>
-		<resource-root path="geolatte-geom-${wildfly.hibernate.module.geolatte.version}.jar"/>
+        <resource-root path="jts-core-${wildfly.hibernate.module.jts.version}.jar"/>
+        <resource-root path="geolatte-geom-${wildfly.hibernate.module.geolatte.version}.jar"/>
     </resources>
 
     <dependencies>
-    	<module name="org.postgresql"/>
-    	<module name="org.slf4j"/>    	
+        <module name="org.postgresql"/>
+        <module name="org.slf4j"/>
         <module name="com.fasterxml.classmate"/>
         <module name="javax.api"/>
         <module name="javax.annotation.api"/>

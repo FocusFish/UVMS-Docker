@@ -19,18 +19,19 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SendingGroupLog {
 
-	@XmlElement(required = true)
-	private String recipient;
+    @XmlElement(required = true)
+    private String recipient;
     @XmlElement(required = true)
     private List<PluginType> pluginList;
 
-	public String getRecipient() {
-		return recipient;
-	}
+    public String getRecipient() {
+        return recipient;
+    }
 
     public void setRecipient(String recipient) {
-		this.recipient = recipient;
-	}
+        this.recipient = recipient;
+    }
+
     public List<PluginType> getPluginList() {
         return pluginList;
     }
@@ -39,5 +40,5 @@ public class SendingGroupLog {
         this.pluginList = pluginList;
     }
 
-	
+
 }

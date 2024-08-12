@@ -17,6 +17,7 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Ignore;
@@ -36,35 +37,35 @@ public class AssetInformationImportNOR extends AbstractRest {
     private static final String YEAR_OF_CONSTRUCTION = "Byggeår";
 
     private static final Double MINIMAL_LENGTH = 10d;
-    
+
     private static final Double HORSEPOWER_TO_KW_RATIO = 0.745699872;
-    
+
     @Ignore
     @Test
     public void importFromCsv() throws IOException {
         String csvFile = "/path/to/file.csv";
-        
+
         Reader in = new FileReader(csvFile, Charset.forName("ISO-8859-1"));
         Iterable<CSVRecord> records = CSVFormat.Builder.create()
-                                    .setDelimiter(';')
+                .setDelimiter(';')
 //                                    .withFirstRecordAsHeader()
-                                    .setQuote(null)
-                                    .build()
-                                    .parse(in);
-        
+                .setQuote(null)
+                .build()
+                .parse(in);
+
         for (CSVRecord csvRecord : records) {
             try {
                 AssetDTO asset = populateAsset(csvRecord);
-                    if (asset.getLengthOverAll() != null 
-                            && asset.getLengthOverAll() > MINIMAL_LENGTH) {
-                        AssetTestHelper.createAsset(asset);
-                    }
+                if (asset.getLengthOverAll() != null
+                        && asset.getLengthOverAll() > MINIMAL_LENGTH) {
+                    AssetTestHelper.createAsset(asset);
+                }
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
     private AssetDTO populateAsset(CSVRecord record) {
         AssetDTO asset = new AssetDTO();
         asset.setFlagStateCode("NOR");

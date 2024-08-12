@@ -19,34 +19,39 @@ import java.util.Map;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class SendingLog {
 
-	@XmlElement(required = true)
-	private String messageId;
-	@XmlElement(required = true)
-	private String dateRecieved;
-	@XmlElement(required = true)
-	private String senderRecipient;
+    @XmlElement(required = true)
+    private String messageId;
+    @XmlElement(required = true)
+    private String dateRecieved;
+    @XmlElement(required = true)
+    private String senderRecipient;
     @XmlElement(required = false)
     private Map<String, String> properties;
 
-	public String getMessageId() {
-		return messageId;
-	}
+    public String getMessageId() {
+        return messageId;
+    }
 
     public void setMessageId(String id) {
-		this.messageId = id;
-	}
+        this.messageId = id;
+    }
+
     public String getDateRecieved() {
-		return dateRecieved;
-	}
+        return dateRecieved;
+    }
+
     public void setDateRecieved(String dateRecieved) {
-		this.dateRecieved = dateRecieved;
-	}
+        this.dateRecieved = dateRecieved;
+    }
+
     public String getSenderRecipient() {
-		return senderRecipient;
-	}
+        return senderRecipient;
+    }
+
     public void setSenderRecipient(String senderRecipient) {
-		this.senderRecipient = senderRecipient;
-	}
+        this.senderRecipient = senderRecipient;
+    }
+
     public Map<String, String> getProperties() {
         return properties;
     }

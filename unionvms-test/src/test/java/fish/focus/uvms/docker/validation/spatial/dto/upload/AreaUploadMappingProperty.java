@@ -25,13 +25,11 @@ public class AreaUploadMappingProperty {
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public AreaUploadMappingProperty() {
     }
 
     /**
-     * 
      * @param source
      * @param target
      */
@@ -41,18 +39,14 @@ public class AreaUploadMappingProperty {
     }
 
     /**
-     * 
-     * @return
-     *     The source
+     * @return The source
      */
     public String getSource() {
         return source;
     }
 
     /**
-     * 
-     * @param source
-     *     The source
+     * @param source The source
      */
     public void setSource(String source) {
         this.source = source;
@@ -64,18 +58,14 @@ public class AreaUploadMappingProperty {
     }
 
     /**
-     * 
-     * @return
-     *     The target
+     * @return The target
      */
     public String getTarget() {
         return target;
     }
 
     /**
-     * 
-     * @param target
-     *     The target
+     * @param target The target
      */
     public void setTarget(String target) {
         this.target = target;

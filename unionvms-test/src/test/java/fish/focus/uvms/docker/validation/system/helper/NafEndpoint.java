@@ -11,13 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.system.helper;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHandler;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHandler;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,23 +26,23 @@ import java.util.concurrent.TimeUnit;
 
 public class NafEndpoint implements Closeable {
 
-    private Server server;
     private static String message;
-    
+    private Server server;
+
     public NafEndpoint(int port) throws Exception {
         server = new Server(port);
-       
+
         ServletHandler servletHandler = new ServletHandler();
         servletHandler.addServletWithMapping(NafServlet.class, "/*");
         server.setHandler(servletHandler);
         // Start Server
         server.start();
     }
-    
+
     public String getNafMessage() {
         return message;
     }
-    
+
     public String getMessage(int timeoutInMillis) throws InterruptedException {
         while (message == null && timeoutInMillis > 0) {
             TimeUnit.MILLISECONDS.sleep(100);
@@ -52,7 +52,7 @@ public class NafEndpoint implements Closeable {
         message = null;
         return returnMessage;
     }
-    
+
     @Override
     public void close() throws IOException {
         if (server != null) {
@@ -63,10 +63,10 @@ public class NafEndpoint implements Closeable {
             }
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class NafServlet extends HttpServlet {
-        
+
         @Override
         protected void doGet(HttpServletRequest httpRequest, HttpServletResponse response) throws ServletException, IOException {
             StringBuffer url = httpRequest.getRequestURL();

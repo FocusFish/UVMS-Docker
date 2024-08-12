@@ -19,7 +19,7 @@ public class MapConfigDto {
     public MapDto getMap() {
         return map;
     }
-    
+
     public void setMap(MapDto map) {
         this.map = map;
     }

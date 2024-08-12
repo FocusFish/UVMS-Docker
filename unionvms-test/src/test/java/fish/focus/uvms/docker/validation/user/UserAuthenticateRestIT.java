@@ -13,188 +13,186 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 package fish.focus.uvms.docker.validation.user;
 
-import org.junit.Ignore;
-import org.junit.Test;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
 import fish.focus.uvms.docker.validation.common.AuthenticationResponse;
 import fish.focus.uvms.docker.validation.user.dto.ChallengeResponse;
 import fish.focus.uvms.docker.validation.user.dto.ContextSet;
 import fish.focus.uvms.docker.validation.user.dto.StatusResponseDto;
 import fish.focus.uvms.docker.validation.user.dto.UserContext;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import java.util.UUID;
+
+import static org.junit.Assert.*;
 
 public class UserAuthenticateRestIT extends AbstractRest {
 
-	@Test
-	public void authenticateGetJwtTokenSuccessTest() {
-		final AuthenticationResponse data = UserHelper.authenticate("vms_admin_com", "password");
-		assertTrue(data.isAuthenticated());
-		assertNotNull(data.getJwtoken());
-	}
+    @Test
+    public void authenticateGetJwtTokenSuccessTest() {
+        final AuthenticationResponse data = UserHelper.authenticate("vms_admin_com", "password");
+        assertTrue(data.isAuthenticated());
+        assertNotNull(data.getJwtoken());
+    }
 
-	@Test
-	public void authenticateGetJwtTokenFailureTest() {
-		final AuthenticationResponse data = UserHelper.authenticate("vms_admin_com", "invalidpassword");
-		assertFalse(data.isAuthenticated());
-		assertNull(data.getJwtoken());
-	}
+    @Test
+    public void authenticateGetJwtTokenFailureTest() {
+        final AuthenticationResponse data = UserHelper.authenticate("vms_admin_com", "invalidpassword");
+        assertFalse(data.isAuthenticated());
+        assertNull(data.getJwtoken());
+    }
 
-	@Test
-	public void getUserChallenge() {
-		// logon
-		final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
-		assertTrue(authData.isAuthenticated());
-		assertNotNull(authData.getJwtoken());
+    @Test
+    public void getUserChallenge() {
+        // logon
+        final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
+        assertTrue(authData.isAuthenticated());
+        assertNotNull(authData.getJwtoken());
 
-		String jwtoken = authData.getJwtoken();
+        String jwtoken = authData.getJwtoken();
 
-		// use the jwToken to get challenge
-		final ChallengeResponse data = UserHelper.getChallenge(jwtoken);
-		assertNotNull(data.getChallenge());
-		assertEquals("vms_admin_com", data.getUserName());
-	}
+        // use the jwToken to get challenge
+        final ChallengeResponse data = UserHelper.getChallenge(jwtoken);
+        assertNotNull(data.getChallenge());
+        assertEquals("vms_admin_com", data.getUserName());
+    }
 
-	@Test
-	public void getUserChallengeTamperedJwt() {
-		final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
-		assertTrue(authData.isAuthenticated());
-		assertNotNull(authData.getJwtoken());
+    @Test
+    public void getUserChallengeTamperedJwt() {
+        final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
+        assertTrue(authData.isAuthenticated());
+        assertNotNull(authData.getJwtoken());
 
-		String jwtoken = authData.getJwtoken();
-		jwtoken += "tampered";
+        String jwtoken = authData.getJwtoken();
+        jwtoken += "tampered";
 
-		Response challengeResponse = getWebTarget()
+        Response challengeResponse = getWebTarget()
                 .path("usm-administration/rest/challenge")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, jwtoken)
                 .get();
 
-		assertEquals(Status.FORBIDDEN.getStatusCode(), challengeResponse.getStatus());
-	}
+        assertEquals(Status.FORBIDDEN.getStatusCode(), challengeResponse.getStatus());
+    }
 
-	@Test
-	@Ignore
-	public void challengeAuth() {
+    @Test
+    @Ignore
+    public void challengeAuth() {
 
-		// until the backend jdbc code is corrected this test is
-		// undeterministical
-		// actually the others as well .... since jdbc is wrong coded
+        // until the backend jdbc code is corrected this test is
+        // undeterministical
+        // actually the others as well .... since jdbc is wrong coded
 
-		/*
-		 * in SCHEMA USM select t.response from usm.user_t u join
-		 * usm.challenge_t t on u.user_id = t.user_id where
-		 * u.user_name='vms_admin_com' and t.challenge='Name of first pet'
-		 */
+        /*
+         * in SCHEMA USM select t.response from usm.user_t u join
+         * usm.challenge_t t on u.user_id = t.user_id where
+         * u.user_name='vms_admin_com' and t.challenge='Name of first pet'
+         */
 
-		final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
-		assertTrue(authData.isAuthenticated());
-		assertNotNull(authData.getJwtoken());
+        final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
+        assertTrue(authData.isAuthenticated());
+        assertNotNull(authData.getJwtoken());
 
-		String jwtoken = authData.getJwtoken();
+        String jwtoken = authData.getJwtoken();
 
-		// use the jwToken to get challenge
-		ChallengeResponse data = UserHelper.getChallenge(jwtoken);
-		String challenge = data.getChallenge();
-		String userName = data.getUserName();
-		String challengeResponse = data.getResponse();
+        // use the jwToken to get challenge
+        ChallengeResponse data = UserHelper.getChallenge(jwtoken);
+        String challenge = data.getChallenge();
+        String userName = data.getUserName();
+        String challengeResponse = data.getResponse();
 
-		// use the jwToken to get challenge
+        // use the jwToken to get challenge
 
-		ChallengeResponse challengeResponseTest = new ChallengeResponse(userName, challenge, challengeResponse);
+        ChallengeResponse challengeResponseTest = new ChallengeResponse(userName, challenge, challengeResponse);
 
-		AuthenticationResponse response = getWebTarget()
+        AuthenticationResponse response = getWebTarget()
                 .path("usm-administration/rest/challengeauth")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, jwtoken)
                 .post(Entity.json(challengeResponseTest), AuthenticationResponse.class);
 
-		assertTrue(response.isAuthenticated());
-	}
+        assertTrue(response.isAuthenticated());
+    }
 
-	@Test
-	public void challengeAuthVerifyWrongChallengeIsNotAccepted() {
+    @Test
+    public void challengeAuthVerifyWrongChallengeIsNotAccepted() {
 
-		/*
-		 * in SCHEMA USM select t.response from usm.user_t u join
-		 * usm.challenge_t t on u.user_id = t.user_id where
-		 * u.user_name='vms_admin_com' and t.challenge='Name of first pet'
-		 */
+        /*
+         * in SCHEMA USM select t.response from usm.user_t u join
+         * usm.challenge_t t on u.user_id = t.user_id where
+         * u.user_name='vms_admin_com' and t.challenge='Name of first pet'
+         */
 
-		final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
-		assertTrue(authData.isAuthenticated());
-		assertNotNull(authData.getJwtoken());
+        final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
+        assertTrue(authData.isAuthenticated());
+        assertNotNull(authData.getJwtoken());
 
-		String jwtoken = authData.getJwtoken();
+        String jwtoken = authData.getJwtoken();
 
-		// use the jwToken to get challenge
-		ChallengeResponse data = UserHelper.getChallenge(jwtoken);
-		String challenge = data.getChallenge();
+        // use the jwToken to get challenge
+        ChallengeResponse data = UserHelper.getChallenge(jwtoken);
+        String challenge = data.getChallenge();
 
-		String answer = UUID.randomUUID().toString();
+        String answer = UUID.randomUUID().toString();
 
-		ChallengeResponse challengeResponseTest = new ChallengeResponse("vms_admin_com", challenge, answer);
+        ChallengeResponse challengeResponseTest = new ChallengeResponse("vms_admin_com", challenge, answer);
 
-		AuthenticationResponse response = getWebTarget()
+        AuthenticationResponse response = getWebTarget()
                 .path("usm-administration/rest/challengeauth")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, jwtoken)
                 .post(Entity.json(challengeResponseTest), AuthenticationResponse.class);
 
-		assertFalse(response.isAuthenticated());
-	}
+        assertFalse(response.isAuthenticated());
+    }
 
-	@Test
-	public void userContexts() {
-		final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
-		assertTrue(authData.isAuthenticated());
-		assertNotNull(authData.getJwtoken());
+    @Test
+    public void userContexts() {
+        final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
+        assertTrue(authData.isAuthenticated());
+        assertNotNull(authData.getJwtoken());
 
-		String jwtoken = authData.getJwtoken();
+        String jwtoken = authData.getJwtoken();
 
-		//SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSx[z]");
-		//OBJECT_MAPPER//.setDateFormat(new StdDateFormat() DateTimeFormatter.ISO_ZONED_DATE_TIME.toFormat().);
+        //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSx[z]");
+        //OBJECT_MAPPER//.setDateFormat(new StdDateFormat() DateTimeFormatter.ISO_ZONED_DATE_TIME.toFormat().);
 
-		UserContext response = getWebTarget()
+        UserContext response = getWebTarget()
                 .path("usm-administration/rest/userContexts")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, jwtoken)
                 .get(UserContext.class);
 
-		ContextSet contextSet = response.getContextSet();
+        ContextSet contextSet = response.getContextSet();
 
-		assertNotNull(contextSet);
-		assertTrue(contextSet.getContexts().size() > 0);
-	}
+        assertNotNull(contextSet);
+        assertTrue(contextSet.getContexts().size() > 0);
+    }
 
-	@Test
-	public void ping() {
-		final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
-		assertTrue(authData.isAuthenticated());
-		assertNotNull(authData.getJwtoken());
+    @Test
+    public void ping() {
+        final AuthenticationResponse authData = UserHelper.authenticate("vms_admin_com", "password");
+        assertTrue(authData.isAuthenticated());
+        assertNotNull(authData.getJwtoken());
 
-		String jwtoken = authData.getJwtoken();
+        String jwtoken = authData.getJwtoken();
 
-		Response response = getWebTarget()
-				.path("usm-administration/rest/ping")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, jwtoken)
-				.get();
+        Response response = getWebTarget()
+                .path("usm-administration/rest/ping")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, jwtoken)
+                .get();
 
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-		StatusResponseDto responseDto = response.readEntity(StatusResponseDto.class);
+        StatusResponseDto responseDto = response.readEntity(StatusResponseDto.class);
 
-		assertEquals(Status.OK.getStatusCode(), responseDto.getStatusCode());
-		assertEquals("OK", responseDto.getStatusMessage());
-	}
+        assertEquals(Status.OK.getStatusCode(), responseDto.getStatusCode());
+        assertEquals("OK", responseDto.getStatusMessage());
+    }
 }

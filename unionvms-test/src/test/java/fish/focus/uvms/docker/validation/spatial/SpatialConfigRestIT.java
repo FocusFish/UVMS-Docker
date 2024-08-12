@@ -37,72 +37,75 @@ import static org.junit.Assert.assertTrue;
 
 public class SpatialConfigRestIT extends AbstractRest {
 
-	@Test
-	public void getReportMapConfig() {
-		String uid = "rep_power";
-		String pwd = "abcd-1234";
-		String scopeName = "EC";
-		String roleName = "rep_power_role";
+    @Test
+    public void getReportMapConfig() {
+        String uid = "rep_power";
+        String pwd = "abcd-1234";
+        String scopeName = "EC";
+        String roleName = "rep_power_role";
 
-		String id = "1";
+        String id = "1";
 
-		ConfigResourceDto dto = new ConfigResourceDto();
-		dto.setTimeStamp(new Date().toString());
+        ConfigResourceDto dto = new ConfigResourceDto();
+        dto.setTimeStamp(new Date().toString());
 
-		ResponseDto<MapConfigDto> response = getWebTarget()
-		        .path("spatial/rest/config")
+        ResponseDto<MapConfigDto> response = getWebTarget()
+                .path("spatial/rest/config")
                 .path(id)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
                 .header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
                 .header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
-                .post(Entity.json(dto), new GenericType<ResponseDto<MapConfigDto>>() {});
-
-		assertThat(response, is(notNullValue()));
-		assertThat(response.getData(), is(notNullValue()));
-		assertThat(response.getData().getMap(), is(notNullValue()));
-		assertThat(response.getData().getMap().getProjection(), is(notNullValue()));
-		assertThat(response.getData().getMap().getProjection().getEpsgCode(), is(3857));
-	}
-
-	@Test
-	public void getBasicReportMapConfig() {
-		String uid = "rep_power";
-		String pwd = "abcd-1234";
-		String scopeName = "EC";
-		String roleName = "rep_power_role";
-
-		ResponseDto<MapConfigDto> response = getWebTarget()
-                .path("spatial/rest/config")
-                .path("basic")
-                .request(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
-                .header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
-                .header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
-                .get(new GenericType<ResponseDto<MapConfigDto>>() {});
+                .post(Entity.json(dto), new GenericType<ResponseDto<MapConfigDto>>() {
+                });
 
         assertThat(response, is(notNullValue()));
         assertThat(response.getData(), is(notNullValue()));
         assertThat(response.getData().getMap(), is(notNullValue()));
         assertThat(response.getData().getMap().getProjection(), is(notNullValue()));
         assertThat(response.getData().getMap().getProjection().getEpsgCode(), is(3857));
-	}
+    }
 
-	@Test
-	public void getAllProjectionsTest() {
-		String uid = "rep_power";
-		String pwd = "abcd-1234";
-		String scopeName = "EC";
-		String roleName = "rep_power_role";
+    @Test
+    public void getBasicReportMapConfig() {
+        String uid = "rep_power";
+        String pwd = "abcd-1234";
+        String scopeName = "EC";
+        String roleName = "rep_power_role";
 
-		ResponseDto<List<ProjectionDto>> response = getWebTarget()
+        ResponseDto<MapConfigDto> response = getWebTarget()
+                .path("spatial/rest/config")
+                .path("basic")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
+                .header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
+                .header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
+                .get(new GenericType<ResponseDto<MapConfigDto>>() {
+                });
+
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getData(), is(notNullValue()));
+        assertThat(response.getData().getMap(), is(notNullValue()));
+        assertThat(response.getData().getMap().getProjection(), is(notNullValue()));
+        assertThat(response.getData().getMap().getProjection().getEpsgCode(), is(3857));
+    }
+
+    @Test
+    public void getAllProjectionsTest() {
+        String uid = "rep_power";
+        String pwd = "abcd-1234";
+        String scopeName = "EC";
+        String roleName = "rep_power_role";
+
+        ResponseDto<List<ProjectionDto>> response = getWebTarget()
                 .path("spatial/rest/config")
                 .path("projections")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
                 .header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
                 .header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
-                .get(new GenericType<ResponseDto<List<ProjectionDto>>>() {});
+                .get(new GenericType<ResponseDto<List<ProjectionDto>>>() {
+                });
 
         assertThat(response, is(notNullValue()));
         assertThat(response.getData(), is(notNullValue()));
@@ -110,68 +113,70 @@ public class SpatialConfigRestIT extends AbstractRest {
 
         assertTrue(response.getData().stream().anyMatch(proj -> proj.getName().equals("Spherical Mercator")));
         assertTrue(response.getData().stream().anyMatch(proj -> proj.getName().equals("WGS 84")));
-	}
+    }
 
-	@Test
-	public void getAdminPreferences() {
-		String uid = "rep_power";
-		String pwd = "abcd-1234";
-		String scopeName = "EC";
-		String roleName = "rep_power_role";
+    @Test
+    public void getAdminPreferences() {
+        String uid = "rep_power";
+        String pwd = "abcd-1234";
+        String scopeName = "EC";
+        String roleName = "rep_power_role";
 
-		ResponseDto<ConfigurationDto> response = getWebTarget()
-		        .path("spatial/rest/config")
-		        .path("admin")
+        ResponseDto<ConfigurationDto> response = getWebTarget()
+                .path("spatial/rest/config")
+                .path("admin")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
                 .header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
                 .header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
-                .get(new GenericType<ResponseDto<ConfigurationDto>>() {});
+                .get(new GenericType<ResponseDto<ConfigurationDto>>() {
+                });
 
-		assertThat(response, is(notNullValue()));
+        assertThat(response, is(notNullValue()));
         assertThat(response.getData(), is(notNullValue()));
 
         assertThat(response.getData().getSystemSettings(), is(notNullValue()));
         assertThat(response.getData().getSystemSettings().getGeoserverUrl(), is("http://localhost:28080/geoserver/"));
-	}
+    }
 
-	@Test
-	public void getUserPreferences() {
-		String uid = "rep_power";
-		String pwd = "abcd-1234";
-		String scopeName = "EC";
-		String roleName = "rep_power_role";
+    @Test
+    public void getUserPreferences() {
+        String uid = "rep_power";
+        String pwd = "abcd-1234";
+        String scopeName = "EC";
+        String roleName = "rep_power_role";
 
-		ResponseDto<ConfigurationDto> response = getWebTarget()
-				.path("spatial/rest/config")
-				.path("user")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
-				.header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
-				.header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
-				.get(new GenericType<ResponseDto<ConfigurationDto>>() {});
+        ResponseDto<ConfigurationDto> response = getWebTarget()
+                .path("spatial/rest/config")
+                .path("user")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
+                .header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
+                .header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
+                .get(new GenericType<ResponseDto<ConfigurationDto>>() {
+                });
 
-		assertThat(response, is(notNullValue()));
-		assertThat(response.getData(), is(notNullValue()));
-	}
+        assertThat(response, is(notNullValue()));
+        assertThat(response.getData(), is(notNullValue()));
+    }
 
-	@Test
-	public void getReportConfig() {
-		String uid = "rep_power";
-		String pwd = "abcd-1234";
-		String scopeName = "EC";
-		String roleName = "rep_power_role";
+    @Test
+    public void getReportConfig() {
+        String uid = "rep_power";
+        String pwd = "abcd-1234";
+        String scopeName = "EC";
+        String roleName = "rep_power_role";
 
-		Response response = getWebTarget()
-				.path("spatial/rest/config")
-				.path("report")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
-				.header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
-				.header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
-				.get();
+        Response response = getWebTarget()
+                .path("spatial/rest/config")
+                .path("report")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken(uid, pwd))
+                .header(AuthConstants.HTTP_HEADER_SCOPE_NAME, scopeName)
+                .header(AuthConstants.HTTP_HEADER_ROLE_NAME, roleName)
+                .get();
 
-		assertNotNull(response);
-		assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-	}
+        assertNotNull(response);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+    }
 }

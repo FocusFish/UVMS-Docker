@@ -74,6 +74,7 @@ public class IncidentTestHelper extends AbstractHelper {
                 .path(assetId)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<HashMap<String, IncidentDto>>() {});
+                .get(new GenericType<HashMap<String, IncidentDto>>() {
+                });
     }
 }

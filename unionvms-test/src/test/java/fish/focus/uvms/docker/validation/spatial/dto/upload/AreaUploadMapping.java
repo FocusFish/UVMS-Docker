@@ -29,13 +29,11 @@ public class AreaUploadMapping {
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public AreaUploadMapping() {
     }
 
     /**
-     * 
      * @param mapping
      */
     public AreaUploadMapping(List<AreaUploadMappingProperty> mapping) {
@@ -43,18 +41,14 @@ public class AreaUploadMapping {
     }
 
     /**
-     * 
-     * @return
-     *     The mapping
+     * @return The mapping
      */
     public List<AreaUploadMappingProperty> getMapping() {
         return mapping;
     }
 
     /**
-     * 
-     * @param mapping
-     *     The mapping
+     * @param mapping The mapping
      */
     public void setMapping(List<AreaUploadMappingProperty> mapping) {
         this.mapping = mapping;

@@ -3,6 +3,7 @@ package fish.focus.uvms.docker.validation.spatial;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.junit.Ignore;
 import org.junit.Test;
 import org.locationtech.jts.geom.Geometry;
@@ -51,6 +53,17 @@ public class SpatialRestIT extends AbstractRest {
     private Double latitude = 57.715523;
     private Double longitude = 11.973965;
 
+    private static Geometry getGeometryFromWKTSrring(String wkt) {
+        try {
+            WKTReader reader = new WKTReader();
+            Geometry geom = reader.read(wkt);
+            geom.setSRID(4326);
+            return geom;
+        } catch (ParseException e) {
+            throw new IllegalArgumentException("Inputstring " + wkt + " causes a parse exception.", e);
+        }
+    }
+
     @Test
     public void getAreaByLocation() {
         PointType point = new PointType();
@@ -62,7 +75,7 @@ public class SpatialRestIT extends AbstractRest {
         areaByLocationSpatialRQ.setPoint(point);
         areaByLocationSpatialRQ.setMethod(SpatialModuleMethod.GET_AREA_BY_LOCATION);
 
-        Response ret = getWebTarget() 
+        Response ret = getWebTarget()
                 .path("spatial/spatialnonsecure/json/getAreaByLocation")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -70,7 +83,8 @@ public class SpatialRestIT extends AbstractRest {
 
         assertEquals(200, ret.getStatus());
 
-        List<AreaExtendedIdentifierType> list = ret.readEntity(new GenericType<List<AreaExtendedIdentifierType>>(){});
+        List<AreaExtendedIdentifierType> list = ret.readEntity(new GenericType<List<AreaExtendedIdentifierType>>() {
+        });
         List<String> control = list.stream().map(AreaExtendedIdentifierType::getName).collect(Collectors.toList());
         assertTrue(control.contains("Göteborg-Lundbyhamnen"));
     }
@@ -83,7 +97,7 @@ public class SpatialRestIT extends AbstractRest {
         point.setCrs(crs);
         AllAreaTypesRequest request = createAllAreaTypesRequest();
 
-        Response ret =  getWebTarget() 
+        Response ret = getWebTarget()
                 .path("spatial/spatialnonsecure/json/getAreaTypes")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -91,7 +105,8 @@ public class SpatialRestIT extends AbstractRest {
 
         assertEquals(200, ret.getStatus());
 
-        List<String> list = ret.readEntity(new GenericType<List<String>>() {});
+        List<String> list = ret.readEntity(new GenericType<List<String>>() {
+        });
         assertTrue(list.contains("EEZ"));
     }
 
@@ -100,7 +115,7 @@ public class SpatialRestIT extends AbstractRest {
     public void getClosestAreaWith4kPoints() throws Exception {
         double[] points = TestPoints.testpoints;
         StringBuilder builder = new StringBuilder();
-        for(int i = 0 ; i < 8000 ; i = i + 2) {
+        for (int i = 0; i < 8000; i = i + 2) {
             PointType point = new PointType();
             point.setLatitude(points[i]);
             point.setLongitude(points[i + 1]);
@@ -115,7 +130,8 @@ public class SpatialRestIT extends AbstractRest {
                     .post(Entity.json(request), Response.class);
 
             assertEquals(200, ret.getStatus());
-            List<Area> list = ret.readEntity(new GenericType<List<Area>>() {});
+            List<Area> list = ret.readEntity(new GenericType<List<Area>>() {
+            });
 
             builder.append("Latitude: " + point.getLatitude() + " Longitude: " + point.getLongitude());
             for (Area aeit : list) {
@@ -123,7 +139,7 @@ public class SpatialRestIT extends AbstractRest {
             }
             builder.append("\r\n");
 
-            if(i % 100 == 0){
+            if (i % 100 == 0) {
                 System.out.println("Number: " + i);
             }
         }
@@ -139,7 +155,7 @@ public class SpatialRestIT extends AbstractRest {
         ClosestLocationSpatialRQ request = createClosestLocationRequest(point,
                 UnitType.METERS, Collections.singletonList(LocationType.PORT));
 
-        Response ret =  getWebTarget() 
+        Response ret = getWebTarget()
                 .path("spatial/spatialnonsecure/json/getClosestLocation")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -164,14 +180,15 @@ public class SpatialRestIT extends AbstractRest {
         List<AreaType> areaTypes = Collections.singletonList(AreaType.COUNTRY);
         SpatialEnrichmentRQ request = createSpatialEnrichmentRequest(point, UnitType.NAUTICAL_MILES, locationTypes, areaTypes);
 
-        Response ret = getWebTarget() 
+        Response ret = getWebTarget()
                 .path("spatial/spatialnonsecure/json/getEnrichment")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .post(Entity.json(request), Response.class);
 
         assertEquals(200, ret.getStatus());
-        SpatialEnrichmentRS enrichmentRS = ret.readEntity(new GenericType<SpatialEnrichmentRS>() {});
+        SpatialEnrichmentRS enrichmentRS = ret.readEntity(new GenericType<SpatialEnrichmentRS>() {
+        });
 
         List<Location> list = enrichmentRS.getClosestLocations().getClosestLocations();
         List<String> control = list.stream().map(Location::getName).collect(Collectors.toList());
@@ -188,7 +205,8 @@ public class SpatialRestIT extends AbstractRest {
                 .accept(MediaType.APPLICATION_JSON)
                 .post(Entity.json(request), Response.class);
 
-        PingRS pingRS = response.readEntity(new GenericType<PingRS>() {});
+        PingRS pingRS = response.readEntity(new GenericType<PingRS>() {
+        });
         assertEquals("pong", pingRS.getResponse());
     }
 
@@ -196,7 +214,7 @@ public class SpatialRestIT extends AbstractRest {
     public void getAreaByCode() {
         AreaByCodeRequest request = createAreaByCodeRequest();
 
-        Response ret = getWebTarget() 
+        Response ret = getWebTarget()
                 .path("spatial/spatialnonsecure/json/getAreaByCode")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -204,7 +222,8 @@ public class SpatialRestIT extends AbstractRest {
 
         assertEquals(200, ret.getStatus());
 
-        AreaByCodeResponse response = ret.readEntity(new GenericType<AreaByCodeResponse>() {});
+        AreaByCodeResponse response = ret.readEntity(new GenericType<AreaByCodeResponse>() {
+        });
 
         List<AreaSimpleType> resultList = response.getAreaSimples();
         assertNotNull(resultList);
@@ -220,14 +239,15 @@ public class SpatialRestIT extends AbstractRest {
     public void getGeometryByPortCode() throws Exception {
         GeometryByPortCodeRequest request = createToGeometryByPortCodeRequest("AOLAD");
 
-        Response ret = getWebTarget() 
+        Response ret = getWebTarget()
                 .path("spatial/spatialnonsecure/json/getGeometryByPortCode")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .post(Entity.json(request), Response.class);
 
         assertEquals(200, ret.getStatus());
-        GeometryByPortCodeResponse rs = ret.readEntity(new GenericType<GeometryByPortCodeResponse>() {});
+        GeometryByPortCodeResponse rs = ret.readEntity(new GenericType<GeometryByPortCodeResponse>() {
+        });
         String geometry = rs.getPortGeometry();
         assertNotNull(geometry);
         assertTrue(geometry.contains("MULTIPOINT"));
@@ -253,13 +273,13 @@ public class SpatialRestIT extends AbstractRest {
             requests.add(request);
         }
 
-        for(int i = 0; i < batchSize; i++) {
+        for (int i = 0; i < batchSize; i++) {
             SpatialEnrichmentRQ request = requests.get(i);
             Response ret = getWebTarget()
-                .path("spatial/spatialnonsecure/json/getEnrichment")
-                .request(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .post(Entity.json(request), Response.class);
+                    .path("spatial/spatialnonsecure/json/getEnrichment")
+                    .request(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .post(Entity.json(request), Response.class);
 
             assertEquals(200, ret.getStatus());
         }
@@ -271,11 +291,11 @@ public class SpatialRestIT extends AbstractRest {
         String[] pointArray = HelsingborgToLidkoping.helsingborgToLidköping;
         Instant start = Instant.now().minusSeconds(60 * pointArray.length);
 
-        for(int i = 0 ; i < pointArray.length - 1 ; i++) {
+        for (int i = 0; i < pointArray.length - 1; i++) {
             movementList.clear();
 
             InputToSegmentCategoryType move = new InputToSegmentCategoryType();
-            Point p = (Point)getGeometryFromWKTSrring(pointArray[i]);
+            Point p = (Point) getGeometryFromWKTSrring(pointArray[i]);
             MovementPoint pos = new MovementPoint();
             pos.setLongitude(p.getX());
             pos.setLatitude(p.getY());
@@ -285,7 +305,7 @@ public class SpatialRestIT extends AbstractRest {
             movementList.add(move);
 
             move = new InputToSegmentCategoryType();
-            p = (Point)getGeometryFromWKTSrring(pointArray[i + 1]);
+            p = (Point) getGeometryFromWKTSrring(pointArray[i + 1]);
             pos = new MovementPoint();
             pos.setLongitude(p.getX());
             pos.setLatitude(p.getY());
@@ -294,7 +314,7 @@ public class SpatialRestIT extends AbstractRest {
 
             movementList.add(move);
 
-            Response response =  getWebTarget()
+            Response response = getWebTarget()
                     .path("spatial/spatialnonsecure/json/getSegmentCategoryType")
                     .request(MediaType.APPLICATION_JSON)
                     .post(Entity.json(movementList), Response.class);
@@ -305,7 +325,7 @@ public class SpatialRestIT extends AbstractRest {
 
     @Test
     public void getAllNonUserAreasTest() throws Exception {
-        Response response =  getWebTarget()
+        Response response = getWebTarget()
                 .path("spatial/rest/area/allNonUserAreas")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -318,7 +338,7 @@ public class SpatialRestIT extends AbstractRest {
 
     @Test
     public void getAllLayersTest() throws Exception {
-        Response response =  getWebTarget()
+        Response response = getWebTarget()
                 .path("spatial/rest/area/layers")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -331,7 +351,7 @@ public class SpatialRestIT extends AbstractRest {
 
     @Test
     public void getAAreaTypesAreasTest() throws Exception {
-        Response response =  getWebTarget()
+        Response response = getWebTarget()
                 .path("spatial/rest/area/getAreaLayer/EEZ")
                 .request(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
@@ -362,7 +382,6 @@ public class SpatialRestIT extends AbstractRest {
         AllAreaTypesRequest allAreaTypesRequest = new AllAreaTypesRequest();
         return allAreaTypesRequest;
     }
-
 
     private GeometryByPortCodeRequest createToGeometryByPortCodeRequest(String portCode) {
         GeometryByPortCodeRequest request = new GeometryByPortCodeRequest();
@@ -414,16 +433,5 @@ public class SpatialRestIT extends AbstractRest {
         }
         request.setLocationTypes(loc);
         return request;
-    }
-
-    private static Geometry getGeometryFromWKTSrring(String wkt) {
-        try {
-            WKTReader reader = new WKTReader();
-            Geometry geom = reader.read(wkt);
-            geom.setSRID(4326);
-            return geom;
-        }catch (ParseException e){
-            throw new IllegalArgumentException("Inputstring " + wkt + " causes a parse exception.", e);
-        }
     }
 }

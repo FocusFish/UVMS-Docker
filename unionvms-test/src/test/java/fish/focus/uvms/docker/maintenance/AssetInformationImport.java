@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.Arrays;
 import java.util.List;
+
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.junit.Ignore;
@@ -25,7 +26,7 @@ import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
 
 public class AssetInformationImport extends AbstractRest {
-    private static final String FLAGSTATE = "Country of Registration"; 
+    private static final String FLAGSTATE = "Country of Registration";
     private static final String CFR = "CFR";
     private static final String UVI = "UVI";
     private static final String EVENT_CODE = "Event";
@@ -66,34 +67,34 @@ public class AssetInformationImport extends AbstractRest {
 
     private static final List<String> IMPORT_COUNTRIES = Arrays.asList("BEL", "DEU", "DNK", "EST", "FIN", "FRA", "GBR", "IRL", "LTU", "LVA", "NLD", "POL", "ESP", "PRT");
     private static final Double MINIMAL_LENGTH = 10d;
-    
+
     @Ignore
     @Test
     public void importCsvFromFleet() throws IOException {
         String csvFile = "/path/to/file.csv";
-        
+
         Reader in = new FileReader(csvFile);
         Iterable<CSVRecord> records = CSVFormat.Builder.create()
-                                    .setDelimiter(';')
+                .setDelimiter(';')
 //                                    .withFirstRecordAsHeader()
-                                    .setQuote(null)
-                                    .build()
-                                    .parse(in);
-        
+                .setQuote(null)
+                .build()
+                .parse(in);
+
         for (CSVRecord csvRecord : records) {
             try {
                 AssetDTO asset = populateAsset(csvRecord);
-                    if (IMPORT_COUNTRIES.contains(asset.getFlagStateCode()) 
-                            && asset.getLengthOverAll() != null 
-                            && asset.getLengthOverAll() > MINIMAL_LENGTH) {
-                        AssetTestHelper.createAsset(asset);
-                    }
+                if (IMPORT_COUNTRIES.contains(asset.getFlagStateCode())
+                        && asset.getLengthOverAll() != null
+                        && asset.getLengthOverAll() > MINIMAL_LENGTH) {
+                    AssetTestHelper.createAsset(asset);
+                }
             } catch (IllegalArgumentException e) {
                 e.printStackTrace();
             }
         }
     }
-    
+
     private AssetDTO populateAsset(CSVRecord record) {
         AssetDTO asset = new AssetDTO();
         asset.setFlagStateCode(record.get(FLAGSTATE));

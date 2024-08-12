@@ -21,28 +21,31 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
 
 public class ExchangeRegistryRestIT extends AbstractRest {
 
-	@Test
-	public void getListTest() {
+    @Test
+    public void getListTest() {
 
-		Response response = getWebTarget()
-				.path("exchange/rest/plugin/list")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(Response.class);
+        Response response = getWebTarget()
+                .path("exchange/rest/plugin/list")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(Response.class);
 
-		assertEquals(200, response.getStatus());
+        assertEquals(200, response.getStatus());
 
-		List<Plugin> plugins = response.readEntity(new GenericType<List<Plugin>>() {});
-		assertNotNull(plugins);
-		assertFalse(plugins.isEmpty());
-	}
+        List<Plugin> plugins = response.readEntity(new GenericType<List<Plugin>>() {
+        });
+        assertNotNull(plugins);
+        assertFalse(plugins.isEmpty());
+    }
 
 
     /* 	Removed two tests that started and stopped the service sweagencyemail.

@@ -18,6 +18,7 @@ public class AlarmItem {
     public String getRuleName() {
         return ruleName;
     }
+
     public void setRuleName(String ruleName) {
         this.ruleName = ruleName;
     }

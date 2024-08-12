@@ -15,7 +15,8 @@ public class Role implements Serializable {
     /**
      * Creates a new instance
      */
-    public Role() {}
+    public Role() {
+    }
 
     /**
      * Get the value of roleName
@@ -55,7 +56,7 @@ public class Role implements Serializable {
 
     /**
      * Formats a human-readable view of this instance.
-     * 
+     *
      * @return a human-readable view
      */
     @Override

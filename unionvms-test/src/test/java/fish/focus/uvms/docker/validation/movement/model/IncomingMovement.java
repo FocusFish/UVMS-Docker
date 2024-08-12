@@ -59,7 +59,7 @@ public class IncomingMovement {
 
     private String pluginType;
     private boolean active;
-    
+
     private String updatedBy;
 
     public String getAssetHistoryId() {

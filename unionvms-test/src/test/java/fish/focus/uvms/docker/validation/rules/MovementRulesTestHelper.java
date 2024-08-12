@@ -11,12 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.rules;
 
-import java.util.List;
+import fish.focus.uvms.docker.validation.common.AbstractHelper;
+import fish.focus.uvms.docker.validation.rules.dto.PreviousReportDto;
+
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import fish.focus.uvms.docker.validation.common.AbstractHelper;
-import fish.focus.uvms.docker.validation.rules.dto.PreviousReportDto;
+import java.util.List;
 
 public class MovementRulesTestHelper extends AbstractHelper {
 
@@ -25,6 +26,7 @@ public class MovementRulesTestHelper extends AbstractHelper {
                 .path("movement-rules/rest/previousReports/list")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<PreviousReportDto>>(){});
+                .get(new GenericType<List<PreviousReportDto>>() {
+                });
     }
 }

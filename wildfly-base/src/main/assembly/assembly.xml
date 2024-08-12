@@ -10,7 +10,7 @@
                 <include>**/*.*</include>
             </includes>
             <excludes>
-            	<exclude>dependencies/*.*</exclude>
+                <exclude>dependencies/*.*</exclude>
             </excludes>
             <outputDirectory></outputDirectory>
         </fileSet>
@@ -19,7 +19,7 @@
             <includes>
                 <include>hibernate*.*</include>
                 <include>jts*.*</include>
-                <include>geolatte-geom*.*</include>                
+                <include>geolatte-geom*.*</include>
             </includes>
             <outputDirectory>hibernate</outputDirectory>
         </fileSet>

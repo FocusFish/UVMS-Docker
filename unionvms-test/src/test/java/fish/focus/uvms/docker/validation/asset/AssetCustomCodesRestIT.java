@@ -11,23 +11,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.asset;
 
-import org.junit.Test;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
+import org.junit.Test;
+
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import static org.junit.Assert.assertFalse;
 import java.util.List;
 
+import static org.junit.Assert.assertFalse;
+
 public class AssetCustomCodesRestIT extends AbstractRest {
-    
+
     @Test
     public void listConstantsTest() throws Exception {
         List<String> response = getWebTarget()
                 .path("asset/rest/customcodes/listconstants")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<String>>() {});
+                .get(new GenericType<List<String>>() {
+                });
         assertFalse(response.isEmpty());
     }
 }

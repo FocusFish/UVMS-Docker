@@ -7,8 +7,10 @@ import fish.focus.uvms.docker.validation.common.AbstractRest;
 import fish.focus.uvms.docker.validation.common.MessageHelper;
 import fish.focus.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 

@@ -11,13 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.system;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import javax.jms.Message;
-import org.junit.Test;
 import fish.focus.schema.exchange.plugin.types.v1.PluginType;
 import fish.focus.schema.exchange.registry.v1.ExchangeRegistryMethod;
 import fish.focus.schema.exchange.registry.v1.RegisterServiceRequest;
@@ -33,6 +26,15 @@ import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
 import fish.focus.uvms.exchange.model.constant.ExchangeModelConstants;
 import fish.focus.uvms.exchange.model.mapper.JAXBMarshaller;
 import fish.focus.uvms.mobileterminal.model.constants.MobileTerminalTypeEnum;
+import org.junit.Test;
+
+import javax.jms.Message;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PluginSynchronizationIT extends AbstractRest {
 
@@ -45,7 +47,7 @@ public class PluginSynchronizationIT extends AbstractRest {
         registerRequest.setSettingList(new SettingListType());
 
         try (MessageHelper messageHelper = new MessageHelper();
-                TopicListener listener = new TopicListener(TopicListener.EVENT_STREAM, "event='Service Registered'")) {
+             TopicListener listener = new TopicListener(TopicListener.EVENT_STREAM, "event='Service Registered'")) {
             messageHelper.sendToEventBus(JAXBMarshaller.marshallJaxBObjectToString(registerRequest), ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE, ExchangeRegistryMethod.REGISTER_SERVICE.toString());
             listener.listenOnEventBus();
             TimeUnit.SECONDS.sleep(1);
@@ -68,9 +70,9 @@ public class PluginSynchronizationIT extends AbstractRest {
 
         UnregisterServiceRequest unregisterRequest = new UnregisterServiceRequest();
         unregisterRequest.setService(serviceType);
-        
+
         try (MessageHelper messageHelper = new MessageHelper();
-                TopicListener listener = new TopicListener(TopicListener.EVENT_STREAM, "event='Service Registered' OR event='Service Unregistered'")) {
+             TopicListener listener = new TopicListener(TopicListener.EVENT_STREAM, "event='Service Registered' OR event='Service Unregistered'")) {
             // register
             messageHelper.sendToEventBus(JAXBMarshaller.marshallJaxBObjectToString(registerRequest), ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE, ExchangeRegistryMethod.REGISTER_SERVICE.toString());
             listener.listenOnEventBus();

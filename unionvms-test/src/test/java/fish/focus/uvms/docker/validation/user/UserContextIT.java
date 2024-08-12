@@ -11,8 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.user;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertNotNull;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
 import fish.focus.uvms.docker.validation.user.dto.Context;
 import fish.focus.uvms.docker.validation.user.dto.Preferences;
@@ -26,11 +24,14 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNotNull;
+
 public class UserContextIT extends AbstractRest {
 
     @Test
     public void putUserContext() {
-        
+
         UserPreference userPreference = new UserPreference();
         userPreference.setApplicationName("VMSFrontend");
         userPreference.setOptionName("settings");
@@ -38,19 +39,19 @@ public class UserContextIT extends AbstractRest {
         userPreference.setUserName("vms_admin_se");
         userPreference.setRoleName("AdminAllUVMS");
         userPreference.setScopeName("All Vessels");
-        
+
         Response resp = getWebTarget()
-            .path("user/rest/user/putPreference")
-            .request(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-            .put(Entity.json(userPreference));
-        
+                .path("user/rest/user/putPreference")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .put(Entity.json(userPreference));
+
         UserContext response = getWebTarget()
                 .path("usm-administration/rest/userContexts")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get(UserContext.class);
-            
+
         for (Context context : response.getContextSet().getContexts()) {
             for (Preferences pref : context.getPreferences().getPreferences()) {
                 if (pref.getApplicationName().equals("VMSFrontend")) {
@@ -59,15 +60,15 @@ public class UserContextIT extends AbstractRest {
             }
         }
     }
-    
+
     @Test
     public void getUserContext() {
         UserContext response = getWebTarget()
-            .path("usm-administration/rest/userContexts")
-            .request(MediaType.APPLICATION_JSON)
-            .header(HttpHeaders.AUTHORIZATION, getValidJwtToken("vms_admin_se", "password"))
-            .get(UserContext.class);
-        
+                .path("usm-administration/rest/userContexts")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken("vms_admin_se", "password"))
+                .get(UserContext.class);
+
         assertNotNull(response);
     }
 }

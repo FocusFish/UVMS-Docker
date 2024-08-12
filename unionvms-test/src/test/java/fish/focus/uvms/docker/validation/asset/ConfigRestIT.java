@@ -13,45 +13,47 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 package fish.focus.uvms.docker.validation.asset;
 
+import fish.focus.uvms.docker.validation.common.AbstractRest;
 import org.junit.Ignore;
 import org.junit.Test;
-import fish.focus.uvms.docker.validation.common.AbstractRest;
-import static org.junit.Assert.assertEquals;
+
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import static org.junit.Assert.assertEquals;
+
 public class ConfigRestIT extends AbstractRest {
 
-	@Test
-	public void getConfigSearchFieldsTest() throws Exception {
-	    Response response = getWebTarget()
+    @Test
+    public void getConfigSearchFieldsTest() throws Exception {
+        Response response = getWebTarget()
                 .path("asset/rest/config/searchfields")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get();
-	    assertEquals(Status.OK.getStatusCode(), response.getStatus());
-	}
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    }
 
-	@Test
-	@Ignore("This endpoint is removed.")
-	public void getConfigurationTest() throws Exception {
-	    Response response = getWebTarget()
+    @Test
+    @Ignore("This endpoint is removed.")
+    public void getConfigurationTest() throws Exception {
+        Response response = getWebTarget()
                 .path("asset/rest/config")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get();
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
-	}
+    }
 
-	@Test
-	public void getParametersTest() throws Exception {
-	    Response response = getWebTarget()
+    @Test
+    public void getParametersTest() throws Exception {
+        Response response = getWebTarget()
                 .path("asset/rest/config/parameters")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get();
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
-	}
+    }
 }

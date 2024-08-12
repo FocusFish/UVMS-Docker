@@ -34,106 +34,139 @@ public class ExchangeLogDto {
     private String typeRefType;
     private ExchangeLogData logData;
     private List<RelatedLogInfo> relatedLogData;
-    
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
     public boolean isIncoming() {
         return incoming;
     }
+
     public void setIncoming(boolean incoming) {
         this.incoming = incoming;
     }
+
     public String getDateRecieved() {
         return dateRecieved;
     }
+
     public void setDateRecieved(String dateRecieved) {
         this.dateRecieved = dateRecieved;
     }
+
     public String getSenderRecipient() {
         return senderRecipient;
     }
+
     public void setSenderRecipient(String from) {
         this.senderRecipient = from;
     }
+
     public String getSource() {
         return source;
     }
+
     public void setSource(String source) {
         this.source = source;
     }
+
     public String getRule() {
         return rule;
     }
+
     public void setRule(String rule) {
         this.rule = rule;
     }
+
     public String getRecipient() {
         return recipient;
     }
+
     public void setRecipient(String recipient) {
         this.recipient = recipient;
     }
+
     public String getDateFwd() {
         return dateFwd;
     }
+
     public void setDateFwd(String dateFwd) {
         this.dateFwd = dateFwd;
     }
+
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
     }
+
     public ExchangeLogData getLogData() {
         return logData;
     }
+
     public void setLogData(ExchangeLogData logData) {
         this.logData = logData;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
+
     public String getTypeRefType() {
         return typeRefType;
     }
+
     public void setTypeRefType(String typeRefType) {
         this.typeRefType = typeRefType;
     }
+
     public List<RelatedLogInfo> getRelatedLogData() {
         return relatedLogData;
     }
+
     public void setRelatedLogData(List<RelatedLogInfo> relatedLogData) {
         this.relatedLogData = relatedLogData;
     }
+
     public String getTo() {
         return to;
     }
+
     public void setTo(String to) {
         this.to = to;
     }
+
     public String getTodt() {
         return todt;
     }
+
     public void setTodt(String todt) {
         this.todt = todt;
     }
+
     public String getOn() {
         return on;
     }
+
     public void setOn(String on) {
         this.on = on;
     }
+
     public String getDf() {
         return df;
     }
+
     public void setDf(String df) {
         this.df = df;
     }

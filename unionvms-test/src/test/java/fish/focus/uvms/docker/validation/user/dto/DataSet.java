@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Holds a Filter/dataset<br/>
  * .
- * 
+ * <p>
  * Definition: a filter is a value for a given criteria: Ex: criteria for the vessel application: vessel_group, filter:
  * Group A It contains the criteria (or type of filter) (ex: vessel_group) is on which the filter should be applied it
  * is attached to the application in which it has been defined; it is defined through the user interface of an
@@ -23,7 +23,8 @@ public class DataSet implements Serializable {
     /**
      * Creates a new instance
      */
-    public DataSet() {}
+    public DataSet() {
+    }
 
     /**
      * Get the value of applicationName
@@ -77,7 +78,7 @@ public class DataSet implements Serializable {
 
     /**
      * Formats a human-readable view of this instance.
-     * 
+     *
      * @return a human-readable view
      */
     @Override

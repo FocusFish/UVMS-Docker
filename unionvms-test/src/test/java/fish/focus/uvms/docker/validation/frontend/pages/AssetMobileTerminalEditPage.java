@@ -12,16 +12,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package fish.focus.uvms.docker.validation.frontend.pages;
 
 import static com.codeborne.selenide.Selenide.*;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+
 import fish.focus.uvms.docker.validation.mobileterminal.dto.ChannelDto;
 import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
+
 import static com.codeborne.selenide.Selectors.*;
 
 public class AssetMobileTerminalEditPage {
 
-    protected AssetMobileTerminalEditPage() {}
+    protected AssetMobileTerminalEditPage() {
+    }
 
     public void populateFieldsFromMobileTerminal(MobileTerminalDto mobileTerminal) {
         setTransceiverType(mobileTerminal.getTransceiverType());

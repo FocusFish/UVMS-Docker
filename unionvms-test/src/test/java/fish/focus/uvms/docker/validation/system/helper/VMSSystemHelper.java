@@ -44,18 +44,17 @@ import static org.junit.Assert.assertNotNull;
 
 public class VMSSystemHelper {
 
-    private static final String SERVICE_NAME = "fish.focus.uvms.docker.validation.system.rules.EMAIL";
-    private static final long TIMEOUT = 10000;
-
     public static final String FLUX_SELECTOR = "ServiceName='fish.focus.uvms.plugins.flux.movement'";
     public static final String NAF_SELECTOR = "ServiceName='fish.focus.uvms.plugins.naf'";
     public static final String INMARSAT_SELECTOR = "ServiceName='fish.focus.uvms.plugins.inmarsat'";
+    private static final String SERVICE_NAME = "fish.focus.uvms.docker.validation.system.rules.EMAIL";
+    private static final long TIMEOUT = 10000;
     public static String emailSelector = "ServiceName='" + SERVICE_NAME + "'";
     public static String emailPluginName = "TEST EMAIL";
     public static String FLUX_NAME = "fish.focus.uvms.plugins.flux.movement";
     public static String NAF_NAME = "fish.focus.uvms.plugins.naf";
     public static String REST_NAME = "fish.focus.uvms.plugins.rest.movement";
-    
+
     public static SetReportRequest triggerBasicRuleAndSendToFlux(String fluxEndpoint) throws Exception {
         return triggerBasicRuleWithAction(ActionType.SEND_REPORT, FLUX_NAME, fluxEndpoint, SetReportRequest.class, FLUX_SELECTOR, true);
     }
@@ -75,7 +74,7 @@ public class VMSSystemHelper {
     public static SetCommandRequest triggerBasicRuleAndSendEmail(String email) throws Exception {
         return triggerBasicRuleWithAction(ActionType.EMAIL, email, SetCommandRequest.class, emailSelector, true);
     }
-    
+
     private static <T> T triggerBasicRuleWithAction(ActionType actionType, String actionValue, Class<T> expectedType, String selector, boolean createTicket) throws Exception {
         return triggerBasicRuleWithAction(actionType, null, actionValue, expectedType, selector, createTicket);
     }
@@ -84,19 +83,19 @@ public class VMSSystemHelper {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         return triggerBasicRuleWithAction(asset, actionType, target, actionValue, expectedType, selector, createTicket);
     }
-    
+
     private static <T> T triggerBasicRuleWithAction(AssetDTO asset, ActionType actionType, String target, String actionValue, Class<T> expectedType, String selector, boolean createTicket) throws Exception {
         try {
             Instant timestamp = Instant.now();
 
             CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                     .setName("Flag state => FLUX DNK")
-                    .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                    .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                             ConditionType.EQ, asset.getFlagStateCode())
                     .action(actionType, target, actionValue)
                     .build();
 
-            if(createTicket){
+            if (createTicket) {
                 CustomRuleActionType ticketAction = new CustomRuleActionType();
                 ticketAction.setAction(ActionType.CREATE_TICKET);
                 ticketAction.setOrder("99");
@@ -105,7 +104,7 @@ public class VMSSystemHelper {
 
             CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(flagStateRule);
             assertNotNull(createdCustomRule);
-    
+
             LatLong position = new LatLong(11d, 56d, new Date());
 
             T reportRequest;
@@ -120,7 +119,7 @@ public class VMSSystemHelper {
             CustomRuleHelper.removeCustomRulesByDefaultUser();
         }
     }
-    
+
     public static void registerEmailPluginIfNotExisting() throws Exception {
         try (MessageHelper messageHelper = new MessageHelper()) {
             String exchangeRequest = ExchangeModuleRequestMapper.createGetServiceListRequest(Collections.singletonList(PluginType.EMAIL));
@@ -137,7 +136,7 @@ public class VMSSystemHelper {
                 serviceType.setServiceResponseMessageName(SERVICE_NAME);
                 String registerRequest = ExchangeModuleRequestMapper.createRegisterServiceRequest(serviceType, new CapabilityListType(), new SettingListType());
                 messageHelper.sendToEventBus(registerRequest, ExchangeModelConstants.EXCHANGE_REGISTER_SERVICE);
-                
+
                 // Clear topic
                 messageHelper.listenOnEventBus(emailSelector, TIMEOUT);
                 messageHelper.listenOnEventBus(emailSelector, TIMEOUT);

@@ -47,15 +47,15 @@ public class VMSSystemPerformanceIT extends AbstractRest {
     private static final String SELECTOR = "ServiceName='fish.focus.uvms.plugins.flux.movement'";
 
     private static final int NUMBER_OF_POSITIONS = 10;
-    
+
     @Rule
     public ContiPerfRule contiPerfRule = new ContiPerfRule();
-    
+
     @After
     public void removeCustomRules() {
         CustomRuleHelper.removeCustomRulesByDefaultUser();
     }
-    
+
     @Test
     @PerfTest(threads = 1)
     @Required(max = 45000)
@@ -65,10 +65,10 @@ public class VMSSystemPerformanceIT extends AbstractRest {
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
 
         String fluxEndpoint = "DNK";
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .build();
@@ -94,10 +94,10 @@ public class VMSSystemPerformanceIT extends AbstractRest {
                 assertThat(setReportRequest.getReport().getMovement().getIrcs(), is(asset.getIrcs()));
                 receivedReports++;
             }
-        }      
+        }
         CustomRuleHelper.removeCustomRule(createdCustomRule.getGuid());
     }
-    
+
     @Ignore
     @Test
     @PerfTest(threads = 1)
@@ -105,10 +105,10 @@ public class VMSSystemPerformanceIT extends AbstractRest {
         // Create rule
         String flagStateCode = "SWE";
         String fluxEndpoint = "DNK";
-        
+
         CustomRuleType flagStateRule = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => FLUX DNK")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, flagStateCode)
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .build();

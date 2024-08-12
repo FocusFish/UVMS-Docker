@@ -1,19 +1,15 @@
 package fish.focus.uvms.docker.validation.asset;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import fish.focus.uvms.docker.validation.asset.assetfilter.test.dto.*;
+import fish.focus.uvms.docker.validation.common.AbstractRest;
+
 import javax.json.JsonObject;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import fish.focus.uvms.docker.validation.asset.assetfilter.test.dto.AssetFilterDto;
-import fish.focus.uvms.docker.validation.asset.assetfilter.test.dto.AssetFilterListDto;
-import fish.focus.uvms.docker.validation.asset.assetfilter.test.dto.AssetFilterQueryDto;
-import fish.focus.uvms.docker.validation.asset.assetfilter.test.dto.AssetFilterQueryRestDto;
-import fish.focus.uvms.docker.validation.asset.assetfilter.test.dto.AssetFilterValueDto;
-import fish.focus.uvms.docker.validation.asset.assetfilter.test.dto.AssetFilterValueType;
-import fish.focus.uvms.docker.validation.common.AbstractRest;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AssetFilterTestHelper extends AbstractRest {
 
@@ -84,14 +80,14 @@ public class AssetFilterTestHelper extends AbstractRest {
     }
 
     public static AssetFilterQueryDto createAssetFilterQuery(AssetFilterDto assetFilterforQuery,
-            AssetFilterQueryDto assetFilterQuery) {
+                                                             AssetFilterQueryDto assetFilterQuery) {
         return getWebTarget().path(ASSET_FILTER_BASE_URL).path(assetFilterforQuery.getId().toString()).path("query")
                 .request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .post(Entity.json(assetFilterQuery), AssetFilterQueryDto.class);
     }
 
     public static AssetFilterValueDto createAssetFilterValue(AssetFilterQueryDto assetFilterQueryForValue,
-            AssetFilterValueDto assetFilterValue) {
+                                                             AssetFilterValueDto assetFilterValue) {
         return getWebTarget().path(ASSET_FILTER_BASE_URL).path(assetFilterQueryForValue.getId().toString())
                 .path("value").request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .post(Entity.json(assetFilterValue), AssetFilterValueDto.class);

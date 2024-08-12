@@ -26,19 +26,19 @@ import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
 import fish.focus.uvms.exchange.model.mapper.ExchangePluginResponseMapper;
 
 public class PollHelper {
-    
+
     public static SetCommandRequest createPollAndReturnSetCommandRequest() throws Exception {
         AssetDTO testAsset = AssetTestHelper.createTestAsset();
         return createPollAndReturnSetCommandRequest(testAsset);
     }
-    
+
     private static SetCommandRequest createPollAndReturnSetCommandRequest(AssetDTO testAsset) throws Exception {
         try (TopicListener topicListener = new TopicListener(VMSSystemHelper.INMARSAT_SELECTOR)) {
             MobileTerminalTestHelper.createPoll_Helper(testAsset, PollType.MANUAL_POLL);
             return topicListener.listenOnEventBusForSpecificMessage(SetCommandRequest.class);
         }
     }
-    
+
     public static SetCommandRequest createPollAndReturnSetCommandRequest(AssetDTO testAsset, MobileTerminalDto mobileTerminal) throws Exception {
         try (TopicListener topicListener = new TopicListener(VMSSystemHelper.INMARSAT_SELECTOR)) {
             MobileTerminalTestHelper.createPollWithMT_Helper(testAsset, PollType.MANUAL_POLL, mobileTerminal);
@@ -54,7 +54,7 @@ public class PollHelper {
         pollAck.setPollId(pollId);
         setCommandAck.setPollStatus(pollAck);
         String ackMessage = ExchangePluginResponseMapper.mapToSetPollStatusToSuccessfulResponse("Test", setCommandAck, pollId);
-        
+
         try (MessageHelper messageHelper = new MessageHelper()) {
             messageHelper.sendMessage("UVMSExchangeEvent", ackMessage);
         }

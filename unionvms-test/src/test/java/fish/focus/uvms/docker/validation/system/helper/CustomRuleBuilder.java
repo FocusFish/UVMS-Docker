@@ -24,9 +24,9 @@ public class CustomRuleBuilder {
 
     private int segmentOrder = 0;
     private int actionOrder = 0;
-    
+
     private CustomRuleType customRule;
-    
+
     private CustomRuleBuilder() {
         customRule = new CustomRuleType();
         customRule.setName("Rule: " + System.currentTimeMillis());
@@ -36,21 +36,21 @@ public class CustomRuleBuilder {
         customRule.setActive(true);
         customRule.setArchived(false);
     }
-    
+
     public static CustomRuleBuilder getBuilder() {
         return new CustomRuleBuilder();
     }
-    
+
     public CustomRuleBuilder setName(String name) {
         customRule.setName(name + " " + System.currentTimeMillis());
         return this;
     }
-    
+
     public CustomRuleBuilder setUser(String username) {
         customRule.setUpdatedBy(username);
         return this;
     }
-    
+
     public CustomRuleBuilder setAvailability(AvailabilityType availabilityType) {
         customRule.setAvailability(availabilityType);
         return this;
@@ -70,7 +70,7 @@ public class CustomRuleBuilder {
         customRule.getDefinitions().add(segment);
         return this;
     }
-   
+
     public CustomRuleBuilder and(CriteriaType criteriaType, SubCriteriaType subCriteriaType, ConditionType conditionType, String value) {
         List<CustomRuleSegmentType> definitions = customRule.getDefinitions();
         if (!definitions.isEmpty()) {
@@ -79,7 +79,7 @@ public class CustomRuleBuilder {
         }
         return rule(criteriaType, subCriteriaType, conditionType, value);
     }
-    
+
     public CustomRuleBuilder or(CriteriaType criteriaType, SubCriteriaType subCriteriaType, ConditionType conditionType, String value) {
         List<CustomRuleSegmentType> definitions = customRule.getDefinitions();
         if (!definitions.isEmpty()) {
@@ -88,7 +88,7 @@ public class CustomRuleBuilder {
         }
         return rule(criteriaType, subCriteriaType, conditionType, value);
     }
-    
+
     public CustomRuleBuilder interval(Date start, Date end) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -98,7 +98,7 @@ public class CustomRuleBuilder {
         customRule.getTimeIntervals().add(customRuleIntervalType);
         return this;
     }
-    
+
     public CustomRuleBuilder action(ActionType actionType, String value) {
         return action(actionType, null, value);
     }
@@ -113,7 +113,7 @@ public class CustomRuleBuilder {
         customRule.getActions().add(action);
         return this;
     }
-    
+
     public CustomRuleType build() {
         return customRule;
     }

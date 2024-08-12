@@ -15,27 +15,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PollChannelListDto {
-	
-	private Integer currentPage;
-	private Integer totalNumberOfPages;
-	private List<PollChannelDto> pollableChannels;
-	
-	public Integer getCurrentPage() {
-		return currentPage;
-	}
-	public void setCurrentPage(Integer currentPage) {
-		this.currentPage = currentPage;
-	}
-	public Integer getTotalNumberOfPages() {
-		return totalNumberOfPages;
-	}
-	public void setTotalNumberOfPages(Integer totalNumberOfPages) {
-		this.totalNumberOfPages = totalNumberOfPages;
-	}
-	public List<PollChannelDto> getPollableChannels() {
-		return pollableChannels;
-	}
-	public void setPollableChannels(ArrayList<PollChannelDto> pollableChannels) {
-		this.pollableChannels = pollableChannels;
-	}
+
+    private Integer currentPage;
+    private Integer totalNumberOfPages;
+    private List<PollChannelDto> pollableChannels;
+
+    public Integer getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public Integer getTotalNumberOfPages() {
+        return totalNumberOfPages;
+    }
+
+    public void setTotalNumberOfPages(Integer totalNumberOfPages) {
+        this.totalNumberOfPages = totalNumberOfPages;
+    }
+
+    public List<PollChannelDto> getPollableChannels() {
+        return pollableChannels;
+    }
+
+    public void setPollableChannels(ArrayList<PollChannelDto> pollableChannels) {
+        this.pollableChannels = pollableChannels;
+    }
 }

@@ -28,7 +28,8 @@ public class Context implements Serializable {
     /**
      * Creates a new instance
      */
-    public Context() {}
+    public Context() {
+    }
 
     /**
      * Get the value of role
@@ -66,7 +67,7 @@ public class Context implements Serializable {
         this.scope = scope;
     }
 
-    
+
     public PreferencesList getPreferences() {
         return preferences;
     }
@@ -77,7 +78,7 @@ public class Context implements Serializable {
 
     /**
      * Formats a human-readable view of this instance.
-     * 
+     *
      * @return a human-readable view
      */
     @Override

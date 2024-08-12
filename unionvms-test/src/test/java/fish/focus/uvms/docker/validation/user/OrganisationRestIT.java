@@ -11,10 +11,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.user;
 
-import org.junit.Test;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
 import fish.focus.uvms.docker.validation.user.dto.EndPoint;
 import fish.focus.uvms.docker.validation.user.dto.Organisation;
+import org.junit.Test;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -26,13 +27,13 @@ public class OrganisationRestIT extends AbstractRest {
         Organisation createdOrganisation = UserHelper.createOrganisation(organisation);
         assertThat(createdOrganisation.getName(), is(organisation.getName()));
     }
-    
+
     @Test
     public void createEndpointTest() {
         Organisation organisation = UserHelper.getBasicOrganisation();
         Organisation createdOrganisation = UserHelper.createOrganisation(organisation);
         assertThat(createdOrganisation.getName(), is(organisation.getName()));
-        
+
         EndPoint endpoint = new EndPoint();
         String endpointName = "Test";
         endpoint.setName(endpointName);
@@ -40,9 +41,9 @@ public class OrganisationRestIT extends AbstractRest {
         endpoint.setStatus("E");
         endpoint.setOrganisationName(organisation.getName());
         EndPoint createdEndpoint = UserHelper.createEndpoint(endpoint);
-        
+
         assertThat(createdEndpoint.getName(), is(endpoint.getName()));
-        
+
         Organisation fetchedOrganisation = UserHelper.getOrganisation(createdOrganisation.getOrganisationId());
         assertThat(fetchedOrganisation.getEndpoints().size(), is(1));
         assertThat(fetchedOrganisation.getEndpoints().get(0).getName(), is(endpointName));

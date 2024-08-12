@@ -212,7 +212,7 @@ public class IncidentCollectionIT extends AbstractRest {
         assertEquals(asset.getId(), pollInfo.getAssetId());
         assertEquals(comment.getComment(), pollInfo.getComment());
 
-        assertEquals(pollInfoDto.getPollInfo().getMobileterminalId() , pollInfoDto.getMobileTerminalSnapshot().getId());
+        assertEquals(pollInfoDto.getPollInfo().getMobileterminalId(), pollInfoDto.getMobileTerminalSnapshot().getId());
         assertEquals(pollInfoDto.getMobileTerminalSnapshot().getAssetId(), asset.getId().toString());
         assertFalse(pollInfoDto.getMobileTerminalSnapshot().getChannels().isEmpty());
 
@@ -598,7 +598,7 @@ public class IncidentCollectionIT extends AbstractRest {
                 .get(IncidentDto.class);
     }
 
-    private IncidentDto createBasicIncident(AssetDTO asset){
+    private IncidentDto createBasicIncident(AssetDTO asset) {
         IncidentDto incidentDto = new IncidentDto();
         incidentDto.setAssetId(asset.getId());
         incidentDto.setAssetName(asset.getName());

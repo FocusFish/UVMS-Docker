@@ -38,7 +38,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class SanityRulesIT extends AbstractRest {
-    
+
     private String assetMustExistRuleName = "Asset not found";
     private String memberNoMissingRuleName = "Mem No. missing";
     private String dnidMissingRuleName = "DNID missing";
@@ -53,7 +53,7 @@ public class SanityRulesIT extends AbstractRest {
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
         long openAlarmsBefore = SanityRuleHelper.countOpenAlarms();
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         InmarsatPluginMock.sendInmarsatPosition(mobileTerminal, position);
 
@@ -74,7 +74,7 @@ public class SanityRulesIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
 
         long openAlarmsBefore = SanityRuleHelper.countOpenAlarms();
-        
+
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR, 5);
         LatLong position = new LatLong(11d, 56d, calendar.getTime());
@@ -84,7 +84,7 @@ public class SanityRulesIT extends AbstractRest {
         long openAlarmsAfter = SanityRuleHelper.countOpenAlarms();
         assertThat(openAlarmsAfter, is(openAlarmsBefore + 1));
     }
-    
+
     /*
     <column name="sanityrule_description" value="Latitude must exist"/>
     <column name="sanityrule_expression" value="latitude == null"/>
@@ -94,7 +94,7 @@ public class SanityRulesIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
 
         long openAlarmsBefore = SanityRuleHelper.countOpenAlarms();
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         FLUXVesselPositionMessage fluxMessage = FLUXHelper.createFluxMessage(asset, position);
         fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getSpecifiedVesselGeographicalCoordinate().setLatitudeMeasure(null);
@@ -105,7 +105,7 @@ public class SanityRulesIT extends AbstractRest {
         long openAlarmsAfter = SanityRuleHelper.countOpenAlarms();
         assertThat(openAlarmsAfter, is(openAlarmsBefore + 1));
     }
-    
+
     /*
     <column name="sanityrule_description" value="Longitude must exist"/>
     <column name="sanityrule_expression" value="longitude == null"/>
@@ -115,7 +115,7 @@ public class SanityRulesIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
 
         long openAlarmsBefore = SanityRuleHelper.countOpenAlarms();
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         FLUXVesselPositionMessage fluxMessage = FLUXHelper.createFluxMessage(asset, position);
         fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getSpecifiedVesselGeographicalCoordinate().setLongitudeMeasure(null);
@@ -126,7 +126,7 @@ public class SanityRulesIT extends AbstractRest {
         long openAlarmsAfter = SanityRuleHelper.countOpenAlarms();
         assertThat(openAlarmsAfter, is(openAlarmsBefore + 1));
     }
-    
+
     /*
     <column name="sanityrule_description" value="A mobile terminal must be connected to an asset"/>
     <column name="sanityrule_expression" value="mobileTerminalConnectId == null &amp;&amp; pluginType == &quot;SATELLITE_RECEIVER&quot;"/>
@@ -156,6 +156,7 @@ public class SanityRulesIT extends AbstractRest {
         AlarmReport latestAlarm = SanityRuleHelper.getLatestOpenAlarmReportSince(timestamp);
         assertTrue(latestAlarm.getAlarmItemList().stream().anyMatch(item -> item.getRuleName().equals(memberNoMissingRuleName)));
     }
+
     /*
     <column name="sanityrule_description" value="DNID must exist when INMARSAT_C"/>
     <column name="sanityrule_expression" value="mobileTerminalDnid == null &amp;&amp; pluginType == &quot;SATELLITE_RECEIVER&quot; &amp;&amp; mobileTerminalType == &quot;INMARSAT_C&quot;"/>
@@ -180,6 +181,7 @@ public class SanityRulesIT extends AbstractRest {
         AlarmReport latestAlarm = SanityRuleHelper.getLatestOpenAlarmReportSince(timestamp);
         assertTrue(latestAlarm.getAlarmItemList().stream().anyMatch(item -> item.getRuleName().equals(dnidMissingRuleName)));
     }
+
     /*
     <column name="sanityrule_description" value="Serial Number must exist when IRIDIUM"/>
     <column name="sanityrule_expression" value="mobileTerminalSerialNumber == null &amp;&amp; pluginType == &quot;SATELLITE_RECEIVER&quot; &amp;&amp; mobileTerminalType == &quot;IRIDIUM&quot;"/>
@@ -205,7 +207,7 @@ public class SanityRulesIT extends AbstractRest {
         AssetDTO asset = AssetTestHelper.createTestAsset();
 
         long openAlarmsBefore = SanityRuleHelper.countOpenAlarms();
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         FLUXVesselPositionMessage fluxMessage = FLUXHelper.createFluxMessage(asset, position);
         fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).setObtainedOccurrenceDateTime(null);
@@ -216,11 +218,11 @@ public class SanityRulesIT extends AbstractRest {
         long openAlarmsAfter = SanityRuleHelper.countOpenAlarms();
         assertThat(openAlarmsAfter, is(openAlarmsBefore + 1));
     }
-    
+
     @Test
     public void triggerTwoSanityRulesTest() throws Exception {
         ZonedDateTime timestamp = ZonedDateTime.now(ZoneOffset.UTC);
-        
+
         AssetDTO asset = AssetTestHelper.createTestAsset();
 
         LatLong position = new LatLong(11d, 56d, new Date());
@@ -231,31 +233,32 @@ public class SanityRulesIT extends AbstractRest {
         FLUXHelper.sendVesselReportToFluxPlugin(report);
 
         SanityRuleHelper.pollAlarmReportCreated();
-        
+
         AlarmReport latestOpenAlarmReportSince = SanityRuleHelper.getLatestOpenAlarmReportSince(timestamp);
-        
+
         assertThat(latestOpenAlarmReportSince, CoreMatchers.is(CoreMatchers.notNullValue()));
         assertThat(latestOpenAlarmReportSince.getAlarmItemList(), CoreMatchers.is(CoreMatchers.notNullValue()));
         assertThat(latestOpenAlarmReportSince.getAlarmItemList().size(), CoreMatchers.is(2));
     }
-    
+
     @Test
     public void triggerThreeSanityRulesTest() throws Exception {
         ZonedDateTime timestamp = ZonedDateTime.now(ZoneOffset.UTC);
-        
+
         AssetDTO asset = AssetTestHelper.createTestAsset();
 
         LatLong position = new LatLong(11d, 56d, Date.from(timestamp.plus(1, ChronoUnit.HOURS).toInstant()));
         FLUXVesselPositionMessage fluxMessage = FLUXHelper.createFluxMessage(asset, position);
         fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getSpecifiedVesselGeographicalCoordinate().setLongitudeMeasure(null);
-        fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getSpecifiedVesselGeographicalCoordinate().setLatitudeMeasure(null);;
+        fluxMessage.getVesselTransportMeans().getSpecifiedVesselPositionEvents().get(0).getSpecifiedVesselGeographicalCoordinate().setLatitudeMeasure(null);
+        ;
         RequestType report = FLUXHelper.createVesselReport(fluxMessage);
         FLUXHelper.sendVesselReportToFluxPlugin(report);
 
         SanityRuleHelper.pollAlarmReportCreated();
-        
+
         AlarmReport latestOpenAlarmReportSince = SanityRuleHelper.getLatestOpenAlarmReportSince(timestamp);
-        
+
         assertThat(latestOpenAlarmReportSince, CoreMatchers.is(CoreMatchers.notNullValue()));
         assertThat(latestOpenAlarmReportSince.getAlarmItemList(), CoreMatchers.is(CoreMatchers.notNullValue()));
         assertThat(latestOpenAlarmReportSince.getAlarmItemList().size(), CoreMatchers.is(3));

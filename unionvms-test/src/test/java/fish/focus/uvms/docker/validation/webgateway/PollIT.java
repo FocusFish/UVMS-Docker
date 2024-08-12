@@ -16,10 +16,12 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import java.util.Map;
 
 public class PollIT extends AbstractRest {
@@ -36,10 +38,11 @@ public class PollIT extends AbstractRest {
                 .path(testAsset.getId().toString())
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get( Response.class);
+                .get(Response.class);
         assertEquals(200, response.getStatus());
 
-        Map<String, PollInfoDto> pollInfoMap = response.readEntity(new GenericType<Map<String, PollInfoDto>>() {});
+        Map<String, PollInfoDto> pollInfoMap = response.readEntity(new GenericType<Map<String, PollInfoDto>>() {
+        });
 
         assertNotNull(pollInfoMap);
         assertFalse(pollInfoMap.isEmpty());
@@ -49,7 +52,7 @@ public class PollIT extends AbstractRest {
         assertNotNull(pollInfo.getPollStatus());
         assertNotNull(pollInfo.getMobileTerminalSnapshot());
 
-        assertEquals(pollInfo.getPollInfo().getMobileterminalId() , pollInfo.getMobileTerminalSnapshot().getId());
+        assertEquals(pollInfo.getPollInfo().getMobileterminalId(), pollInfo.getMobileTerminalSnapshot().getId());
         assertEquals(pollInfo.getMobileTerminalSnapshot().getAssetId(), testAsset.getId().toString());
         assertFalse(pollInfo.getMobileTerminalSnapshot().getChannels().isEmpty());
 
@@ -78,10 +81,11 @@ public class PollIT extends AbstractRest {
                 .path(testAsset.getId().toString())
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get( Response.class);
+                .get(Response.class);
         assertEquals(200, response.getStatus());
 
-        Map<String, PollInfoDto> pollInfoMap = response.readEntity(new GenericType<Map<String, PollInfoDto>>() {});
+        Map<String, PollInfoDto> pollInfoMap = response.readEntity(new GenericType<Map<String, PollInfoDto>>() {
+        });
 
         assertNotNull(pollInfoMap);
         assertEquals(2, pollInfoMap.size());
