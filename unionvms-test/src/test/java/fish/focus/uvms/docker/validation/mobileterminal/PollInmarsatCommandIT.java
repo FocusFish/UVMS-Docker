@@ -31,24 +31,24 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class PollInmarsatCommandIT extends AbstractRest {
-    
+
     @Test
     public void sendPollAndVerifySetCommandValues() throws Exception {
         AssetDTO testAsset = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
-        
+
         SetCommandRequest command = PollHelper.createPollAndReturnSetCommandRequest(testAsset, mobileTerminal);
-        
+
         assertThat(command, is(notNullValue()));
         assertThat(command.getCommand().getCommand(), is(CommandTypeType.POLL));
-        
+
         List<KeyValueType> pollReceiverValues = command.getCommand().getPoll().getPollReceiver();
         Map<String, String> receiverValuesMap = new HashMap<>();
         for (KeyValueType keyValueType : pollReceiverValues) {
             receiverValuesMap.put(keyValueType.getKey(), keyValueType.getValue());
         }
         assertThat(receiverValuesMap.get("SATELLITE_NUMBER"), is(mobileTerminal.getSatelliteNumber()));
-        
+
         ChannelDto channel = mobileTerminal.getChannels().iterator().next();
         assertThat(receiverValuesMap.get("DNID"), is(channel.getDnid()));
         assertThat(receiverValuesMap.get("MEMBER_NUMBER"), is(channel.getMemberNumber()));

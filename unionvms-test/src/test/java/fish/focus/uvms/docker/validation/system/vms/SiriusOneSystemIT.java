@@ -11,12 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.system.vms;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import org.junit.Test;
 import fish.focus.schema.movement.v1.MovementSourceType;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
@@ -26,35 +20,42 @@ import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
 import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalPluginDto;
 import fish.focus.uvms.docker.validation.movement.LatLong;
 import fish.focus.uvms.docker.validation.movement.MovementHelper;
-import fish.focus.uvms.docker.validation.system.helper.FLUXHelper;
 import fish.focus.uvms.docker.validation.system.helper.SiriusOnePluginMock;
 import fish.focus.uvms.mobileterminal.model.constants.MobileTerminalTypeEnum;
 import fish.focus.uvms.movement.model.dto.MovementDto;
+import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SiriusOneSystemIT {
 
     @Test
     public void siriousOnePositionTest() throws Exception {
         AssetDTO asset = AssetTestHelper.createTestAsset();
-        
+
         MobileTerminalDto terminal = MobileTerminalTestHelper.createBasicMobileTerminal();
         terminal.setMobileTerminalType(MobileTerminalTypeEnum.IRIDIUM.toString());
 
         MobileTerminalPluginDto plugin = new MobileTerminalPluginDto();
         plugin.setPluginServiceName("fish.focus.uvms.plugins.iridium.siriusone");
         terminal.setPlugin(plugin);
-        
+
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.persistMobileTerminal(terminal);
         MobileTerminalTestHelper.assignMobileTerminal(asset, mobileTerminal);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         try (TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Movement'")) {
             SiriusOnePluginMock.sendSiriusOnePosition(mobileTerminal, position);
             topicListener.listenOnEventBus();
         }
-        
+
         List<MovementDto> latestMovements = MovementHelper.getLatestMovements(Arrays.asList(asset.getId().toString()));
-        
+
         assertThat(latestMovements.size(), is(1));
         MovementDto movement = latestMovements.get(0);
         assertThat(movement.getSource(), is(MovementSourceType.IRIDIUM));

@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 /**
  * Holds the details of a channel
- *
  */
 public class Channel implements Serializable {
     private static final long serialVersionUID = 1L;

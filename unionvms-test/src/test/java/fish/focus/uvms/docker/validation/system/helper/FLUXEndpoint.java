@@ -11,14 +11,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.system.helper;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletHandler;
-import xeu.connector_bridge.v1.PostMsgType;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletHandler;
+import xeu.connector_bridge.v1.PostMsgType;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.Unmarshaller;
@@ -36,29 +36,28 @@ import java.util.stream.Collectors;
 public class FLUXEndpoint implements Closeable {
 
     public static int ENDPOINT_PORT = 29001;
-    
-    private Server server;
     private static PostMsgType message;
     private static Map<String, String> headers;
-    
+    private Server server;
+
     public FLUXEndpoint() throws Exception {
         this(ENDPOINT_PORT);
     }
-    
+
     public FLUXEndpoint(int port) throws Exception {
         server = new Server(port);
-       
+
         ServletHandler servletHandler = new ServletHandler();
         servletHandler.addServletWithMapping(FLUXServlet.class, "/*");
         server.setHandler(servletHandler);
         // Start Server
         server.start();
     }
-    
+
     public PostMsgType getFLUXMessage() {
         return message;
     }
-    
+
     public PostMsgType getMessage(int timeoutInMillis) throws InterruptedException {
         while (message == null && timeoutInMillis > 0) {
             TimeUnit.MILLISECONDS.sleep(100);
@@ -68,7 +67,7 @@ public class FLUXEndpoint implements Closeable {
         message = null;
         return returnMessage;
     }
-    
+
     public Map<String, String> getHeaders(int timeoutInMillis) throws InterruptedException {
         while (message == null && timeoutInMillis > 0) {
             TimeUnit.MILLISECONDS.sleep(100);
@@ -89,10 +88,10 @@ public class FLUXEndpoint implements Closeable {
             }
         }
     }
-    
+
     @SuppressWarnings("serial")
     public static class FLUXServlet extends HttpServlet {
-        
+
         @Override
         protected void doPost(HttpServletRequest httpRequest, HttpServletResponse response) throws ServletException, IOException {
             try {
@@ -105,13 +104,13 @@ public class FLUXEndpoint implements Closeable {
                         .stream()
                         .collect(Collectors.toMap(h -> h, httpRequest::getHeader));
                 PrintWriter out = response.getWriter();
-                out.println("<?xml version=\"1.0\" ?>\n" + 
-                        "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" + 
-                        "        <soap:Body>\n" + 
-                        "                <POSTMSGOUT xmlns=\"urn:xeu:connector-bridge:v1\">\n" + 
-                        "                        <AssignedON/>\n" + 
-                        "                </POSTMSGOUT>\n" + 
-                        "        </soap:Body>\n" + 
+                out.println("<?xml version=\"1.0\" ?>\n" +
+                        "<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+                        "        <soap:Body>\n" +
+                        "                <POSTMSGOUT xmlns=\"urn:xeu:connector-bridge:v1\">\n" +
+                        "                        <AssignedON/>\n" +
+                        "                </POSTMSGOUT>\n" +
+                        "        </soap:Body>\n" +
                         "</soap:Envelope>");
                 out.close();
             } catch (Exception e) {

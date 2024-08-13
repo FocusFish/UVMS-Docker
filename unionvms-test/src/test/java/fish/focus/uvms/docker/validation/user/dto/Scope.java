@@ -1,9 +1,9 @@
 package fish.focus.uvms.docker.validation.user.dto;
 
+import javax.json.bind.annotation.JsonbDateFormat;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
-import javax.json.bind.annotation.JsonbDateFormat;
 
 /**
  * Holds a Scope based on a set of datasets from any applications. The goal is to limit the visibility on data.
@@ -24,7 +24,8 @@ public class Scope implements Serializable {
     /**
      * Creates a new instance
      */
-    public Scope() {}
+    public Scope() {
+    }
 
     /**
      * Get the value of scopeName
@@ -136,7 +137,7 @@ public class Scope implements Serializable {
 
     /**
      * Formats a human-readable view of this instance.
-     * 
+     *
      * @return a human-readable view
      */
     @Override

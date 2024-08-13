@@ -85,7 +85,7 @@ public class InmarsatSystemIT extends AbstractRest {
                     .request(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                     .put(Entity.json(urlSetting));
-    
+
             SetConfigRequest configMessage1 = listener.listenOnEventBusForSpecificMessage(SetConfigRequest.class);
             assertTrue(configMessage1.getConfigurations().getSetting().stream().anyMatch(c -> c.getValue().equals(ip)));
 
@@ -101,6 +101,22 @@ public class InmarsatSystemIT extends AbstractRest {
             assertTrue(configMessage2.getConfigurations().getSetting().stream().anyMatch(c -> c.getValue().equals(ip)));
         }
         TimeUnit.SECONDS.sleep(2);
+    }
+
+    // Find docker host machine ip. Replace this with 'host.docker.internal' when supported on Linux.
+    private static String getDockerHostIp() throws SocketException {
+        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+        while (interfaces.hasMoreElements()) {
+            NetworkInterface e = interfaces.nextElement();
+            Enumeration<InetAddress> inetAddresses = e.getInetAddresses();
+            while (inetAddresses.hasMoreElements()) {
+                InetAddress inetAddress = inetAddresses.nextElement();
+                if (inetAddress.getHostAddress().startsWith("172")) {
+                    return inetAddress.getHostAddress();
+                }
+            }
+        }
+        return "host.docker.internal";
     }
 
     @Test
@@ -176,22 +192,6 @@ public class InmarsatSystemIT extends AbstractRest {
             String start = messageList.get(2);
             validateCommand(start, "start");
         }
-    }
-
-    // Find docker host machine ip. Replace this with 'host.docker.internal' when supported on Linux.
-    private static String getDockerHostIp() throws SocketException {
-        Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-        while (interfaces.hasMoreElements()) {
-            NetworkInterface e = interfaces.nextElement();
-            Enumeration<InetAddress> inetAddresses = e.getInetAddresses();
-            while (inetAddresses.hasMoreElements()) {
-                InetAddress inetAddress = inetAddresses.nextElement();
-                if (inetAddress.getHostAddress().startsWith("172")) {
-                    return inetAddress.getHostAddress();
-                }
-            }
-        }
-        return "host.docker.internal";
     }
 
     private void validateCommand(String command, String type) {

@@ -30,168 +30,167 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.UUID;
 
+import static org.junit.Assert.*;
+
 public class CustomRulesRestIT extends AbstractRest {
 
-	@Test
-	public void createCustomRuleTest() {
-		CustomRuleType response = createAndPersistCustomRule();
-		assertNotNull(response.getGuid());
-	}
+    @Test
+    public void createCustomRuleTest() {
+        CustomRuleType response = createAndPersistCustomRule();
+        assertNotNull(response.getGuid());
+    }
 
-	@Test
-	public void createCustomRuleTest_WillFailWithInvalidEntity() {
-		CustomRuleType customRuleType = new CustomRuleType();
-		Response response = getWebTarget()
-				.path("movement-rules/rest/customrules")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(customRuleType), Response.class);
-		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-	}
+    @Test
+    public void createCustomRuleTest_WillFailWithInvalidEntity() {
+        CustomRuleType customRuleType = new CustomRuleType();
+        Response response = getWebTarget()
+                .path("movement-rules/rest/customrules")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(customRuleType), Response.class);
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
 
-	@Test
-	public void getCustomRulesByUser() {
-		createAndPersistCustomRule();
-		List<CustomRuleType> response = getWebTarget()
-				.path("movement-rules/rest/customrules/listAll")
-				.path("vms_admin_se")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(new GenericType<List<CustomRuleType>>(){});
+    @Test
+    public void getCustomRulesByUser() {
+        createAndPersistCustomRule();
+        List<CustomRuleType> response = getWebTarget()
+                .path("movement-rules/rest/customrules/listAll")
+                .path("vms_admin_se")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(new GenericType<List<CustomRuleType>>() {
+                });
 
-		assertFalse(response.isEmpty());
-	}
+        assertFalse(response.isEmpty());
+    }
 
-	@Test
-	public void getCustomRulesByQueryTest() {
-		CustomRuleType created = createAndPersistCustomRule();
+    @Test
+    public void getCustomRulesByQueryTest() {
+        CustomRuleType created = createAndPersistCustomRule();
 
-		CustomRuleQuery CustomRuleQuery = new CustomRuleQuery();
-		ListPagination lp = new ListPagination();
-		lp.setListSize(10);
-		lp.setPage(1);
-		CustomRuleQuery.setPagination(lp);
-		CustomRuleListCriteria crlc = new CustomRuleListCriteria();
-		crlc.setKey(CustomRuleSearchKey.GUID);
-		crlc.setValue(created.getGuid());
-		CustomRuleQuery.getCustomRuleSearchCriteria().add(crlc);
-		CustomRuleQuery.setDynamic(true);
+        CustomRuleQuery CustomRuleQuery = new CustomRuleQuery();
+        ListPagination lp = new ListPagination();
+        lp.setListSize(10);
+        lp.setPage(1);
+        CustomRuleQuery.setPagination(lp);
+        CustomRuleListCriteria crlc = new CustomRuleListCriteria();
+        crlc.setKey(CustomRuleSearchKey.GUID);
+        crlc.setValue(created.getGuid());
+        CustomRuleQuery.getCustomRuleSearchCriteria().add(crlc);
+        CustomRuleQuery.setDynamic(true);
 
-		GetCustomRuleListByQueryResponse response = getWebTarget()
-				.path("movement-rules/rest/customrules/listByQuery")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(CustomRuleQuery), GetCustomRuleListByQueryResponse.class);
+        GetCustomRuleListByQueryResponse response = getWebTarget()
+                .path("movement-rules/rest/customrules/listByQuery")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(CustomRuleQuery), GetCustomRuleListByQueryResponse.class);
 
-		List<CustomRuleType> customRules = response.getCustomRules();
-		boolean found = customRules.stream().anyMatch(cr -> cr.getGuid().equals(created.getGuid()));
-		assertTrue(found);
-	}
+        List<CustomRuleType> customRules = response.getCustomRules();
+        boolean found = customRules.stream().anyMatch(cr -> cr.getGuid().equals(created.getGuid()));
+        assertTrue(found);
+    }
 
-	@Test
-	public void getCustomRuleByGuidTest() {
-		CustomRuleType created = createAndPersistCustomRule();
-		CustomRuleType fetched = getWebTarget()
-				.path("movement-rules/rest/customrules")
-				.path(created.getGuid())
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(CustomRuleType.class);
-		assertEquals(created.getGuid(), fetched.getGuid());
-	}
+    @Test
+    public void getCustomRuleByGuidTest() {
+        CustomRuleType created = createAndPersistCustomRule();
+        CustomRuleType fetched = getWebTarget()
+                .path("movement-rules/rest/customrules")
+                .path(created.getGuid())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(CustomRuleType.class);
+        assertEquals(created.getGuid(), fetched.getGuid());
+    }
 
-	@Test
-	public void getCustomRuleByGuidTest_WillFailWithInvalidUUID() {
-		Response response = getWebTarget()
-				.path("movement-rules/rest/customrules")
-				.path(UUID.randomUUID().toString())
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get();
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		AppError appError = response.readEntity(AppError.class);
-		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), appError.code.intValue());
+    @Test
+    public void getCustomRuleByGuidTest_WillFailWithInvalidUUID() {
+        Response response = getWebTarget()
+                .path("movement-rules/rest/customrules")
+                .path(UUID.randomUUID().toString())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get();
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        AppError appError = response.readEntity(AppError.class);
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), appError.code.intValue());
 
-	}
+    }
 
-	@Test
-	public void deleteCustomRuleTest() {
-		CustomRuleType created = createAndPersistCustomRule();
-		Response response = getWebTarget()
-				.path("movement-rules/rest/customrules")
-				.path(created.getGuid())
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.delete();
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
+    @Test
+    public void deleteCustomRuleTest() {
+        CustomRuleType created = createAndPersistCustomRule();
+        Response response = getWebTarget()
+                .path("movement-rules/rest/customrules")
+                .path(created.getGuid())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .delete();
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
 
-		CustomRuleType customRuleType = response.readEntity(CustomRuleType.class);
-		assertFalse(customRuleType.isActive());
-	}
+        CustomRuleType customRuleType = response.readEntity(CustomRuleType.class);
+        assertFalse(customRuleType.isActive());
+    }
 
-	@Test
-	public void deleteCustomRuleTest_WillFailWithInvalidUUID() {
-		Response response = getWebTarget()
-				.path("movement-rules/rest/customrules")
-				.path(UUID.randomUUID().toString())
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.delete();
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		AppError appError = response.readEntity(AppError.class);
-		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), appError.code.intValue());
-	}
+    @Test
+    public void deleteCustomRuleTest_WillFailWithInvalidUUID() {
+        Response response = getWebTarget()
+                .path("movement-rules/rest/customrules")
+                .path(UUID.randomUUID().toString())
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .delete();
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        AppError appError = response.readEntity(AppError.class);
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), appError.code.intValue());
+    }
 
-	@Test
-	public void updateCustomRuleTest() {
-		CustomRuleType created = createAndPersistCustomRule();
-		created.setName("NEW_TEST_NAME");
-		CustomRuleType updated = getWebTarget()
-				.path("movement-rules/rest/customrules")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.put(Entity.json(created), CustomRuleType.class);
+    @Test
+    public void updateCustomRuleTest() {
+        CustomRuleType created = createAndPersistCustomRule();
+        created.setName("NEW_TEST_NAME");
+        CustomRuleType updated = getWebTarget()
+                .path("movement-rules/rest/customrules")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .put(Entity.json(created), CustomRuleType.class);
 
-		assertEquals("NEW_TEST_NAME", updated.getName());
-	}
+        assertEquals("NEW_TEST_NAME", updated.getName());
+    }
 
-	@Test
-	public void updateCustomRuleTest_WillFailWithInvalidEntity() {
-		CustomRuleType customRuleType = new CustomRuleType();
-		Response response = getWebTarget()
-				.path("movement-rules/rest/customrules")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.put(Entity.json(customRuleType));
-		assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-	}
+    @Test
+    public void updateCustomRuleTest_WillFailWithInvalidEntity() {
+        CustomRuleType customRuleType = new CustomRuleType();
+        Response response = getWebTarget()
+                .path("movement-rules/rest/customrules")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .put(Entity.json(customRuleType));
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
 
-	@Test
-	public void updateSubscriptionTest() {
-		UpdateSubscriptionType updateSubscriptionType = new UpdateSubscriptionType();
-		Response response = getWebTarget()
-				.path("movement-rules/rest/customrules/subscription")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(updateSubscriptionType));
-		assertEquals(Status.OK.getStatusCode(), response.getStatus());
-		AppError appError = response.readEntity(AppError.class);
-		assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), appError.code.intValue());
-	}
+    @Test
+    public void updateSubscriptionTest() {
+        UpdateSubscriptionType updateSubscriptionType = new UpdateSubscriptionType();
+        Response response = getWebTarget()
+                .path("movement-rules/rest/customrules/subscription")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(updateSubscriptionType));
+        assertEquals(Status.OK.getStatusCode(), response.getStatus());
+        AppError appError = response.readEntity(AppError.class);
+        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), appError.code.intValue());
+    }
 
-	private CustomRuleType createAndPersistCustomRule() {
-		CustomRuleType customRuleType = CustomRulesTestHelper.getCompleteNewCustomRule();
-		return getWebTarget()
-				.path("movement-rules/rest/customrules")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(customRuleType), CustomRuleType.class);
-	}
+    private CustomRuleType createAndPersistCustomRule() {
+        CustomRuleType customRuleType = CustomRulesTestHelper.getCompleteNewCustomRule();
+        return getWebTarget()
+                .path("movement-rules/rest/customrules")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(customRuleType), CustomRuleType.class);
+    }
 }

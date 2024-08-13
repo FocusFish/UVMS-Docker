@@ -14,7 +14,9 @@ package fish.focus.uvms.docker.validation.frontend.pages;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
+
 import java.util.UUID;
+
 import com.codeborne.selenide.Condition;
 
 public class AssetPage {
@@ -60,8 +62,8 @@ public class AssetPage {
 
     private void assertAssetAttribute(String name, String expectedValue) {
         $(byText(name))
-            .parent()
-            .sibling(0)
-            .shouldHave(Condition.text(expectedValue));
+                .parent()
+                .sibling(0)
+                .shouldHave(Condition.text(expectedValue));
     }
 }

@@ -1,6 +1,6 @@
 package fish.focus.uvms.docker.validation.system.vms;
 
-import fish.focus.schema.exchange.movement.v1.*;
+import fish.focus.schema.exchange.movement.v1.MovementType;
 import fish.focus.schema.exchange.plugin.v1.SetReportRequest;
 import fish.focus.schema.movementrules.customrule.v1.*;
 import fish.focus.uvms.asset.client.model.AssetDTO;
@@ -13,13 +13,12 @@ import fish.focus.uvms.docker.validation.mobileterminal.dto.ChannelDto;
 import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
 import fish.focus.uvms.docker.validation.movement.LatLong;
 import fish.focus.uvms.docker.validation.movement.model.AlarmReport;
-import fish.focus.uvms.docker.validation.system.helper.CustomRuleBuilder;
-import fish.focus.uvms.docker.validation.system.helper.CustomRuleHelper;
-import fish.focus.uvms.docker.validation.system.helper.InmarsatPluginMock;
-import fish.focus.uvms.docker.validation.system.helper.SanityRuleHelper;
-import fish.focus.uvms.docker.validation.system.helper.VMSSystemHelper;
+import fish.focus.uvms.docker.validation.system.helper.*;
 import org.hamcrest.CoreMatchers;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import javax.jms.JMSException;
 import java.time.Instant;
@@ -82,34 +81,34 @@ public class InmarsatSanityIT extends AbstractRest {
 
             CustomRuleHelper.pollTicketCreated();
             CustomRuleHelper.assertRuleTriggered(createdCustomRule, timestamp);
-    
+
             SetReportRequest setReportRequest = topicListener.listenOnEventBusForSpecificMessage(SetReportRequest.class);
-    
+
             assertThat(setReportRequest.getReport().getRecipient(), is(fluxEndpoint));
-    
+
             MovementType movement = setReportRequest.getReport().getMovement();
             assertThat(movement.getAssetName(), is(asset.getName()));
             assertThat(movement.getIrcs(), is(asset.getIrcs()));
         }
     }
-    
+
     @Test
     public void sendInmarsatVerifyAsset() throws Exception {
         String dnid = "12345";
-        
+
         // create assets/mt
         AssetDTO asset1 = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal1 = MobileTerminalTestHelper.createBasicMobileTerminal();
         mobileTerminal1.getChannels().iterator().next().setDnid(dnid);
         mobileTerminal1 = MobileTerminalTestHelper.persistMobileTerminal(mobileTerminal1);
         MobileTerminalTestHelper.assignMobileTerminal(asset1, mobileTerminal1);
-        
+
         AssetDTO asset2 = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal2 = MobileTerminalTestHelper.createBasicMobileTerminal();
         mobileTerminal2.getChannels().iterator().next().setDnid(dnid);
         mobileTerminal2 = MobileTerminalTestHelper.persistMobileTerminal(mobileTerminal2);
         MobileTerminalTestHelper.assignMobileTerminal(asset2, mobileTerminal2);
-        
+
         AssetDTO asset3 = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal3 = MobileTerminalTestHelper.createBasicMobileTerminal();
         mobileTerminal3.getChannels().iterator().next().setDnid(dnid);
@@ -121,29 +120,29 @@ public class InmarsatSanityIT extends AbstractRest {
         MovementType movement1 = setReportRequest.getReport().getMovement();
         assertThat(movement1.getAssetName(), is(asset1.getName()));
         assertThat(movement1.getIrcs(), is(asset1.getIrcs()));
-        
+
         SetReportRequest setReportRequest2 = sendPositionAndReturnResponse(asset2, mobileTerminal2);
         MovementType movement2 = setReportRequest2.getReport().getMovement();
         assertThat(movement2.getAssetName(), is(asset2.getName()));
         assertThat(movement2.getIrcs(), is(asset2.getIrcs()));
-        
+
         SetReportRequest setReportRequest3 = sendPositionAndReturnResponse(asset3, mobileTerminal3);
         MovementType movement3 = setReportRequest3.getReport().getMovement();
         assertThat(movement3.getAssetName(), is(asset3.getName()));
         assertThat(movement3.getIrcs(), is(asset3.getIrcs()));
     }
-    
+
     @Test
     public void sendInmarsatNonExistingAssetAndMobileTerminal() throws Exception {
         ZonedDateTime timestamp = ZonedDateTime.now(ZoneOffset.UTC);
-        
+
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         InmarsatPluginMock.sendInmarsatPosition(mobileTerminal, position);
-        
+
         SanityRuleHelper.pollAlarmReportCreated();
-        
+
         AlarmReport alarmReport = SanityRuleHelper.getLatestOpenAlarmReportSince(timestamp);
         ChannelDto channel = mobileTerminal.getChannels().iterator().next();
         assertThat(alarmReport.getIncomingMovement().getMobileTerminalDNID(), CoreMatchers.is(channel.getDnid()));

@@ -26,81 +26,88 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import java.util.List;
 
 public class MovementConfigRestIT extends AbstractRest {
 
-	@Test
-	public void getMovementTypesTest() {
-		List<MovementTypeType> response = getWebTarget()
-		        .path("movement/rest/config/movementTypes")
-		        .request(MediaType.APPLICATION_JSON)
-		        .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-		        .get(new GenericType<List<MovementTypeType>>() {});
-		assertNotNull(response);
-	}
+    @Test
+    public void getMovementTypesTest() {
+        List<MovementTypeType> response = getWebTarget()
+                .path("movement/rest/config/movementTypes")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(new GenericType<List<MovementTypeType>>() {
+                });
+        assertNotNull(response);
+    }
 
-	@Test
-	public void getSegmentTypesTest() {
-		List<SegmentCategoryType> response = getWebTarget()
+    @Test
+    public void getSegmentTypesTest() {
+        List<SegmentCategoryType> response = getWebTarget()
                 .path("movement/rest/config/segmentCategoryTypes")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<SegmentCategoryType>>() {});
-		assertNotNull(response);
-	}
+                .get(new GenericType<List<SegmentCategoryType>>() {
+                });
+        assertNotNull(response);
+    }
 
-	@Test
-	public void getMovementSearchKeysTest() {
-		List<SearchKeyType> response = getWebTarget()
+    @Test
+    public void getMovementSearchKeysTest() {
+        List<SearchKeyType> response = getWebTarget()
                 .path("movement/rest/config/searchKeys")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<SearchKeyType>>() {});
-		assertNotNull(response);
-	}
+                .get(new GenericType<List<SearchKeyType>>() {
+                });
+        assertNotNull(response);
+    }
 
-	@Test
-	public void getMovementSourceTypesTest() {
-		List<MovementSourceType> response = getWebTarget()
+    @Test
+    public void getMovementSourceTypesTest() {
+        List<MovementSourceType> response = getWebTarget()
                 .path("movement/rest/config/movementSourceTypes")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<MovementSourceType>>() {});
-		assertNotNull(response);
-	}
+                .get(new GenericType<List<MovementSourceType>>() {
+                });
+        assertNotNull(response);
+    }
 
-	@Test
-	public void getActivityTypesTest() {
-		List<MovementActivityTypeType> response = getWebTarget()
+    @Test
+    public void getActivityTypesTest() {
+        List<MovementActivityTypeType> response = getWebTarget()
                 .path("movement/rest/config/activityTypes")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(new GenericType<List<MovementActivityTypeType>>() {});
-		assertNotNull(response);
-	}
+                .get(new GenericType<List<MovementActivityTypeType>>() {
+                });
+        assertNotNull(response);
+    }
 
-	@Test
-	public void getConfigurationTest() {
-		Response response = getWebTarget()
+    @Test
+    public void getConfigurationTest() {
+        Response response = getWebTarget()
                 .path("movement/rest/config/")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get();
-		assertNotNull(response);
+        assertNotNull(response);
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
-	}
+    }
 
     @Test
     public void getAlarmStatusesTest() {
-		List response = getWebTarget()
-				.path("movement/rest/config/alarmstatus")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.get(List.class);
+        List response = getWebTarget()
+                .path("movement/rest/config/alarmstatus")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(List.class);
 
-		assertEquals(3, response.size());
+        assertEquals(3, response.size());
     }
 }

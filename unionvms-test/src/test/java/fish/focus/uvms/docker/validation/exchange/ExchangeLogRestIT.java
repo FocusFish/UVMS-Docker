@@ -30,9 +30,11 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -41,100 +43,101 @@ import java.util.List;
 
 public class ExchangeLogRestIT extends AbstractRest {
 
-	@Test
-	public void getLogListByCriteriaTest() {
-		ExchangeListQuery exchangeListQuery = new ExchangeListQuery();
-		ExchangeListCriteria exchangeListCriteria = new ExchangeListCriteria();
-		exchangeListCriteria.setIsDynamic(true);
-		ExchangeListCriteriaPair exchangeListCriteriaPair = new ExchangeListCriteriaPair();
-		exchangeListCriteriaPair.setKey(SearchField.STATUS);
-		exchangeListCriteriaPair.setValue("SUCCESSFUL");
-		exchangeListCriteria.getCriterias().add(exchangeListCriteriaPair);
-		
-		exchangeListQuery.setExchangeSearchCriteria(exchangeListCriteria);
-		ExchangeListPagination exchangeListPagination = new ExchangeListPagination();
-		exchangeListPagination.setPage(1);
-		exchangeListPagination.setListSize(100);
-		exchangeListQuery.setPagination(exchangeListPagination);
+    @Test
+    public void getLogListByCriteriaTest() {
+        ExchangeListQuery exchangeListQuery = new ExchangeListQuery();
+        ExchangeListCriteria exchangeListCriteria = new ExchangeListCriteria();
+        exchangeListCriteria.setIsDynamic(true);
+        ExchangeListCriteriaPair exchangeListCriteriaPair = new ExchangeListCriteriaPair();
+        exchangeListCriteriaPair.setKey(SearchField.STATUS);
+        exchangeListCriteriaPair.setValue("SUCCESSFUL");
+        exchangeListCriteria.getCriterias().add(exchangeListCriteriaPair);
 
-		ListQueryResponse listQueryResponse = getWebTarget()
-				.path("exchange/rest/exchange/list")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(exchangeListQuery), ListQueryResponse.class);
+        exchangeListQuery.setExchangeSearchCriteria(exchangeListCriteria);
+        ExchangeListPagination exchangeListPagination = new ExchangeListPagination();
+        exchangeListPagination.setPage(1);
+        exchangeListPagination.setListSize(100);
+        exchangeListQuery.setPagination(exchangeListPagination);
 
-		assertNotNull(listQueryResponse);
-		assertFalse(listQueryResponse.getLogList().isEmpty());
-	}
+        ListQueryResponse listQueryResponse = getWebTarget()
+                .path("exchange/rest/exchange/list")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(exchangeListQuery), ListQueryResponse.class);
 
-	@Test
-	public void getPollStatusQueryTest() throws Exception {
+        assertNotNull(listQueryResponse);
+        assertFalse(listQueryResponse.getLogList().isEmpty());
+    }
+
+    @Test
+    public void getPollStatusQueryTest() throws Exception {
         SetCommandRequest commandRequest = PollHelper.createPollAndReturnSetCommandRequest();
         CommandType command = commandRequest.getCommand();
         PollHelper.ackPoll(command.getPoll().getMessage(), command.getPoll().getPollId(),
-				ExchangeLogStatusTypeType.SUCCESSFUL, command.getUnsentMessageGuid());
+                ExchangeLogStatusTypeType.SUCCESSFUL, command.getUnsentMessageGuid());
 
-        Thread.sleep(1000);	 // Needed to let the system work and catch up
+        Thread.sleep(1000);     // Needed to let the system work and catch up
 
         PollQuery pollQuery = new PollQuery();
-		pollQuery.setStatus(ExchangeLogStatusTypeType.SUCCESSFUL);
-		pollQuery.setStatusFromDate(formatDateAsUTC(Instant.now().minus(1, ChronoUnit.HOURS)));
-		pollQuery.setStatusToDate(formatDateAsUTC(Instant.now().plus(1, ChronoUnit.HOURS)));
+        pollQuery.setStatus(ExchangeLogStatusTypeType.SUCCESSFUL);
+        pollQuery.setStatusFromDate(formatDateAsUTC(Instant.now().minus(1, ChronoUnit.HOURS)));
+        pollQuery.setStatusToDate(formatDateAsUTC(Instant.now().plus(1, ChronoUnit.HOURS)));
 
-		List<ExchangeLogStatusType> exchangeLogStatusTypeList = getWebTarget()
-				.path("exchange/rest/exchange/poll/")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(pollQuery), new GenericType<List<ExchangeLogStatusType>>() {});
-		
-		assertNotNull(exchangeLogStatusTypeList);
-		assertFalse(exchangeLogStatusTypeList.isEmpty());
-	}
-
-	@Test
-	public void getPollStatusRefGuidTest() {
-		AssetDTO testAsset = AssetTestHelper.createTestAsset();
-        CreatePollResultDto createPollResultDto = MobileTerminalTestHelper.createPoll_Helper(testAsset, PollType.MANUAL_POLL);
-        List<String> sentPolls = createPollResultDto.getSentPolls();
-        String uid = sentPolls.get(0);
-
-		ExchangeLogStatusType exchangeLogStatusType = getWebTarget()
-                .path("exchange/rest/exchange/poll/" + uid)
+        List<ExchangeLogStatusType> exchangeLogStatusTypeList = getWebTarget()
+                .path("exchange/rest/exchange/poll/")
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-                .get(ExchangeLogStatusType.class);
+                .post(Entity.json(pollQuery), new GenericType<List<ExchangeLogStatusType>>() {
+                });
 
-		assertNotNull(exchangeLogStatusType);
-		assertNotNull(exchangeLogStatusType.getGuid());
-	}
+        assertNotNull(exchangeLogStatusTypeList);
+        assertFalse(exchangeLogStatusTypeList.isEmpty());
+    }
 
-	@Test
-	public void getExchangeLogByGuidTest() {
+    @Test
+    public void getPollStatusRefGuidTest() {
         AssetDTO testAsset = AssetTestHelper.createTestAsset();
         CreatePollResultDto createPollResultDto = MobileTerminalTestHelper.createPoll_Helper(testAsset, PollType.MANUAL_POLL);
         List<String> sentPolls = createPollResultDto.getSentPolls();
         String uid = sentPolls.get(0);
 
-		ExchangeLogStatusType exchangeLogStatusType = getWebTarget()
+        ExchangeLogStatusType exchangeLogStatusType = getWebTarget()
                 .path("exchange/rest/exchange/poll/" + uid)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get(ExchangeLogStatusType.class);
 
-		assertNotNull(exchangeLogStatusType);
+        assertNotNull(exchangeLogStatusType);
+        assertNotNull(exchangeLogStatusType.getGuid());
+    }
+
+    @Test
+    public void getExchangeLogByGuidTest() {
+        AssetDTO testAsset = AssetTestHelper.createTestAsset();
+        CreatePollResultDto createPollResultDto = MobileTerminalTestHelper.createPoll_Helper(testAsset, PollType.MANUAL_POLL);
+        List<String> sentPolls = createPollResultDto.getSentPolls();
+        String uid = sentPolls.get(0);
+
+        ExchangeLogStatusType exchangeLogStatusType = getWebTarget()
+                .path("exchange/rest/exchange/poll/" + uid)
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .get(ExchangeLogStatusType.class);
+
+        assertNotNull(exchangeLogStatusType);
         String guid = (String) exchangeLogStatusType.getGuid();
 
-		ExchangeLogType exchangeLogType = getWebTarget()
+        ExchangeLogType exchangeLogType = getWebTarget()
                 .path("exchange/rest/exchange/" + guid)
                 .request(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
                 .get(ExchangeLogType.class);
 
-		assertNotNull(exchangeLogType);
+        assertNotNull(exchangeLogType);
         assertEquals(LogType.SEND_POLL, exchangeLogType.getType());
-	}
+    }
 
-	private String formatDateAsUTC(Instant date) {
-	    return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z").withZone(ZoneId.of("UTC")).format(date);
-	}
+    private String formatDateAsUTC(Instant date) {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss Z").withZone(ZoneId.of("UTC")).format(date);
+    }
 }

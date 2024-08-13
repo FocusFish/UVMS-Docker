@@ -11,19 +11,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.system;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import fish.focus.uvms.docker.validation.common.AbstractRest;
+import fish.focus.uvms.docker.validation.common.MessageHelper;
+import org.junit.Test;
+
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.GenericType;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import org.junit.Test;
-import fish.focus.uvms.docker.validation.common.AbstractRest;
-import fish.focus.uvms.docker.validation.common.MessageHelper;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class MetricsIT extends AbstractRest {
 
@@ -69,9 +71,10 @@ public class MetricsIT extends AbstractRest {
 
     private String getMetricValue(String metricName) throws URISyntaxException, IOException, InterruptedException {
         Map<String, Map<String, String>> metrics = ClientBuilder.newClient()
-            .target("http://" + getHost() + ":29990/metrics")
-            .request(MediaType.APPLICATION_JSON)
-            .get(new GenericType<Map<String, Map<String, String>>>() {});
+                .target("http://" + getHost() + ":29990/metrics")
+                .request(MediaType.APPLICATION_JSON)
+                .get(new GenericType<Map<String, Map<String, String>>>() {
+                });
         return metrics.get("application")
                 .get(metricName);
     }

@@ -29,20 +29,20 @@ import static org.junit.Assert.assertEquals;
 
 public class AuditRestIT extends AbstractRest {
 
-	@Test
-	public void getListByQueryTest() {
-		AuditLogListQuery auditLogListQuery = new AuditLogListQuery();
-		ListPagination listPagination = new ListPagination();
-		listPagination.setPage(BigInteger.valueOf(1));
-		listPagination.setListSize(BigInteger.valueOf(25));
-		auditLogListQuery.setPagination(listPagination);
+    @Test
+    public void getListByQueryTest() {
+        AuditLogListQuery auditLogListQuery = new AuditLogListQuery();
+        ListPagination listPagination = new ListPagination();
+        listPagination.setPage(BigInteger.valueOf(1));
+        listPagination.setListSize(BigInteger.valueOf(25));
+        auditLogListQuery.setPagination(listPagination);
 
-		Response response = getWebTarget()
-				.path("audit/rest/audit/list")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(auditLogListQuery));
+        Response response = getWebTarget()
+                .path("audit/rest/audit/list")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(auditLogListQuery));
 
-		assertEquals(OK.getStatusCode(), response.getStatus());
-	}
+        assertEquals(OK.getStatusCode(), response.getStatus());
+    }
 }

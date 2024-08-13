@@ -1,10 +1,11 @@
 package fish.focus.uvms.docker.validation.common;
 
+import fish.focus.uvms.commons.message.api.MessageConstants;
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.api.jms.ActiveMQJMSClient;
 import org.apache.activemq.artemis.api.jms.JMSFactoryType;
 import org.apache.activemq.artemis.core.remoting.impl.netty.NettyConnectorFactory;
-import fish.focus.uvms.commons.message.api.MessageConstants;
+
 import javax.jms.*;
 import java.io.Closeable;
 import java.util.HashMap;
@@ -13,12 +14,13 @@ import java.util.UUID;
 
 public class MessageHelper implements Closeable {
 
+    private final static String RESPONSE_QUEUE_NAME = "IntegrationTestsResponseQueue";
+    private static final String TEST_RESPONSE_QUEUE = "IntegrationTestsResponseQueue";
+    private static final String SERVICE_NAME = "ServiceName";
+    private static final long TIMEOUT = 15 * 1000;
     private final Connection connection;
     private final Session session;
     private Map<String, Queue> queueMap = new HashMap<>();
-
-    private final static String RESPONSE_QUEUE_NAME = "IntegrationTestsResponseQueue";
-
     public MessageHelper() throws JMSException {
         Map<String, Object> params = new HashMap<>();
         params.put("host", "localhost");
@@ -30,10 +32,6 @@ public class MessageHelper implements Closeable {
         connection.start();
         session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
     }
-
-    private static final String TEST_RESPONSE_QUEUE = "IntegrationTestsResponseQueue";
-    private static final String SERVICE_NAME = "ServiceName";
-    private static final long TIMEOUT = 15 * 1000;
 
     private Queue createQueue(String queueName) throws JMSException {
         Queue queue = queueMap.get(queueName);

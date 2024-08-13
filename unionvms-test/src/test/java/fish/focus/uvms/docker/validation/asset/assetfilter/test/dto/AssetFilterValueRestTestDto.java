@@ -8,12 +8,12 @@ public class AssetFilterValueRestTestDto {
         return value;
     }
 
-    public String getOperator() {
-        return operator;
-    }
-
     public void setValue(Double value) {
         this.value = value;
+    }
+
+    public String getOperator() {
+        return operator;
     }
 
     public void setOperator(String operator) {

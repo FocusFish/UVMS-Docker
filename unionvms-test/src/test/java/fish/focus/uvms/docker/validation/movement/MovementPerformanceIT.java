@@ -29,8 +29,10 @@ import javax.ws.rs.sse.InboundSseEvent;
 import javax.ws.rs.sse.SseEventSource;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.math.BigInteger;
@@ -45,6 +47,16 @@ public class MovementPerformanceIT extends AbstractRest {
 
     private static MovementHelper movementHelper;
     private static MessageHelper messageHelper;
+    private static Consumer<InboundSseEvent> onEvent = (inboundSseEvent) -> {
+        String data = inboundSseEvent.readData();
+        System.out.println(data);
+    };
+    //Error
+    private static Consumer<Throwable> onError = Throwable::printStackTrace;
+    //Connection close and there is nothing to receive
+    private static Runnable onComplete = () -> {
+        System.out.println("Done!");
+    };
 
     @BeforeClass
     public static void setup() throws JMSException {
@@ -58,69 +70,89 @@ public class MovementPerformanceIT extends AbstractRest {
         messageHelper.close();
     }
 
+    private static String marshall(final GetMovementListByQueryRequest createMovementRequest) throws JAXBException {
+        final StringWriter sw = new StringWriter();
+        JAXBContext.newInstance(GetMovementListByQueryRequest.class).createMarshaller().marshal(createMovementRequest, sw);
+        return sw.toString();
+    }
+
+    private static String humanReadableFormat(Duration duration) {
+        return duration.toString()
+                .substring(2)
+                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                .toLowerCase();
+    }
+
+    public static SseEventSource getSseStream() {
+        WebTarget target = getWebTarget().path("exchange/rest/unsecured/sse/subscribe");
+        AuthorizationHeaderWebTarget jwtTarget = new AuthorizationHeaderWebTarget(target, getValidJwtToken());
+        return SseEventSource.
+                target(jwtTarget).build();
+    }
+
     @Test
     @Ignore
-    public void runEveryAreaTest20TimesAndGetAverageTime() throws Exception{
+    public void runEveryAreaTest20TimesAndGetAverageTime() throws Exception {
         Instant b4 = Instant.now();
         Instant start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             spikyThingOverIrelandTest();
         }
-        System.out.println("Done with spikyThingOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with spikyThingOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             multipointPolygonInAVeryRoughCircleTest();
         }
-        System.out.println("Done with multipointPolygonInAVeryRoughCircleTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with multipointPolygonInAVeryRoughCircleTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             sphereOverIrelandTest();
         }
-        System.out.println("Done with sphereOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with sphereOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             triangleAroundSouthernIrelandTest();
         }
-        System.out.println("Done with triangleAroundSouthernIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with triangleAroundSouthernIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             spikyBallOverIrelandTest();
         }
-        System.out.println("Done with spikyBallOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with spikyBallOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             hollowSphereOverIrelandTest();
         }
-        System.out.println("Done with hollowSphereOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with hollowSphereOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             squareInTheMiddleOfSpainTest();
         }
-        System.out.println("Done with squareInTheMiddleOfSpainTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with squareInTheMiddleOfSpainTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             fishOverIrelandTest();
         }
-        System.out.println("Done with fishOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with fishOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             pentagramOverIrelandTest();
         }
-        System.out.println("Done with pentagramOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with pentagramOverIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         start = Instant.now();
-        for (int i = 0; i < 20; i++){
+        for (int i = 0; i < 20; i++) {
             twoTrianglesAroundIrelandTest();
         }
-        System.out.println("Done with twoTrianglesAroundIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start,Instant.now()).dividedBy(20L)));
+        System.out.println("Done with twoTrianglesAroundIrelandTest. Total time: " + humanReadableFormat(Duration.between(start, Instant.now())) + " Average time: " + humanReadableFormat(Duration.between(start, Instant.now()).dividedBy(20L)));
 
         System.out.println("All done. Total time: " + humanReadableFormat(Duration.between(b4, Instant.now())));
     }
@@ -144,7 +176,7 @@ public class MovementPerformanceIT extends AbstractRest {
             createMovementResponse = movementHelper.createMovement(createMovementRequest);
             assertNotNull(createMovementResponse);
             i++;
-            if((i % 10) == 0){
+            if ((i % 10) == 0) {
                 System.out.println("Created movement number: " + i + " Time so far: " + humanReadableFormat(Duration.between(b4, Instant.now())) + " Time since last 10: " + humanReadableFormat(Duration.between(lastIteration, Instant.now())));
                 averageDurations.add(Duration.between(lastIteration, Instant.now()));
                 lastIteration = Instant.now();
@@ -181,12 +213,12 @@ public class MovementPerformanceIT extends AbstractRest {
             createMovementList.add(movementHelper.createIncomingMovement(testAsset, position));
         }
         Collections.reverse(createMovementList);
-        for (IncomingMovement createMovementRequest : createMovementList){
+        for (IncomingMovement createMovementRequest : createMovementList) {
             createMovementResponse = movementHelper.createMovement(createMovementRequest);
             assertNotNull(createMovementResponse);
             i++;
             if ((i % 10) == 0) {
-                System.out.println("Created movement number: " + i + " Time so far: " + humanReadableFormat(Duration.between(b4, Instant.now()))+ " Time since last 10: " + humanReadableFormat(Duration.between(lastIteration, Instant.now())));   //on run: 4.30 ish
+                System.out.println("Created movement number: " + i + " Time so far: " + humanReadableFormat(Duration.between(b4, Instant.now())) + " Time since last 10: " + humanReadableFormat(Duration.between(lastIteration, Instant.now())));   //on run: 4.30 ish
                 averageDurations.add(Duration.between(lastIteration, Instant.now()));
                 lastIteration = Instant.now();
             }
@@ -206,7 +238,7 @@ public class MovementPerformanceIT extends AbstractRest {
     @Test
     @Ignore
     public void camelErrorHandlingTest() throws Exception {
-        Message message = messageHelper.getMessageResponse("UVMSMovementEvent","");
+        Message message = messageHelper.getMessageResponse("UVMSMovementEvent", "");
 
         ExceptionType response = unMarshallErrorResponse(message);
 
@@ -220,7 +252,6 @@ public class MovementPerformanceIT extends AbstractRest {
         List<LatLong> route = movementHelper.createRuttCobhNewYork(10, 0.06f); //0.1F = 654 pos    0.01 = 6543     0.07 = 934   0.06 = 1090
         sendRouteToMovementOnXShipsAsync(8, route);
     }
-
 
     @Test
     @Ignore
@@ -273,56 +304,56 @@ public class MovementPerformanceIT extends AbstractRest {
     }
 
     @Test
-    public void triangleAroundSouthernIrelandTest () throws Exception {
+    public void triangleAroundSouthernIrelandTest() throws Exception {
         //one triangle over the south of ireland
         String areaInWKT = "POLYGON((-12.963867187499998 55.05320258537114,-12.700195312499996 50.79204706440686,-3.823242187499996 50.736455137010665,-12.963867187499998 55.05320258537114))";
         buildAndSendQuery(areaInWKT);
     }
 
     @Test
-    public void squareInTheMiddleOfSpainTest () throws Exception {
+    public void squareInTheMiddleOfSpainTest() throws Exception {
         //one big square over the middle of spain
         String areaInWKT = "POLYGON((-5.844726562499999 41.525029573238015,-0.37353515624999817 41.541477666790286,-1.0107421874999976 37.77071473849608,-7.316894531249996 38.08268954483802,-5.844726562499999 41.525029573238015))";
         buildAndSendQuery(areaInWKT);
     }
 
     @Test
-    public void spikyThingOverIrelandTest () throws Exception {
+    public void spikyThingOverIrelandTest() throws Exception {
         //this is one spiky polygon placed over southern ireland
         String areaInWKT = "POLYGON((-17.2265625 55.103516058019665,-17.314453124999996 50.54136296522162,-5.361328124999988 50.62507306341436,-5.361328124999988 55.578344672182055,-8.173828124999993 48.57478991092884,-9.448242187499993 55.2540770670727,-10.766601562499998 48.83579746243092,-11.909179687499993 55.02802211299252,-12.656249999999998 48.95136647094773,-13.886718749999998 54.80068486732233,-14.633789062499991 49.095452162534826,-15.249023437499995 54.699233528481386,-16.215820312499993 48.980216985374994,-20.083007812499996 54.033586335210856,-17.2265625 55.103516058019665))";
         buildAndSendQuery(areaInWKT);
     }
 
     @Test
-    public void spikyBallOverIrelandTest () throws Exception {
+    public void spikyBallOverIrelandTest() throws Exception {
         //this is one spiky "ball" placed over southern ireland
         String areaInWKT = "POLYGON((-14.853515624999996 54.59752785211387,-14.677734374999993 51.563412328675895,-10.019531249999995 50.14874640066279,-4.130859374999988 52.02545860348815,-4.2626953125 55.103516058019665,-9.711914062500002 56.84897198026974,-0.7910156249999951 53.173119202640635,-11.293945312499993 55.998380955359636,-1.3183593749999973 51.17934297928926,-12.128906249999995 55.42901345240739,-3.7353515624999982 49.894634395734215,-9.7998046875 56.365250136856076,-7.646484374999992 48.922499263758226,-5.009765624999997 56.292156685076435,-12.568359374999991 48.980216985374994,-1.186523437500001 54.952385690633605,-16.56738281249999 50.56928286558244,-0.2636718749999928 52.40241887397332,-17.314453124999996 53.64463782485652,-2.4609374999999996 50.54136296522162,-14.853515624999996 54.59752785211387))";
         buildAndSendQuery(areaInWKT);
     }
 
     @Test
-    public void pentagramOverIrelandTest () throws Exception {
+    public void pentagramOverIrelandTest() throws Exception {
         //pentagram placed over ireland
         String areaInWKT = "POLYGON((-13.754882812499993 54.085173420886775,-3.6914062499999996 54.11094294272428,-13.666992187499993 50.09239321093878,-8.129882812499996 56.72862197314072,-5.229492187499991 50.205033264943324,-13.754882812499993 54.085173420886775))";
         buildAndSendQuery(areaInWKT);
     }
 
     @Test
-    public void fishOverIrelandTest () throws Exception {
+    public void fishOverIrelandTest() throws Exception {
         //"fish" placed over ireland
         String areaInWKT = "POLYGON((-24.565429687500007 51.672555148396754,-20.7421875 52.776185688961704,-15.161132812500004 53.09402405506327,-11.250000000000002 52.509534770327264,-6.328125000000003 50.31740811261869,-6.547851562500004 53.06762664238738,-10.810546875000007 50.00773901463688,-14.853515625000004 49.32512199104002,-20.346679687500004 50.205033264943324,-23.466796875000004 50.81981826215653,-24.565429687500007 51.672555148396754))";
         buildAndSendQuery(areaInWKT);
     }
 
     @Test
-    public void sphereOverIrelandTest () throws Exception {
+    public void sphereOverIrelandTest() throws Exception {
         //sphere with missing parts over southern ireland
         String areaInWKT = "POLYGON((-9.887695312499996 52.48278022207825,-11.777343749999996 51.563412328675895,-12.260742187499998 49.75287993415023,-10.151367187500007 48.1367666796927,-7.031250000000009 48.341646172374595,-5.449218750000001 49.837982453084834,-5.581054687499998 51.699799849741936,-7.338867187499999 52.48278022207825,-10.722656250000007 52.935396658623205,-13.315429687500004 51.12421275782688,-13.403320312500002 49.26780455063752,-10.986328125000002 47.5172006978394,-6.416015625000009 47.5172006978394,-4.350585937499998 49.86631672953868,-4.306640625 52.02545860348815,-6.679687500000002 53.409531853086435,-2.592773437499996 50.56928286558244,-6.020507812500003 46.31658418182218,-11.821289062499995 46.73986059969266,-14.458007812499996 48.86471476180279,-14.765624999999998 51.34433866059925,-11.118164062499996 53.72271667491847,-9.887695312499996 52.48278022207825))";
         buildAndSendQuery(areaInWKT);
     }
 
     @Test
-    public void hollowSphereOverIrelandTest () throws Exception {
+    public void hollowSphereOverIrelandTest() throws Exception {
         //hollow "sphere" over southern ireland
         String areaInWKT = "POLYGON((-10.283203125000004 52.321910885947716,-12.216796875 50.98609893339352,-11.865234374999995 49.582226044621706,-10.195312500000005 48.74894534343292,-7.382812499999999 48.661942846070076,-5.141601562499994 49.32512199104002,-4.2626953125 50.98609893339352,-5.6689453124999964 52.02545860348815,-7.514648437499995 52.69636107827449,-9.711914062500002 52.456009392640766,-7.4707031249999964 52.2143386082582,-5.888671875000006 51.59072264312016,-5.4052734375000036 50.68079714532166,-6.020507812500003 49.75287993415023,-7.426757812499998 49.239120832466966,-9.843749999999998 49.26780455063752,-11.0302734375 49.92293545449576,-11.162109374999996 50.93073802371819,-8.657226562499998 52.509534770327264,-10.283203125000004 52.321910885947716))";
         buildAndSendQuery(areaInWKT);
@@ -356,7 +387,7 @@ public class MovementPerformanceIT extends AbstractRest {
             source.open();
 
             for (LatLong position : route) {
-                AssetDTO testAsset = assetList.get((int)(Math.random()* (double)nrOfShips));
+                AssetDTO testAsset = assetList.get((int) (Math.random() * (double) nrOfShips));
                 final IncomingMovement createMovementRequest = movementHelper.createIncomingMovement(testAsset, position);
                 movementHelper.createMovementDontWaitForResponse(testAsset, createMovementRequest);
 
@@ -372,19 +403,6 @@ public class MovementPerformanceIT extends AbstractRest {
             }
         }
     }
-
-    private static Consumer<InboundSseEvent> onEvent = (inboundSseEvent) -> {
-        String data = inboundSseEvent.readData();
-        System.out.println(data);
-    };
-
-    //Error
-    private static Consumer<Throwable> onError = Throwable::printStackTrace;
-
-    //Connection close and there is nothing to receive
-    private static Runnable onComplete = () -> {
-        System.out.println("Done!");
-    };
 
     private void buildAndSendQuery(String areaInWKT) throws Exception {
         Instant start = Instant.now();
@@ -404,18 +422,12 @@ public class MovementPerformanceIT extends AbstractRest {
 
         String inputString = marshall(input);
 
-        Message output = messageHelper.getMessageResponse("UVMSMovementEvent",inputString);
+        Message output = messageHelper.getMessageResponse("UVMSMovementEvent", inputString);
         assertNotNull(output);
 
         GetMovementListByQueryResponse response = unMarshallCreateMovementBatchResponse(output);
 //        System.out.println("Amount of movement: " + response.getMovement().size());
 //        System.out.println("Time search query: " + humanReadableFormat(Duration.between(start, Instant.now()))); //last time 1.015S
-    }
-
-    private static String marshall(final GetMovementListByQueryRequest createMovementRequest) throws JAXBException {
-        final StringWriter sw = new StringWriter();
-        JAXBContext.newInstance(GetMovementListByQueryRequest.class).createMarshaller().marshal(createMovementRequest, sw);
-        return sw.toString();
     }
 
     private GetMovementListByQueryResponse unMarshallCreateMovementBatchResponse(final Message response) throws Exception {
@@ -437,23 +449,10 @@ public class MovementPerformanceIT extends AbstractRest {
         return positions;
     }
 
-    private static String humanReadableFormat(Duration duration) {
-        return duration.toString()
-                .substring(2)
-                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
-                .toLowerCase();
-    }
-
     private ExceptionType unMarshallErrorResponse(final Message response) throws Exception {
         TextMessage textMessage = (TextMessage) response;
         JAXBContext jaxbContext = JAXBContext.newInstance(ExceptionType.class);
         return (ExceptionType) jaxbContext.createUnmarshaller()
                 .unmarshal(new StringReader(textMessage.getText()));
-    }
-    public static SseEventSource getSseStream() {
-        WebTarget target = getWebTarget().path("exchange/rest/unsecured/sse/subscribe");
-        AuthorizationHeaderWebTarget jwtTarget = new AuthorizationHeaderWebTarget(target, getValidJwtToken());
-        return SseEventSource.
-                target(jwtTarget).build();
     }
 }

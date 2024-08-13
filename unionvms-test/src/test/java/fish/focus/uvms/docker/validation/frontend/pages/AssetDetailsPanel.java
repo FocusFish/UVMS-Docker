@@ -20,6 +20,7 @@ import static com.codeborne.selenide.Selectors.byTagName;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+
 import com.codeborne.selenide.SelenideElement;
 
 public class AssetDetailsPanel {
@@ -36,32 +37,32 @@ public class AssetDetailsPanel {
 
     public void assertIrcs(String expectedIrcs) {
         assetInformation.$(byText("Ircs:"))
-            .sibling(0)
-            .shouldHave(text(expectedIrcs));
+                .sibling(0)
+                .shouldHave(text(expectedIrcs));
     }
 
     public void assertMmsi(String expectedMmsi) {
         assetInformation.$(byText("Mmsi:"))
-            .sibling(0)
-            .shouldHave(text(expectedMmsi));
+                .sibling(0)
+                .shouldHave(text(expectedMmsi));
     }
 
     public void assertFlagstate(String expectedFlagstate) {
         assetInformation.$(byText("Flagstate:"))
-            .sibling(0)
-            .shouldHave(text(expectedFlagstate));
+                .sibling(0)
+                .shouldHave(text(expectedFlagstate));
     }
 
     public void assertExternalMarking(String expectedExternalMarking) {
         assetInformation.$(byText("External marking:"))
-            .sibling(0)
-            .shouldHave(text(expectedExternalMarking));
+                .sibling(0)
+                .shouldHave(text(expectedExternalMarking));
     }
 
     public void assertLength(String expectedLength) {
         assetInformation.$(byText("Length:"))
-            .sibling(0)
-            .shouldHave(text(expectedLength));
+                .sibling(0)
+                .shouldHave(text(expectedLength));
     }
 
     public void sendManuallPoll(String comment) {
@@ -76,6 +77,6 @@ public class AssetDetailsPanel {
         $(byText("Manage polling")).click();
         $(byText("Last 24 hours history")).click();
         $$(byTagName("map-asset-poll-manual"))
-            .shouldHave(size(expectedSize));
+                .shouldHave(size(expectedSize));
     }
 }

@@ -16,7 +16,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
-import javax.json.bind.annotation.JsonbTransient;
 
 public class AreaUploadProperty {
 
@@ -27,13 +26,11 @@ public class AreaUploadProperty {
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public AreaUploadProperty() {
     }
 
     /**
-     * 
      * @param name
      * @param type
      * @param value
@@ -46,18 +43,14 @@ public class AreaUploadProperty {
     }
 
     /**
-     * 
-     * @return
-     *     The name
+     * @return The name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 
-     * @param name
-     *     The name
+     * @param name The name
      */
     public void setName(String name) {
         this.name = name;
@@ -69,18 +62,14 @@ public class AreaUploadProperty {
     }
 
     /**
-     * 
-     * @return
-     *     The type
+     * @return The type
      */
     public String getType() {
         return type;
     }
 
     /**
-     * 
-     * @param type
-     *     The type
+     * @param type The type
      */
     public void setType(String type) {
         this.type = type;
@@ -92,18 +81,14 @@ public class AreaUploadProperty {
     }
 
     /**
-     *
-     * @return
-     *     The value
+     * @return The value
      */
     public Object getValue() {
         return value;
     }
 
     /**
-     *
-     * @param value
-     *     The value
+     * @param value The value
      */
     public void setValue(Object value) {
         this.value = value;

@@ -1,29 +1,29 @@
 package fish.focus.uvms.docker.validation.common;
 
-import static org.junit.Assert.assertTrue;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import fish.focus.uvms.commons.date.JsonBConfigurator;
+import fish.focus.uvms.docker.validation.AppError;
+import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.json.bind.Jsonb;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import fish.focus.uvms.commons.date.JsonBConfigurator;
-import fish.focus.uvms.docker.validation.AppError;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractRest {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractRest.class.getSimpleName());
-
     protected static final Jsonb JSONB = new JsonBConfigurator().getContext(null);
-
+    private static final Logger log = LoggerFactory.getLogger(AbstractRest.class.getSimpleName());
     private static final String HOST = "localhost";
     private static final String BASE_URL = "http://" + HOST + ":28080/unionvms/";
     //protected static final String BASE_URL = "http://liaswf05t.havochvatten.se:28080/unionvms/";
@@ -106,8 +106,8 @@ public abstract class AbstractRest {
         return myCalendar.getTime();
     }
 
-    public static void checkForAppErrorMessage(String json){
-        if(json.contains("\"code\":")){
+    public static void checkForAppErrorMessage(String json) {
+        if (json.contains("\"code\":")) {
             throw new RuntimeException(JSONB.fromJson(json, AppError.class).description);
         }
     }

@@ -13,7 +13,9 @@ package fish.focus.uvms.docker.validation.frontend.pages;
 
 import static com.codeborne.selenide.Selenide.localStorage;
 import static com.codeborne.selenide.Selenide.open;
+
 import java.util.UUID;
+
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import com.codeborne.selenide.Configuration;

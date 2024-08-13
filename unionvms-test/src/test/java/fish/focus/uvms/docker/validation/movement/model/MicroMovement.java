@@ -19,7 +19,8 @@ public class MicroMovement {
 
     private MovementSourceType source;
 
-    public MicroMovement() {}
+    public MicroMovement() {
+    }
 
     public MovementPoint getLocation() {
         return location;

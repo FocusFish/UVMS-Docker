@@ -14,7 +14,8 @@ public class UserContext implements Serializable {
     /**
      * Creates a new instance
      */
-    public UserContext() {}
+    public UserContext() {
+    }
 
     /**
      * Get the value of userName

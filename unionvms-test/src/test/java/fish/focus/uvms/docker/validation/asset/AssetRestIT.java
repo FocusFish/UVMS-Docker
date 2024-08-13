@@ -13,32 +13,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 */
 package fish.focus.uvms.docker.validation.asset;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.sse.SseEventSource;
-import org.hamcrest.CoreMatchers;
-import org.junit.Ignore;
-import org.junit.Test;
-import fish.focus.uvms.asset.client.model.AssetBO;
-import fish.focus.uvms.asset.client.model.AssetDTO;
-import fish.focus.uvms.asset.client.model.AssetListResponse;
-import fish.focus.uvms.asset.client.model.ContactInfo;
-import fish.focus.uvms.asset.client.model.FishingLicence;
-import fish.focus.uvms.asset.client.model.Note;
+import fish.focus.uvms.asset.client.model.*;
 import fish.focus.uvms.asset.model.constants.AuditOperationEnum;
 import fish.focus.uvms.asset.remote.dto.search.SearchBranch;
 import fish.focus.uvms.asset.remote.dto.search.SearchFields;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
+import org.hamcrest.CoreMatchers;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.sse.SseEventSource;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.*;
 
 public class AssetRestIT extends AbstractRest {
 
@@ -342,35 +334,35 @@ public class AssetRestIT extends AbstractRest {
         }
     }
 
-	@Test(timeout = 10000)
-	public void assetSseTest() throws Exception {
-		AssetDTO testAsset = AssetTestHelper.createTestAsset();
+    @Test(timeout = 10000)
+    public void assetSseTest() throws Exception {
+        AssetDTO testAsset = AssetTestHelper.createTestAsset();
 
-		List<String> assets = new ArrayList<>();
-		try (SseEventSource source = AssetTestHelper.getSseStream()) {
-			source.register((inboundSseEvent) -> {
-				if (inboundSseEvent.getComment() != null && inboundSseEvent.getComment().equals("Updated Asset")) {
-					assets.add(inboundSseEvent.readData());
-				}
-			});
-			source.open();
+        List<String> assets = new ArrayList<>();
+        try (SseEventSource source = AssetTestHelper.getSseStream()) {
+            source.register((inboundSseEvent) -> {
+                if (inboundSseEvent.getComment() != null && inboundSseEvent.getComment().equals("Updated Asset")) {
+                    assets.add(inboundSseEvent.readData());
+                }
+            });
+            source.open();
 
-			testAsset.setName("new test name");
-			testAsset = AssetTestHelper.updateAsset(testAsset);
-			Thread.sleep(50);
-			testAsset.setFlagStateCode("UNK");
-			testAsset = AssetTestHelper.updateAsset(testAsset);
-			Thread.sleep(50);
-			testAsset.setLengthOverAll(42d);
-			testAsset = AssetTestHelper.updateAsset(testAsset);
-			Thread.sleep(50);
+            testAsset.setName("new test name");
+            testAsset = AssetTestHelper.updateAsset(testAsset);
+            Thread.sleep(50);
+            testAsset.setFlagStateCode("UNK");
+            testAsset = AssetTestHelper.updateAsset(testAsset);
+            Thread.sleep(50);
+            testAsset.setLengthOverAll(42d);
+            testAsset = AssetTestHelper.updateAsset(testAsset);
+            Thread.sleep(50);
 
-			while(assets.size() < 3) {
-				Thread.sleep(100);
-			}
-		}
-		assertThat(assets.size(), CoreMatchers.is(3));
-	}
+            while (assets.size() < 3) {
+                Thread.sleep(100);
+            }
+        }
+        assertThat(assets.size(), CoreMatchers.is(3));
+    }
 
     @Test
     public void getFishingLicenceTest() throws Exception {

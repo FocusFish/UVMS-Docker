@@ -32,13 +32,11 @@ public class AreaUploadMetadata {
 
     /**
      * No args constructor for use in serialization
-     * 
      */
     public AreaUploadMetadata() {
     }
 
     /**
-     * 
      * @param domain
      * @param file
      */
@@ -48,18 +46,14 @@ public class AreaUploadMetadata {
     }
 
     /**
-     * 
-     * @return
-     *     The domain
+     * @return The domain
      */
     public List<AreaUploadProperty> getDomain() {
         return domain;
     }
 
     /**
-     * 
-     * @param domain
-     *     The database-properties
+     * @param domain The database-properties
      */
     public void setDomain(List<AreaUploadProperty> domain) {
         this.domain = domain;
@@ -71,18 +65,14 @@ public class AreaUploadMetadata {
     }
 
     /**
-     * 
-     * @return
-     *     The file
+     * @return The file
      */
     public List<AreaUploadProperty> getFile() {
         return file;
     }
 
     /**
-     * 
-     * @param file
-     *     The file
+     * @param file The file
      */
     public void setFile(List<AreaUploadProperty> file) {
         this.file = file;

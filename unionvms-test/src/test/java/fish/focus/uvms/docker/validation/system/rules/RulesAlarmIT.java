@@ -28,7 +28,6 @@ import fish.focus.uvms.docker.validation.mobileterminal.dto.ChannelDto;
 import fish.focus.uvms.docker.validation.mobileterminal.dto.MobileTerminalDto;
 import fish.focus.uvms.docker.validation.movement.LatLong;
 import fish.focus.uvms.docker.validation.movement.ManualMovementRestHelper;
-import fish.focus.uvms.docker.validation.movement.MovementHelper;
 import fish.focus.uvms.docker.validation.movement.model.ManualMovementDto;
 import fish.focus.uvms.docker.validation.system.helper.*;
 import fish.focus.uvms.exchange.model.mapper.JAXBMarshaller;
@@ -58,18 +57,18 @@ public class RulesAlarmIT extends AbstractRest {
     public static void cleanup() {
         messageHelper.close();
     }
-    
+
     @BeforeClass
     public static void registerEmailPluginIfNotExisting() throws Exception {
         messageHelper = new MessageHelper();
         VMSSystemHelper.registerEmailPluginIfNotExisting();
     }
-    
+
     @After
     public void removeCustomRules() {
         CustomRuleHelper.removeCustomRulesByDefaultUser();
     }
-    
+
     @Test
     public void sendEmailIfReportedSpeedIsGreaterThan10knotsTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -78,15 +77,15 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType speedRule = CustomRuleBuilder.getBuilder()
                 .setName("Speed > 10 knots => Send email")
-                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED,
                         ConditionType.GT, "10")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdSpeedRule = CustomRuleHelper.createCustomRule(speedRule);
         assertNotNull(createdSpeedRule);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         position.speed = 10.5;
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdSpeedRule, position);
@@ -102,15 +101,15 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType speedRule = CustomRuleBuilder.getBuilder()
                 .setName("Speed < 10 knots => Send email")
-                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED,
                         ConditionType.LT, "10")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdSpeedRule = CustomRuleHelper.createCustomRule(speedRule);
         assertNotNull(createdSpeedRule);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         position.speed = 9.5;
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdSpeedRule, position);
@@ -124,34 +123,34 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType speedRule = CustomRuleBuilder.getBuilder()
                 .setName("Speed > 10 knots => Send email")
-                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED,
                         ConditionType.GT, "10")
                 .action(ActionType.EMAIL, "test@mail.com")
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdSpeedRule = CustomRuleHelper.createCustomRule(speedRule);
         assertNotNull(createdSpeedRule);
-        
+
         String email = System.currentTimeMillis() + "@mail.com";
         CustomRuleType fsRule = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => Send email")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdFsRule = CustomRuleHelper.createCustomRule(fsRule);
         assertNotNull(createdFsRule);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         position.speed = 9.5;
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdFsRule, position);
         CustomRuleHelper.assertRuleNotTriggered(createdSpeedRule);
         CustomRuleHelper.assertRuleTriggered(createdFsRule, timestamp);
     }
-    
+
     @Test
     public void doNotTriggerRuleIfReportedSpeedIsGreaterThan10knotsTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -159,34 +158,34 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType speedRule = CustomRuleBuilder.getBuilder()
                 .setName("Speed < 10 knots => Send email")
-                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED,
                         ConditionType.LT, "10")
                 .action(ActionType.EMAIL, "test@mail.com")
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdSpeedRule = CustomRuleHelper.createCustomRule(speedRule);
         assertNotNull(createdSpeedRule);
-        
+
         String email = System.currentTimeMillis() + "@mail.com";
         CustomRuleType fsRule = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => Send email")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdFsRule = CustomRuleHelper.createCustomRule(fsRule);
         assertNotNull(createdFsRule);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         position.speed = 10.5;
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdFsRule, position);
         CustomRuleHelper.assertRuleNotTriggered(createdSpeedRule);
         CustomRuleHelper.assertRuleTriggered(createdFsRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfReportedSpeedIsGreaterThanOrEqual10knotsTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -195,21 +194,21 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType speedRule = CustomRuleBuilder.getBuilder()
                 .setName("Speed >= 10 knots => Send email")
-                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED,
                         ConditionType.GE, "10")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdSpeedRule = CustomRuleHelper.createCustomRule(speedRule);
         assertNotNull(createdSpeedRule);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         position.speed = 10;
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdSpeedRule, position);
         CustomRuleHelper.assertRuleTriggered(createdSpeedRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfReportedSpeedIsLessThanOrEqual10knotsTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -218,21 +217,21 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType speedRule = CustomRuleBuilder.getBuilder()
                 .setName("Speed <= 10 knots => Send email")
-                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED,
                         ConditionType.LE, "10")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdSpeedRule = CustomRuleHelper.createCustomRule(speedRule);
         assertNotNull(createdSpeedRule);
-        
+
         LatLong position = new LatLong(11d, 56d, new Date());
         position.speed = 10;
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdSpeedRule, position);
         CustomRuleHelper.assertRuleTriggered(createdSpeedRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfReportedSpeedIsGreaterThan10knotsAndAreaIsDNKTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -241,23 +240,23 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType speedAndAreaRule = CustomRuleBuilder.getBuilder()
                 .setName("Sp > 10 && area = DNK => Send email")
-                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED,
                         ConditionType.GT, "10")
-                .and(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .and(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdSpeedAndAreaRule = CustomRuleHelper.createCustomRule(speedAndAreaRule);
         assertNotNull(createdSpeedAndAreaRule);
-        
+
         LatLong position = new LatLong(56d, 10.5, new Date());
         position.speed = 10.5;
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdSpeedAndAreaRule, position);
         CustomRuleHelper.assertRuleTriggered(createdSpeedAndAreaRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfReportedSpeedIsLessThan10knotsAndAreaIsDNKTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -266,23 +265,23 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType speedAndAreaRule = CustomRuleBuilder.getBuilder()
                 .setName("Sp < 10 && area = DNK => Send email")
-                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.REPORTED_SPEED,
                         ConditionType.LT, "10")
-                .and(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .and(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdSpeedAndAreaRule = CustomRuleHelper.createCustomRule(speedAndAreaRule);
         assertNotNull(createdSpeedAndAreaRule);
-        
+
         LatLong position = new LatLong(56d, 10.5, new Date());
         position.speed = 9.5;
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdSpeedAndAreaRule, position);
         CustomRuleHelper.assertRuleTriggered(createdSpeedAndAreaRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfAreaCodeIsDEUTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -291,20 +290,20 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaRule = CustomRuleBuilder.getBuilder()
                 .setName("Area = DEU => Send email")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE,
                         ConditionType.EQ, "DEU")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdAreaRule = CustomRuleHelper.createCustomRule(areaRule);
         assertNotNull(createdAreaRule);
-        
+
         LatLong position = new LatLong(54.528352, 12.877972, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdAreaRule, position);
         CustomRuleHelper.assertRuleTriggered(createdAreaRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfAssetIRCSMatchesTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -313,20 +312,20 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType ircsRule = CustomRuleBuilder.getBuilder()
                 .setName("IRCS => Send email")
-                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS,
                         ConditionType.EQ, asset.getIrcs())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdIrcsRule = CustomRuleHelper.createCustomRule(ircsRule);
         assertNotNull(createdIrcsRule);
-        
+
         LatLong position = new LatLong(1d, 1d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdIrcsRule, position);
         CustomRuleHelper.assertRuleTriggered(createdIrcsRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfIrcsDisjunctionMatchesTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -335,29 +334,29 @@ public class RulesAlarmIT extends AbstractRest {
         String email = System.currentTimeMillis() + "@mail.com";
 
         CustomRuleType customRule = CustomRuleBuilder.getBuilder()
-                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS,
                         ConditionType.EQ, asset1.getIrcs())
-                .or(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS, 
+                .or(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS,
                         ConditionType.EQ, asset2.getIrcs())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(customRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(1d, 1d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset1, email, createdCustomRule, position);
 
         CustomRuleHelper.assertRuleTriggered(createdCustomRule, timestamp);
-        
+
         timestamp = Instant.now();
-        
+
         LatLong position2 = new LatLong(2d, 2d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset2, email, createdCustomRule, position2);
         CustomRuleHelper.assertRuleTriggered(createdCustomRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfIrcsCfrConjunctionMatchesTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -365,56 +364,56 @@ public class RulesAlarmIT extends AbstractRest {
         String email = System.currentTimeMillis() + "@mail.com";
 
         CustomRuleType customRule = CustomRuleBuilder.getBuilder()
-                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS,
                         ConditionType.EQ, asset.getIrcs())
-                .and(CriteriaType.ASSET, SubCriteriaType.ASSET_CFR, 
+                .and(CriteriaType.ASSET, SubCriteriaType.ASSET_CFR,
                         ConditionType.EQ, asset.getCfr())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(customRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(1d, 1d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdCustomRule, position);
         CustomRuleHelper.assertRuleTriggered(createdCustomRule, timestamp);
     }
-    
+
     @Test
     public void doNotTriggerRuleIfIrcsCfrConjunctionNotMatchesTest() throws Exception {
         Instant timestamp = Instant.now();
         AssetDTO asset = AssetTestHelper.createTestAsset();
 
         CustomRuleType customRule = CustomRuleBuilder.getBuilder()
-                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_IRCS,
                         ConditionType.EQ, asset.getIrcs())
-                .and(CriteriaType.ASSET, SubCriteriaType.ASSET_CFR, 
+                .and(CriteriaType.ASSET, SubCriteriaType.ASSET_CFR,
                         ConditionType.EQ, "MOCKCFR")
                 .action(ActionType.EMAIL, "test@mail.com")
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(customRule);
         assertNotNull(createdCustomRule);
-        
+
         String email = System.currentTimeMillis() + "@mail.com";
         CustomRuleType fsRule = CustomRuleBuilder.getBuilder()
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdFsRule = CustomRuleHelper.createCustomRule(fsRule);
         assertNotNull(createdFsRule);
-        
+
         LatLong position = new LatLong(1d, 1d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdFsRule, position);
         CustomRuleHelper.assertRuleNotTriggered(createdCustomRule);
         CustomRuleHelper.assertRuleTriggered(createdFsRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfAssetCFRMatchesTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -423,20 +422,20 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType cfrRule = CustomRuleBuilder.getBuilder()
                 .setName("CFR => Send email")
-                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_CFR, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_CFR,
                         ConditionType.EQ, asset.getCfr())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCfrRule = CustomRuleHelper.createCustomRule(cfrRule);
         assertNotNull(createdCfrRule);
-        
+
         LatLong position = new LatLong(1d, 1d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdCfrRule, position);
         CustomRuleHelper.assertRuleTriggered(createdCfrRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfAssetNameMatchesTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -445,20 +444,20 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType assetNameRule = CustomRuleBuilder.getBuilder()
                 .setName("Asset name => Send email")
-                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_NAME, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.ASSET_NAME,
                         ConditionType.EQ, asset.getName())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdAssetNameRule = CustomRuleHelper.createCustomRule(assetNameRule);
         assertNotNull(createdAssetNameRule);
-        
+
         LatLong position = new LatLong(1d, 1d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdAssetNameRule, position);
         CustomRuleHelper.assertRuleTriggered(createdAssetNameRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfLatitudeIsGreaterThan10Test() throws Exception {
         Instant timestamp = Instant.now();
@@ -466,20 +465,20 @@ public class RulesAlarmIT extends AbstractRest {
         String email = System.currentTimeMillis() + "@mail.com";
 
         CustomRuleType customRule = CustomRuleBuilder.getBuilder()
-                .rule(CriteriaType.POSITION, SubCriteriaType.LATITUDE, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.LATITUDE,
                         ConditionType.GT, "10")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(customRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(11d, 1d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdCustomRule, position);
         CustomRuleHelper.assertRuleTriggered(createdCustomRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfLongitudeIsGreaterThan10Test() throws Exception {
         Instant timestamp = Instant.now();
@@ -487,20 +486,20 @@ public class RulesAlarmIT extends AbstractRest {
         String email = System.currentTimeMillis() + "@mail.com";
 
         CustomRuleType customRule = CustomRuleBuilder.getBuilder()
-                .rule(CriteriaType.POSITION, SubCriteriaType.LONGITUDE, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.LONGITUDE,
                         ConditionType.GT, "10")
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(customRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(1d, 11d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdCustomRule, position);
         CustomRuleHelper.assertRuleTriggered(createdCustomRule, timestamp);
     }
-    
+
     @Test
     public void sendEmailIfPositionReportTimeIsGreaterOrEqualTest() throws Exception {
         Instant timestamp = Instant.now();
@@ -508,20 +507,20 @@ public class RulesAlarmIT extends AbstractRest {
         String email = System.currentTimeMillis() + "@mail.com";
 
         CustomRuleType customRule = CustomRuleBuilder.getBuilder()
-                .rule(CriteriaType.POSITION, SubCriteriaType.POSITION_REPORT_TIME, 
+                .rule(CriteriaType.POSITION, SubCriteriaType.POSITION_REPORT_TIME,
                         ConditionType.GE, "" + timestamp.toEpochMilli())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdCustomRule = CustomRuleHelper.createCustomRule(customRule);
         assertNotNull(createdCustomRule);
-        
+
         LatLong position = new LatLong(1d, 1d, new Date());
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdCustomRule, position);
         CustomRuleHelper.assertRuleTriggered(createdCustomRule, timestamp);
     }
-    
+
     @Test
     public void triggerAreaEntryRule() throws Exception {
         Instant timestamp = Instant.now();
@@ -535,20 +534,20 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area entry DNK")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_ENT,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdAreaRule = CustomRuleHelper.createCustomRule(areaEntryRule);
         assertNotNull(createdAreaRule);
-        
+
         LatLong positionDnk = new LatLong(56d, 10.5, new Date());
         sendPositionToFluxAndVerifyAssetInfo(asset, fluxEndpoint, positionDnk);
         CustomRuleHelper.assertRuleTriggered(createdAreaRule, timestamp);
     }
-    
+
     @Test
     public void doNotTriggerAreaEntryRule() throws Exception {
         Instant timestamp = Instant.now();
@@ -564,27 +563,27 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area entry SWE")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_ENT,
                         ConditionType.EQ, "SWE")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdAreaRule = CustomRuleHelper.createCustomRule(areaEntryRule);
         assertNotNull(createdAreaRule);
-        
+
         String email = System.currentTimeMillis() + "@mail.com";
         CustomRuleType fsRule = CustomRuleBuilder.getBuilder()
                 .setName("Flag state => Send email")
-                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE, 
+                .rule(CriteriaType.ASSET, SubCriteriaType.FLAG_STATE,
                         ConditionType.EQ, asset.getFlagStateCode())
                 .action(ActionType.EMAIL, email)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdFsRule = CustomRuleHelper.createCustomRule(fsRule);
         assertNotNull(createdFsRule);
-        
+
         LatLong positionSwe2 = new LatLong(57.670176, 11.799626, new Date());
 
         sendPositionToFluxAndVerifyEmailAndRuleName(asset, email, createdFsRule, positionSwe2);
@@ -592,7 +591,7 @@ public class RulesAlarmIT extends AbstractRest {
         CustomRuleHelper.assertRuleNotTriggered(createdAreaRule);
         CustomRuleHelper.assertRuleTriggered(createdFsRule, timestamp);
     }
-    
+
     @Test
     public void triggerAreaExitRule() throws Exception {
         Instant timestamp = Instant.now();
@@ -606,15 +605,15 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area exit SWE")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_EXT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_EXT,
                         ConditionType.EQ, "SWE")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
                 .build();
-        
+
         CustomRuleType createdAreaRule = CustomRuleHelper.createCustomRule(areaEntryRule);
         assertNotNull(createdAreaRule);
-        
+
         LatLong positionDnk = new LatLong(56d, 10.5, new Date());
         sendPositionToFluxAndVerifyAssetInfo(asset, fluxEndpoint, positionDnk);
         CustomRuleHelper.assertRuleTriggered(createdAreaRule, timestamp);
@@ -628,7 +627,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area entry DNK")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -655,7 +654,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area entry DNK")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -683,7 +682,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area entry DNK")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_ENT,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -703,7 +702,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaVMSEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area VMS entry DNK")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -730,7 +729,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area entry DNK")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_ENT,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -764,7 +763,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area entry DNK")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -803,7 +802,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area entry DNK")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_ENT,
                         ConditionType.EQ, "DNK")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -909,7 +908,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaEntryRule = CustomRuleBuilder.getBuilder()
                 .setName("Area exit SWE")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_EXT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_EXT,
                         ConditionType.EQ, "SWE")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -936,7 +935,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaExitRule = CustomRuleBuilder.getBuilder()
                 .setName("Area Exit")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_EXT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_EXT,
                         ConditionType.EQ, "SWE")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")
@@ -956,7 +955,7 @@ public class RulesAlarmIT extends AbstractRest {
 
         CustomRuleType areaVMSExitRule = CustomRuleBuilder.getBuilder()
                 .setName("Area exit SWE")
-                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_EXT, 
+                .rule(CriteriaType.AREA, SubCriteriaType.AREA_CODE_VMS_EXT,
                         ConditionType.EQ, "SWE")
                 .action(ActionType.SEND_REPORT, VMSSystemHelper.FLUX_NAME, fluxEndpoint)
                 .action(ActionType.CREATE_TICKET, "Dummy ticket")

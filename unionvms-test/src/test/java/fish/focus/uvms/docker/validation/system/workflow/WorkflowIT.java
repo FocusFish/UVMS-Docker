@@ -11,15 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.system.workflow;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import fish.focus.uvms.asset.client.model.AssetDTO;
 import fish.focus.uvms.docker.validation.asset.AssetTestHelper;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
@@ -35,6 +26,17 @@ import fish.focus.uvms.incident.model.dto.IncidentDto;
 import fish.focus.uvms.incident.model.dto.IncidentTicketDto;
 import fish.focus.uvms.incident.model.dto.OpenAndRecentlyResolvedIncidentsDto;
 import fish.focus.uvms.incident.model.dto.enums.StatusEnum;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class WorkflowIT extends AbstractRest {
 
@@ -56,7 +58,7 @@ public class WorkflowIT extends AbstractRest {
                 .filter(r -> r.getAssetGuid().equals(asset.getId().toString()))
                 .collect(Collectors.toList());
         assertThat(reportsByAsset.size(), is(1));
-        
+
         // Create asset not sending incident
         IncidentTicketDto ticket = IncidentTestHelper.createTicket(asset.getId());
         ticket.setMovementId(reportsByAsset.get(0).getMovementGuid().toString());

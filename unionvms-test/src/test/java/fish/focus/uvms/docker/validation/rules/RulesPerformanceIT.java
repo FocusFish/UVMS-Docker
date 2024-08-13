@@ -36,12 +36,19 @@ import java.util.*;
 
 public class RulesPerformanceIT {
 
-    private final ConnectionFactory connectionFactory;
-
     private static final String MOVEMENTRULES_QUEUE = "UVMSMovementRulesEvent";
     private static final String RESPONSE_QUEUE = "IntegrationTestsResponseQueue";
     private static MovementHelper movementHelper;
     private static MessageHelper messageHelper;
+    private final ConnectionFactory connectionFactory;
+
+    public RulesPerformanceIT() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("host", "localhost");
+        params.put("port", 5445);
+        TransportConfiguration transportConfiguration = new TransportConfiguration(NettyConnectorFactory.class.getName(), params);
+        connectionFactory = ActiveMQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, transportConfiguration);
+    }
 
     @BeforeClass
     public static void setup() throws JMSException {
@@ -54,12 +61,41 @@ public class RulesPerformanceIT {
         movementHelper.close();
     }
 
-    public RulesPerformanceIT() {
-        Map<String, Object> params = new HashMap<>();
-        params.put("host", "localhost");
-        params.put("port", 5445);
-        TransportConfiguration transportConfiguration = new TransportConfiguration(NettyConnectorFactory.class.getName(), params);
-        connectionFactory = ActiveMQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF,transportConfiguration);
+    private static RawMovementType createBasicMovement(AssetId assetId, String assetName, LatLong pos) {
+        RawMovementType movement = new RawMovementType();
+        movement.setAssetId(assetId);
+        movement.setAssetName(assetName);
+        movement.setFlagState("SWE");
+        movement.setDateRecieved(new Date());
+        movement.setMovementType(MovementTypeType.POS);
+        movement.setPluginName("PLUGIN");
+        movement.setPluginType("SATELLITE_RECEIVER");
+        MovementPoint movementPoint = new MovementPoint();
+        movementPoint.setLatitude(pos.latitude);
+        movementPoint.setLongitude(pos.longitude);
+        movement.setPosition(movementPoint);
+        movement.setPositionTime(new Date());
+        movement.setReportedCourse(pos.bearing);
+        movement.setReportedSpeed(pos.speed);
+        movement.setSource(MovementSourceType.INMARSAT_C);
+        movement.setComChannelType(MovementComChannelType.NAF);
+        return movement;
+    }
+
+    private static String createSetMovementReportRequest(PluginType type, RawMovementType rawMovementType) throws JAXBException {
+        SetMovementReportRequest request = new SetMovementReportRequest();
+        request.setMethod(RulesModuleMethod.SET_MOVEMENT_REPORT);
+        request.setType(type);
+        request.setUsername("PerformanceTester");
+        request.setRequest(rawMovementType);
+        return JAXBMarshaller.marshallJaxBObjectToString(request);
+    }
+
+    private static String humanReadableFormat(Duration duration) {
+        return duration.toString()
+                .substring(2)
+                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
+                .toLowerCase();
     }
 
     @Test
@@ -88,7 +124,7 @@ public class RulesPerformanceIT {
         Instant lastIteration = Instant.now();
         List<Duration> averageDurations = new ArrayList<>();
 
-        for(LatLong pos : route) {
+        for (LatLong pos : route) {
             RawMovementType move = createBasicMovement(assetId, testAsset.getName(), pos);
             String request = createSetMovementReportRequest(PluginType.FLUX, move);
 
@@ -97,11 +133,11 @@ public class RulesPerformanceIT {
             Message message = messageHelper.listenForResponseOnQueue("PerformanceTester", "IntegrationTestsResponseQueue");
 
             ProcessedMovementResponse movementResponse = JAXBMarshaller.unmarshallTextMessage((TextMessage) message, ProcessedMovementResponse.class);
-            if(movementResponse.getMovementRefType().getType().equals(MovementRefTypeType.ALARM)){
+            if (movementResponse.getMovementRefType().getType().equals(MovementRefTypeType.ALARM)) {
                 System.out.println("Alarm: " + i + ", ");
             }
             i++;
-            if((i % 10) == 0){
+            if ((i % 10) == 0) {
                 System.out.println("Created movement number: " + i + " Time so far: " + humanReadableFormat(Duration.between(b4, Instant.now()))
                         + " Time since last 10: " + humanReadableFormat(Duration.between(lastIteration, Instant.now())));
                 averageDurations.add(Duration.between(lastIteration, Instant.now()));
@@ -158,7 +194,7 @@ public class RulesPerformanceIT {
         List<String> nameList = new ArrayList<>();
 
         System.out.println("Start creating assets");
-        for(int i = 0; i < nrOfShips; i++ ){
+        for (int i = 0; i < nrOfShips; i++) {
             AssetDTO testAsset = AssetTestHelper.createTestAsset();
             MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
             MobileTerminalTestHelper.assignMobileTerminal(testAsset, mobileTerminal);
@@ -187,7 +223,7 @@ public class RulesPerformanceIT {
         List<Duration> averageDurations = new ArrayList<>();
         List<String> corrList = new ArrayList<>();
 
-        for(LatLong pos : route) {
+        for (LatLong pos : route) {
             AssetId assetId = assetList.get(i % nrOfShips);
 
             RawMovementType move = createBasicMovement(assetId, nameList.get(i % nrOfShips), pos);
@@ -197,7 +233,7 @@ public class RulesPerformanceIT {
             corrList.add(corrId);
 
             i++;
-            if((i % 10) == 0){
+            if ((i % 10) == 0) {
                 System.out.println("Created movement number: " + i + " Time so far: " + humanReadableFormat(Duration.between(b4, Instant.now()))
                         + " Time since last 10: " + humanReadableFormat(Duration.between(lastIteration, Instant.now())));
                 averageDurations.add(Duration.between(lastIteration, Instant.now()));
@@ -207,15 +243,15 @@ public class RulesPerformanceIT {
 
         Instant middle = Instant.now();
         i = 0;
-        for(String corr : corrList){
+        for (String corr : corrList) {
             Message message = messageHelper.listenForResponseOnQueue("PerformanceTester", "IntegrationTestsResponseQueue");
             ProcessedMovementResponse movementResponse = JAXBMarshaller.unmarshallTextMessage((TextMessage) message, ProcessedMovementResponse.class);
-            if(movementResponse.getMovementRefType().getType().equals(MovementRefTypeType.ALARM)){
+            if (movementResponse.getMovementRefType().getType().equals(MovementRefTypeType.ALARM)) {
                 System.out.println("Alarm: " + i + ", ");
             }
             i++;
 
-            if((i % 10) == 0){
+            if ((i % 10) == 0) {
                 System.out.println("Recieved movement number: " + i + " Time so far: " + humanReadableFormat(Duration.between(b4, Instant.now()))
                         + " Time since last 10: " + humanReadableFormat(Duration.between(lastIteration, Instant.now())));
                 averageDurations.add(Duration.between(lastIteration, Instant.now()));
@@ -242,42 +278,5 @@ public class RulesPerformanceIT {
 
             return message.getJMSMessageID();
         }
-    }
-
-    private static RawMovementType createBasicMovement(AssetId assetId, String assetName, LatLong pos) {
-        RawMovementType movement = new RawMovementType();
-        movement.setAssetId(assetId);
-        movement.setAssetName(assetName);
-        movement.setFlagState("SWE");
-        movement.setDateRecieved(new Date());
-        movement.setMovementType(MovementTypeType.POS);
-        movement.setPluginName("PLUGIN");
-        movement.setPluginType("SATELLITE_RECEIVER");
-        MovementPoint movementPoint = new MovementPoint();
-        movementPoint.setLatitude(pos.latitude);
-        movementPoint.setLongitude(pos.longitude);
-        movement.setPosition(movementPoint);
-        movement.setPositionTime(new Date());
-        movement.setReportedCourse(pos.bearing);
-        movement.setReportedSpeed(pos.speed);
-        movement.setSource(MovementSourceType.INMARSAT_C);
-        movement.setComChannelType(MovementComChannelType.NAF);
-        return movement;
-    }
-
-    private static String createSetMovementReportRequest(PluginType type, RawMovementType rawMovementType) throws JAXBException {
-        SetMovementReportRequest request = new SetMovementReportRequest();
-        request.setMethod(RulesModuleMethod.SET_MOVEMENT_REPORT);
-        request.setType(type);
-        request.setUsername("PerformanceTester");
-        request.setRequest(rawMovementType);
-        return JAXBMarshaller.marshallJaxBObjectToString(request);
-    }
-
-    private static String humanReadableFormat(Duration duration) {
-        return duration.toString()
-                .substring(2)
-                .replaceAll("(\\d[HMS])(?!$)", "$1 ")
-                .toLowerCase();
     }
 }

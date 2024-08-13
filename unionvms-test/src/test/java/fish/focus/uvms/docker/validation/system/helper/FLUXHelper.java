@@ -34,10 +34,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import java.math.BigDecimal;
 import java.util.GregorianCalendar;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class FLUXHelper extends AbstractHelper {
 
@@ -45,7 +46,7 @@ public class FLUXHelper extends AbstractHelper {
         RequestType vesselReport = createVesselReport(asset, position);
         sendVesselReportToFluxPlugin(vesselReport);
     }
-    
+
     public static void sendVesselReportToFluxPlugin(RequestType requestType) {
         BridgeConnectorPortType bridgeConnectorPortType = createBridgeConnector();
         ResponseType responseType = bridgeConnectorPortType.post(requestType);
@@ -57,10 +58,10 @@ public class FLUXHelper extends AbstractHelper {
         FLUXVesselPositionMessage fluxVesselPositionMessage = createFluxMessage(testAsset, latLong);
         return createVesselReport(fluxVesselPositionMessage);
     }
-    
+
     public static RequestType createVesselReport(FLUXVesselPositionMessage fluxVesselPositionMessage) throws DatatypeConfigurationException, JAXBException, ParserConfigurationException {
         GregorianCalendar calendar = new GregorianCalendar();
-        
+
         RequestType requestType = new RequestType();
         requestType.setAny(createAnyElement(fluxVesselPositionMessage));
         requestType.setAD("SWE");
@@ -71,14 +72,14 @@ public class FLUXHelper extends AbstractHelper {
         requestType.getOtherAttributes().put(new QName("USER"), "FLUX");
         requestType.getOtherAttributes().put(new QName("FR"), "FLUX Test");
         requestType.setTODT(DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar));
-        
+
         return requestType;
     }
-    
+
     public static FLUXVesselPositionMessage createFluxMessage(AssetDTO testAsset, LatLong latLong) throws DatatypeConfigurationException {
         FLUXVesselPositionMessage fluxVesselPositionMessage = new FLUXVesselPositionMessage();
         VesselTransportMeansType vesselTransportMeansType = new VesselTransportMeansType();
-        
+
         IDType cfrId = new IDType();
         cfrId.setSchemeID("CFR");
         cfrId.setValue(testAsset.getCfr());
@@ -101,18 +102,18 @@ public class FLUXHelper extends AbstractHelper {
         vesselTransportMeansType.setRegistrationVesselCountry(vesselCountry);
 
         VesselPositionEventType vesselPositionEventType = new VesselPositionEventType();
-        
+
         MeasureType measureType = new MeasureType();
         measureType.setValue(BigDecimal.valueOf(latLong.bearing));
         vesselPositionEventType.setCourseValueMeasure(measureType);
-        
+
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(latLong.positionTime);
-        
+
         DateTimeType posDateTime = new DateTimeType();
         posDateTime.setDateTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar));
         vesselPositionEventType.setObtainedOccurrenceDateTime(posDateTime);
-        
+
         VesselGeographicalCoordinateType cordinates = new VesselGeographicalCoordinateType();
         MeasureType longitude = new MeasureType();
         longitude.setValue(BigDecimal.valueOf(latLong.longitude));
@@ -121,19 +122,19 @@ public class FLUXHelper extends AbstractHelper {
         latitude.setValue(BigDecimal.valueOf(latLong.latitude));
         cordinates.setLatitudeMeasure(latitude);
         vesselPositionEventType.setSpecifiedVesselGeographicalCoordinate(cordinates);
-        
+
         MeasureType speedValue = new MeasureType();
         speedValue.setValue(BigDecimal.valueOf(latLong.speed));
         vesselPositionEventType.setSpeedValueMeasure(speedValue);
-        
+
         CodeType typeCodeValue = new CodeType();
         typeCodeValue.setValue("POS");
         vesselPositionEventType.setTypeCode(typeCodeValue);
-        
+
         vesselTransportMeansType.getSpecifiedVesselPositionEvents().add(vesselPositionEventType);
-        
+
         fluxVesselPositionMessage.setVesselTransportMeans(vesselTransportMeansType);
-        
+
         FLUXReportDocumentType fluxReportDocumentType = new FLUXReportDocumentType();
         DateTimeType dateTimeType = new DateTimeType();
         dateTimeType.setDateTime(DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar));
@@ -142,19 +143,19 @@ public class FLUXHelper extends AbstractHelper {
         fLUXPartyType.getIDS().add(countryId);
         fluxReportDocumentType.setOwnerFLUXParty(fLUXPartyType);
         TextType textType = new TextType();
-        fluxReportDocumentType.setPurpose(textType);        
+        fluxReportDocumentType.setPurpose(textType);
         CodeType purposeCode = new CodeType();
         purposeCode.setValue("9");
-        fluxReportDocumentType.setPurposeCode(purposeCode);     
+        fluxReportDocumentType.setPurposeCode(purposeCode);
         IDType idType = new IDType();
         fluxReportDocumentType.setReferencedID(idType);
         fluxReportDocumentType.getIDS().add(idType);
         CodeType typeCode = new CodeType();
-        fluxReportDocumentType.setTypeCode(typeCode);       
+        fluxReportDocumentType.setTypeCode(typeCode);
         fluxVesselPositionMessage.setFLUXReportDocument(fluxReportDocumentType);
         return fluxVesselPositionMessage;
     }
-    
+
     private static Element createAnyElement(FLUXVesselPositionMessage fLUXVesselPositionMessage)
             throws JAXBException, ParserConfigurationException {
         JAXBContext jaxbContext = JAXBContext.newInstance(FLUXVesselPositionMessage.class);
@@ -165,7 +166,7 @@ public class FLUXHelper extends AbstractHelper {
         marshaller.marshal(fLUXVesselPositionMessage, document);
         return document.getDocumentElement();
     }
-    
+
     private static BridgeConnectorPortType createBridgeConnector() {
         BridgeConnectorPortType bridgeConnectorPortType = new BridgeConnectorService().getBridgeConnectorSOAP11Port();
 

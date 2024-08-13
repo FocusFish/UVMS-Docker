@@ -2,6 +2,7 @@ package fish.focus.uvms.docker.validation.activity;
 
 import java.time.Instant;
 import java.util.UUID;
+
 import fish.focus.schema.exchange.module.v1.ExchangeModuleMethod;
 import fish.focus.schema.exchange.plugin.types.v1.PluginType;
 import fish.focus.uvms.activity.model.mapper.ActivityModuleRequestMapper;
@@ -19,12 +20,13 @@ public class ActivityJMSHelper extends AbstractHelper {
     private static final String ACTIVITY_QUEUE = "UVMSActivityEvent";
     private static final String EXCHANGE_QUEUE = "UVMSExchangeEvent";
 
-    private ActivityJMSHelper() {}
+    private ActivityJMSHelper() {
+    }
 
     public static void sendToActivity(FLUXFAReportMessage message) throws Exception {
         String activityRequest = ActivityModuleRequestMapper.mapToSetFLUXFAReportOrQueryMessageRequest(JAXBMarshaller.marshallJaxBObjectToString(message), PluginType.FLUX.name(), MessageType.FLUX_FA_REPORT_MESSAGE, SyncAsyncRequestType.ASYNC, UUID.randomUUID().toString());
         try (MessageHelper messageHelper = new MessageHelper();
-                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Activity'")) {
+             TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Activity'")) {
             messageHelper.sendMessage(ACTIVITY_QUEUE, activityRequest);
             topicListener.listenOnEventBus();
         }
@@ -33,7 +35,7 @@ public class ActivityJMSHelper extends AbstractHelper {
     public static void sendToExchange(FLUXFAReportMessage message) throws Exception {
         String exchangeRequest = ExchangeModuleRequestMapper.createFluxFAReportRequest(JAXBMarshaller.marshallJaxBObjectToString(message), "activity-plugin", "FLUXFAReportMessage", Instant.now(), message.getFLUXReportDocument().getIDS().get(0).getValue(), PluginType.OTHER, "SWE", null, null, null, null);
         try (MessageHelper messageHelper = new MessageHelper();
-                TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Activity'")) {
+             TopicListener topicListener = new TopicListener(TopicListener.EVENT_STREAM, "event = 'Activity'")) {
             messageHelper.sendMessageWithFunction(EXCHANGE_QUEUE, exchangeRequest, ExchangeModuleMethod.SET_FLUX_FA_REPORT_MESSAGE.toString());
             topicListener.listenOnEventBus();
         }

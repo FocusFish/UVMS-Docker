@@ -21,9 +21,10 @@ import fish.focus.uvms.docker.validation.system.helper.VMSSystemHelper;
 
 public class CustomRulesTestHelper {
 
-    private CustomRulesTestHelper(){}
+    private CustomRulesTestHelper() {
+    }
 
-    public static CustomRuleType getCompleteNewCustomRule(){
+    public static CustomRuleType getCompleteNewCustomRule() {
         CustomRuleType customRule = new CustomRuleType();
 
         customRule.setName("Flag SWE && area DNK => Send to DNK" + " (" + System.currentTimeMillis() + ")");

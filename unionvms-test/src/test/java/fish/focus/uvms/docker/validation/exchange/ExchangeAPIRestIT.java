@@ -18,25 +18,27 @@ import fish.focus.schema.exchange.plugin.types.v1.PluginType;
 import fish.focus.schema.exchange.source.v1.GetServiceListResponse;
 import fish.focus.uvms.docker.validation.common.AbstractRest;
 import org.junit.Test;
+
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 public class ExchangeAPIRestIT extends AbstractRest {
-	@Test
-	public void getListTest() {
-		GetServiceListRequest getServiceListRequest = new GetServiceListRequest();
-		getServiceListRequest.getType().add(PluginType.SATELLITE_RECEIVER);
+    @Test
+    public void getListTest() {
+        GetServiceListRequest getServiceListRequest = new GetServiceListRequest();
+        getServiceListRequest.getType().add(PluginType.SATELLITE_RECEIVER);
 
-		GetServiceListResponse response = getWebTarget()
-				.path("exchange/rest/unsecured/api/serviceList")
-				.request(MediaType.APPLICATION_JSON)
-				.header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
-				.post(Entity.json(getServiceListRequest), GetServiceListResponse.class);
+        GetServiceListResponse response = getWebTarget()
+                .path("exchange/rest/unsecured/api/serviceList")
+                .request(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, getValidJwtToken())
+                .post(Entity.json(getServiceListRequest), GetServiceListResponse.class);
 
-		assertNotNull(response);
-		assertTrue(response.getService().size() > 0);
-	}
+        assertNotNull(response);
+        assertTrue(response.getService().size() > 0);
+    }
 }
