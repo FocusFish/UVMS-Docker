@@ -26,7 +26,7 @@ public class AssetMobileTerminalPage {
 
     public void createMobileTerminal(MobileTerminalDto mobileTerminal, String comment) {
         $(byText("Attach")).click();
-        $(by("data-placeholder", "Serial number"))
+        $(by("placeholder", "Serial number"))
                 .setValue(mobileTerminal.getSerialNo())
                 .pressEnter();
         $(byText("Create")).click();

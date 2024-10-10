@@ -22,7 +22,7 @@
         <scm.url>scm:git:https://github.com/FocusFish/UVMS-Docker.git</scm.url>
         <unionvms.wildfly.version>26.0.0.Final</unionvms.wildfly.version>
         <unionvms.project.unionvms.web.version>3.0.80</unionvms.project.unionvms.web.version>
-        <unionvms.project.vms.web.version>1.1.37</unionvms.project.vms.web.version>
+        <unionvms.project.vms.web.version>1.2.0</unionvms.project.vms.web.version>
         <unionvms.project.geoserver.version>2.25.3.1</unionvms.project.geoserver.version>
         <unionvms.project.user.module>2.2.6</unionvms.project.user.module>
         <unionvms.project.reporting.module>1.1.31</unionvms.project.reporting.module>

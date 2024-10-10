@@ -26,7 +26,7 @@ public class RealtimeMapPage {
     }
 
     public RealtimeMapPage gotoCoordinates(Double latitude, Double longitude) {
-        $(by("data-placeholder", "Search"))
+        $(by("placeholder", "Search"))
                 .setValue(String.format("/c %s %s", latitude, longitude))
                 .pressEnter();
         sleep(DEFAULT_ANIMATION_DURATION);
