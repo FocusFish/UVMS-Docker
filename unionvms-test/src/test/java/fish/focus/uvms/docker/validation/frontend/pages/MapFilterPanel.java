@@ -27,13 +27,13 @@ public class MapFilterPanel {
     }
 
     public void setFilter(String filterString) {
-        $(by("data-placeholder", "Filter"))
+        $(by("placeholder", "Filter"))
                 .setValue(filterString);
     }
 
     public void createFilter(String filterName) {
         $(byText("Create new filter")).click();
-        $(by("data-placeholder", "Name")).setValue(filterName);
+        $(by("placeholder", "Name")).setValue(filterName);
         $(byText("Save filter")).click();
     }
 
