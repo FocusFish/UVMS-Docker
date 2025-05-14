@@ -18,7 +18,7 @@
         <docker.skip>${skipITs}</docker.skip>
         <docker.frontend.test.suite>UnionVMSTestCaseG2</docker.frontend.test.suite>
         <uvms.commons.version>4.1.15</uvms.commons.version>
-        <uvms.pom.version>3.29</uvms.pom.version>
+        <uvms.pom.version>3.30</uvms.pom.version>
         <resteasy.version>5.0.9.Final</resteasy.version>
     </properties>
 
