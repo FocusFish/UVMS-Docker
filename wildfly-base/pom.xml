@@ -17,7 +17,7 @@
         <wildfly.hibernate.module.jts.version>1.16.1</wildfly.hibernate.module.jts.version>
         <wildfly.postgres.module.postgis.version>2.5.1</wildfly.postgres.module.postgis.version>
         <wildfly.postgres.module.postgres.version>42.7.5</wildfly.postgres.module.postgres.version>
-        <wildfly.artemis.module.artemis.version>2.24.0</wildfly.artemis.module.artemis.version>
+        <wildfly.artemis.module.artemis.version>2.41.0</wildfly.artemis.module.artemis.version>
     </properties>
     <dependencies>
         <dependency>
