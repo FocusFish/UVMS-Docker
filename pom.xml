@@ -6,13 +6,13 @@
     <parent>
         <groupId>fish.focus.maven</groupId>
         <artifactId>focus-pom</artifactId>
-        <version>2.10</version>
+        <version>2.11</version>
         <relativePath/>
     </parent>
 
     <groupId>fish.focus.uvms.docker</groupId>
     <artifactId>uvms-docker</artifactId>
-    <version>4.4.1</version>
+    <version>4.5.0</version>
     <packaging>pom</packaging>
     <name>uvms-docker</name>
 
@@ -23,16 +23,16 @@
         <unionvms.wildfly.version>26.0.0.Final</unionvms.wildfly.version>
         <unionvms.project.unionvms.web.version>3.0.80</unionvms.project.unionvms.web.version>
         <unionvms.project.vms.web.version>1.2.1</unionvms.project.vms.web.version>
-        <unionvms.project.geoserver.version>2.25.3.2</unionvms.project.geoserver.version>
+        <unionvms.project.geoserver.version>2.27.1.0</unionvms.project.geoserver.version>
         <unionvms.project.user.module>2.2.6</unionvms.project.user.module>
         <unionvms.project.reporting.module>1.1.31</unionvms.project.reporting.module>
         <unionvms.project.movementrules.module>2.4.22</unionvms.project.movementrules.module>
-        <unionvms.project.movement.module>5.6.21</unionvms.project.movement.module>
+        <unionvms.project.movement.module>5.7.1</unionvms.project.movement.module>
         <unionvms.project.exchange.module>5.3.32</unionvms.project.exchange.module>
         <unionvms.project.spatial.module>2.2.12</unionvms.project.spatial.module>
         <unionvms.project.config.module>4.3.12</unionvms.project.config.module>
         <unionvms.project.audit.module>4.3.12</unionvms.project.audit.module>
-        <unionvms.project.asset.module>6.8.35</unionvms.project.asset.module>
+        <unionvms.project.asset.module>6.8.37</unionvms.project.asset.module>
         <unionvms.project.incident.module>1.0.15</unionvms.project.incident.module>
         <unionvms.project.activity.module>1.2.18</unionvms.project.activity.module>
         <unionvms.project.web-gateway>1.0.9</unionvms.project.web-gateway>
