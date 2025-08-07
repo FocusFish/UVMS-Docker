@@ -6,7 +6,7 @@
     <parent>
         <groupId>fish.focus.uvms.docker</groupId>
         <artifactId>uvms-docker</artifactId>
-        <version>4.6.3-SNAPSHOT</version>
+        <version>4.6.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
