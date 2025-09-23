@@ -11,6 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package fish.focus.uvms.docker.validation.system.vms;
 
+import com.github.noconnor.junitperf.JUnitPerfRule;
+import com.github.noconnor.junitperf.JUnitPerfTest;
+import com.github.noconnor.junitperf.JUnitPerfTestRequirement;
 import fish.focus.schema.exchange.plugin.v1.SetReportRequest;
 import fish.focus.schema.movementrules.customrule.v1.*;
 import fish.focus.uvms.asset.client.model.AssetDTO;
@@ -26,9 +29,6 @@ import fish.focus.uvms.docker.validation.system.helper.CustomRuleHelper;
 import fish.focus.uvms.docker.validation.system.helper.FLUXHelper;
 import fish.focus.uvms.docker.validation.system.helper.VMSSystemHelper;
 import fish.focus.uvms.exchange.model.mapper.JAXBMarshaller;
-import org.databene.contiperf.PerfTest;
-import org.databene.contiperf.Required;
-import org.databene.contiperf.junit.ContiPerfRule;
 import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Rule;
@@ -49,7 +49,7 @@ public class VMSSystemPerformanceIT extends AbstractRest {
     private static final int NUMBER_OF_POSITIONS = 10;
 
     @Rule
-    public ContiPerfRule contiPerfRule = new ContiPerfRule();
+    public JUnitPerfRule perfTestRule = new JUnitPerfRule();
 
     @After
     public void removeCustomRules() {
@@ -57,8 +57,8 @@ public class VMSSystemPerformanceIT extends AbstractRest {
     }
 
     @Test
-    @PerfTest(threads = 1)
-    @Required(max = 45000)
+    @JUnitPerfTest(threads = 1)
+    @JUnitPerfTestRequirement(maxLatency = 45_000)
     public void createPositionAndTriggerRulePerformanceTest() throws Exception {
         AssetDTO asset = AssetTestHelper.createTestAsset();
         MobileTerminalDto mobileTerminal = MobileTerminalTestHelper.createMobileTerminal();
@@ -100,7 +100,7 @@ public class VMSSystemPerformanceIT extends AbstractRest {
 
     @Ignore
     @Test
-    @PerfTest(threads = 1)
+    @JUnitPerfTest(threads = 1)
     public void createPositionAndTriggerRulePerformanceTestTenShips() throws Exception {
         // Create rule
         String flagStateCode = "SWE";
