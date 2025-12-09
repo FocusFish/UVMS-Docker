@@ -5,7 +5,7 @@
     <parent>
         <groupId>fish.focus.uvms.docker</groupId>
         <artifactId>uvms-docker</artifactId>
-        <version>4.6.4</version>
+        <version>4.7.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>uvms-docker-wildfly-base</artifactId>
@@ -15,8 +15,8 @@
         <wildfly.hibernate.module.spatial.version>5.4.24.Final</wildfly.hibernate.module.spatial.version>
         <wildfly.hibernate.module.geolatte.version>1.4.0</wildfly.hibernate.module.geolatte.version>
         <wildfly.hibernate.module.jts.version>1.16.1</wildfly.hibernate.module.jts.version>
-        <wildfly.postgres.module.postgis.version>2.5.1</wildfly.postgres.module.postgis.version>
-        <wildfly.postgres.module.postgres.version>42.7.7</wildfly.postgres.module.postgres.version>
+        <wildfly.postgres.module.postgis.version>2025.1.1</wildfly.postgres.module.postgis.version>
+        <wildfly.postgres.module.postgres.version>42.7.8</wildfly.postgres.module.postgres.version>
         <wildfly.artemis.module.artemis.version>2.24.0</wildfly.artemis.module.artemis.version>
     </properties>
     <dependencies>
@@ -147,7 +147,7 @@
                 <plugin>
                     <groupId>io.fabric8</groupId>
                     <artifactId>docker-maven-plugin</artifactId>
-                    <version>0.46.0</version>
+                    <version>0.48.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -227,7 +227,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.9.0</version>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
