@@ -56,6 +56,7 @@
             <artifactId>exchange-module</artifactId>
             <type>war</type>
         </dependency>
+
         <dependency>
             <groupId>fish.focus.uvms.movement</groupId>
             <artifactId>movement-module</artifactId>
@@ -127,6 +128,11 @@
             <groupId>fish.focus.uvms.plugins.rest.movement</groupId>
             <artifactId>flux-vesselposition-rest-module</artifactId>
             <type>ear</type>
+        </dependency>
+        <dependency>
+            <groupId>fish.focus.uvms.plugins.vms2</groupId>
+            <artifactId>vms2</artifactId>
+            <type>war</type>
         </dependency>
     </dependencies>
     <build>
