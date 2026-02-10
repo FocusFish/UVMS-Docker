@@ -12,7 +12,7 @@
 
     <groupId>fish.focus.uvms.docker</groupId>
     <artifactId>uvms-docker</artifactId>
-    <version>4.7.0</version>
+    <version>4.7.1</version>
     <packaging>pom</packaging>
     <name>uvms-docker</name>
 
@@ -28,7 +28,7 @@
         <unionvms.project.reporting.module>1.2.0</unionvms.project.reporting.module>
         <unionvms.project.movementrules.module>2.5.0</unionvms.project.movementrules.module>
         <unionvms.project.movement.module>5.8.0</unionvms.project.movement.module>
-        <unionvms.project.exchange.module>5.4.0</unionvms.project.exchange.module>
+        <unionvms.project.exchange.module>5.5.0</unionvms.project.exchange.module>
         <unionvms.project.spatial.module>2.3.0</unionvms.project.spatial.module>
         <unionvms.project.config.module>4.4.1</unionvms.project.config.module>
         <unionvms.project.audit.module>4.4.0</unionvms.project.audit.module>
@@ -42,6 +42,7 @@
         <unionvms.project.plugins.inmarsat>3.2.2</unionvms.project.plugins.inmarsat>
         <unionvms.project.plugins.siriusone>3.1.0</unionvms.project.plugins.siriusone>
         <unionvms.project.plugins.flux-rest>1.12.0</unionvms.project.plugins.flux-rest>
+        <unionvms.project.plugins.vms>0.1.0</unionvms.project.plugins.vms>
     </properties>
 
     <scm>
@@ -335,6 +336,14 @@
                 <type>war</type>
                 <version>${unionvms.project.plugins.siriusone}</version>
             </dependency>
+
+            <dependency>
+                <groupId>fish.focus.uvms.plugins.vms2</groupId>
+                <artifactId>vms2</artifactId>
+                <type>war</type>
+                <version>${unionvms.project.plugins.vms}</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>

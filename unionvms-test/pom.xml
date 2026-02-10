@@ -6,7 +6,7 @@
     <parent>
         <groupId>fish.focus.uvms.docker</groupId>
         <artifactId>uvms-docker</artifactId>
-        <version>4.7.0</version>
+        <version>4.7.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -18,7 +18,7 @@
         <docker.skip>${skipITs}</docker.skip>
         <docker.frontend.test.suite>UnionVMSTestCaseG2</docker.frontend.test.suite>
         <uvms.commons.version>4.2.0</uvms.commons.version>
-        <uvms.pom.version>3.33</uvms.pom.version>
+        <uvms.pom.version>3.34</uvms.pom.version>
         <resteasy.version>5.0.10.Final</resteasy.version>
     </properties>
 
@@ -467,7 +467,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>3.6.2</version>
+                        <version>3.6.3</version>
                         <executions>
                             <execution>
                                 <phase>generate-sources</phase>
@@ -496,7 +496,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>3.6.2</version>
+                        <version>3.6.3</version>
                         <executions>
                             <execution>
                                 <id>postman-test2</id>

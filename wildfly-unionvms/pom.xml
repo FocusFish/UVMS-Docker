@@ -5,7 +5,7 @@
     <parent>
         <groupId>fish.focus.uvms.docker</groupId>
         <artifactId>uvms-docker</artifactId>
-        <version>4.7.0</version>
+        <version>4.7.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -56,6 +56,7 @@
             <artifactId>exchange-module</artifactId>
             <type>war</type>
         </dependency>
+
         <dependency>
             <groupId>fish.focus.uvms.movement</groupId>
             <artifactId>movement-module</artifactId>
@@ -128,6 +129,11 @@
             <artifactId>flux-vesselposition-rest-module</artifactId>
             <type>ear</type>
         </dependency>
+        <dependency>
+            <groupId>fish.focus.uvms.plugins.vms2</groupId>
+            <artifactId>vms2</artifactId>
+            <type>war</type>
+        </dependency>
     </dependencies>
     <build>
         <pluginManagement>
@@ -193,7 +199,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.7.1</version>
+                <version>3.8.0</version>
                 <configuration>
                     <descriptors>
                         <descriptor>src/main/assembly/assembly.xml</descriptor>
