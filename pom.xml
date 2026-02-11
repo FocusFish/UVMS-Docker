@@ -12,7 +12,7 @@
 
     <groupId>fish.focus.uvms.docker</groupId>
     <artifactId>uvms-docker</artifactId>
-    <version>4.7.2-SNAPSHOT</version>
+    <version>4.7.2</version>
     <packaging>pom</packaging>
     <name>uvms-docker</name>
 
