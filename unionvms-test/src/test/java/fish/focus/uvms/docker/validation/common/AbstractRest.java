@@ -26,8 +26,6 @@ public abstract class AbstractRest {
     private static final Logger log = LoggerFactory.getLogger(AbstractRest.class.getSimpleName());
     private static final String HOST = "localhost";
     private static final String BASE_URL = "http://" + HOST + ":28080/unionvms/";
-    //protected static final String BASE_URL = "http://liaswf05t.havochvatten.se:28080/unionvms/";
-    //protected static final String BASE_URL = "http://liaswf05p.havochvatten.se:28080/unionvms/";
 
     private static String validJwtToken;
 
