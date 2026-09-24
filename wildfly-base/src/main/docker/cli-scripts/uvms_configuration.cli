@@ -162,6 +162,13 @@ embed-server --server-config=${SERVER_CONFIG}
 /subsystem=logging/logging-profile=user/size-rotating-file-handler=user-error-file:add(level=ERROR,file={path=>"/app/logs/user/user-error.log"},named-formatter=APP-PATTERN,suffix=".yyyy-MM-dd_HHmmss.zip",rotate-size=50M, max-backup-index=40)
 /subsystem=logging/logging-profile=user/logger=fish.focus:add(handlers=[user-file,user-error-file])
 
+# VMS 2.0
+/subsystem=logging/logging-profile=vms2:add
+/subsystem=logging/logging-profile=vms2/pattern-formatter=APP-PATTERN:add(pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %X{requestId} %-5p %c{40} %X{userId}- %m%n")
+/subsystem=logging/logging-profile=vms2/size-rotating-file-handler=vms2-file:add(level=INFO,file={path=>"/app/logs/vms2/vms2.log"},named-formatter=APP-PATTERN,suffix=".yyyy-MM-dd_HHmmss.zip",rotate-size=50M, max-backup-index=40)
+/subsystem=logging/logging-profile=vms2/size-rotating-file-handler=vms2-error-file:add(level=ERROR,file={path=>"/app/logs/vms2/vms2-error.log"},named-formatter=APP-PATTERN,suffix=".yyyy-MM-dd_HHmmss.zip",rotate-size=50M, max-backup-index=40)
+/subsystem=logging/logging-profile=vms2/logger=fish.focus:add(handlers=[vms2-file,vms2-error-file])
+
 # WebGateway
 /subsystem=logging/logging-profile=web-gateway:add
 /subsystem=logging/logging-profile=web-gateway/pattern-formatter=APP-PATTERN:add(pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %X{requestId} %-5p %c{40} %X{userId}- %m%n")
